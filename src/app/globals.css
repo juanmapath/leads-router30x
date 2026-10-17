@@ -175,3 +175,12 @@ a { color: var(--jev); }
 .adopt-num { font-size: 28px; font-weight: 700; }
 .ask { margin-top: 16px; display: grid; gap: 8px; border-color: var(--jev); }
 .ask-text { font-size: clamp(17px, 2.3vw, 21px); }
+
+/* Modo presentación */
+.progress { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); display: grid; gap: 10px; z-index: 5; }
+.progress button { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--text-3); background: transparent; padding: 0; cursor: pointer; }
+.progress button.on { background: var(--text); border-color: var(--text); }
+.theme-toggle { position: fixed; right: 12px; top: 12px; z-index: 5; font: inherit; font-size: 12px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); cursor: pointer; }
+@media (max-width: 899px) { .progress { display: none; } }
+@media (min-width: 900px) { section.block { min-height: 92vh; } section.block.cover { min-height: 70vh; } }
+section.block { scroll-margin-top: 16px; }
