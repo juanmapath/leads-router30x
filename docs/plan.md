@@ -45,6 +45,7 @@ Revisión del viernes 23:00 contra el doc de preparación (charlas): el motor y 
 - [ ] Costo mensual de operación: 300 leads/semana × (1 + señales promedio) × costo por decisión, Jev vs LLM.
 
 ## Sábado 12:00–18:00 · UI del demo (el pitch ES el demo)
+**Detalle completo y prioridades: `docs/ui-plan.md`** (manda sobre esta lista).
 - [ ] **Apertura = momento wow: "La semana de 30X".** Botón que pasa los 300 leads por la regla y por Jev: columnas que se llenan (agenda, otro programa, empresas, nurturing, persona) frente a "gracias". Contador: personas a las que la regla dijo gracias, cuántas tenían programa, costo total de decidir la semana y tiempo. Cifra de negocio (escenario viable) arriba.
 - [ ] **Zoom a un lead:** regla (puntaje y "gracias") vs Jev (acción, programa, probabilidades, porqué, ms y costo).
 - [ ] **Simulador de señales:** "fue a una clase de Luma", "respondió WhatsApp", "abandonó el formulario" → recalcula.

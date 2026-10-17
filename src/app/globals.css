@@ -1,0 +1,104 @@
+/* Tokens: claro por defecto, oscuro seleccionado (no invertido). Paleta de referencia de dataviz. */
+:root {
+  color-scheme: light;
+  --bg: #f6f6f4;
+  --surface: #fcfcfb;
+  --border: #e3e2de;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --text-3: #75746f;
+  --jev: #2a78d6;        /* serie única de Jev */
+  --jev-soft: #cde2fb;
+  --legacy: #8f8e89;     /* regla actual: gris, recesivo */
+  --good: #0ca30c;
+  --critical: #d03b3b;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme='light'])) {
+    color-scheme: dark;
+    --bg: #111110;
+    --surface: #1a1a19;
+    --border: #2e2e2b;
+    --text: #f0efec;
+    --text-2: #c3c2b7;
+    --text-3: #9a998f;
+    --jev: #3987e5;
+    --jev-soft: #184f95;
+    --legacy: #6f6e69;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #111110;
+  --surface: #1a1a19;
+  --border: #2e2e2b;
+  --text: #f0efec;
+  --text-2: #c3c2b7;
+  --text-3: #9a998f;
+  --jev: #3987e5;
+  --jev-soft: #184f95;
+  --legacy: #6f6e69;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 64px; }
+h1, h2, h3 { line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(22px, 4vw, 28px); }
+h2 { font-size: clamp(20px, 3.4vw, 24px); }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--text-2); }
+.faint { color: var(--text-3); font-size: 13px; }
+.num { font-variant-numeric: tabular-nums; }
+
+section.block { margin-top: 40px; }
+.block-head { display: grid; gap: 6px; margin-bottom: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.grid-2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.tiles { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+.tile .value { font-size: 28px; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.tile .label { color: var(--text-2); font-size: 14px; }
+
+.btn {
+  appearance: none; border: 0; border-radius: 8px; cursor: pointer;
+  background: var(--jev); color: #fff; font: inherit; font-weight: 600;
+  padding: 12px 18px; min-height: 44px;
+}
+.btn:disabled { opacity: 0.6; cursor: default; }
+.btn:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+/* Barras horizontales con etiqueta directa */
+.bars { display: grid; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: minmax(110px, 34%) 1fr 48px; align-items: center; gap: 10px; font-size: 14px; }
+.bar-track { height: 22px; position: relative; }
+.bar-fill { position: absolute; inset: 0 auto 0 0; border-radius: 0 4px 4px 0; transition: width 900ms cubic-bezier(.2,.7,.2,1); }
+.bar-row .count { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.bar-row:hover .bar-fill, .bar-row:focus-within .bar-fill { filter: brightness(1.08); }
+@media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
+
+.hero { display: grid; gap: 4px; }
+.hero .value { font-size: clamp(34px, 7vw, 52px); font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+
+details summary { cursor: pointer; color: var(--text-2); font-size: 14px; }
+details[open] summary { margin-bottom: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--text-2); font-weight: 500; }
+td.num, th.num { text-align: right; }
+
+.tooltip {
+  position: absolute; pointer-events: none; z-index: 2;
+  background: var(--text); color: var(--surface); font-size: 13px;
+  padding: 6px 8px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -100%);
+}
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
