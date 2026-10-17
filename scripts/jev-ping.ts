@@ -4,7 +4,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { experimental_decide as decideWithJev } from 'ai';
 import { buildState } from '../src/engine/state.ts';
 import { toSdkQuestions, normalize } from '../src/engine/jev.ts';
-import { decide } from '../src/engine/decide.ts';
+import { decideForLead } from '../src/engine/decide.ts';
 import { legacyRoute } from '../src/engine/legacy.ts';
 import leads from '../data/leads.json' with { type: 'json' };
 import type { Lead } from '../src/engine/types.ts';
@@ -36,9 +36,9 @@ try {
   const t0 = Date.now();
   const raw = await decideWithJev({ model: 'typesafe-ai/jev', state, questions: toSdkQuestions() });
   const answers = normalize(raw);
-  report.full = { ok: true, ms: Date.now() - t0, raw, answers, decision: decide(answers), legacy: legacyRoute(lead) };
+  report.full = { ok: true, ms: Date.now() - t0, raw, answers, decision: decideForLead(lead, answers), legacy: legacyRoute(lead) };
   console.log('✔ 6 preguntas', Date.now() - t0, 'ms');
-  console.log(JSON.stringify({ answers, decision: decide(answers), legacy: legacyRoute(lead) }, null, 2));
+  console.log(JSON.stringify({ answers, decision: decideForLead(lead, answers), legacy: legacyRoute(lead) }, null, 2));
 } catch (e: any) {
   report.full = { ok: false, error: String(e?.message ?? e), data: e?.responseBody ?? e?.data };
   console.log('✘ 6 preguntas:', e?.message ?? e);

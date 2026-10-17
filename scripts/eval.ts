@@ -6,7 +6,7 @@ import leads from '../data/leads.json' with { type: 'json' };
 import evalSet from '../data/eval-set.json' with { type: 'json' };
 import { askJev } from '../src/engine/jev-client.ts';
 import { buildState } from '../src/engine/state.ts';
-import { decide } from '../src/engine/decide.ts';
+import { decideForLead } from '../src/engine/decide.ts';
 import { legacyRoute } from '../src/engine/legacy.ts';
 import type { Expected, Lead } from '../src/engine/types.ts';
 
@@ -16,7 +16,7 @@ const rows: any[] = [];
 
 for (const [i, lead] of set.entries()) {
   const call = await askJev(buildState(lead));
-  const d = decide(call.answers);
+  const d = decideForLead(lead, call.answers);
   const exp = expected[lead.id];
   rows.push({
     id: lead.id, archetype: lead.archetype, expected: exp, decision: d, answers: call.answers,

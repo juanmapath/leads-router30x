@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import leads from '../../../../data/leads.json';
 import { askJev } from '../../../engine/jev-client.ts';
 import { buildState } from '../../../engine/state.ts';
-import { decide } from '../../../engine/decide.ts';
+import { decideForLead } from '../../../engine/decide.ts';
 import { legacyRoute } from '../../../engine/legacy.ts';
 import type { Lead, Signal } from '../../../engine/types.ts';
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       state,
       legacy: legacyRoute(lead),
       jev: { answers: call.answers, ms: call.ms, costUsd: call.costUsd, source: call.source },
-      decision: decide(call.answers),
+      decision: decideForLead(lead, call.answers),
     });
   } catch (err) {
     console.error('Jev falló', err);

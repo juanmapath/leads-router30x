@@ -1,5 +1,5 @@
 import { programName } from './programs.ts';
-import type { Decision, JevAnswers, ProgramId } from './types.ts';
+import type { Decision, JevAnswers, Lead, ProgramId } from './types.ts';
 
 // Umbrales. Se ajustan con la gráfica de calibración (scripts/eval.ts), no a ojo.
 export const THRESHOLDS = {
@@ -55,4 +55,30 @@ export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
 
   reasons.push('Caso dudoso: lo revisa una persona.');
   return { action: 'cola_humana', program: a.program.value, channel: 'vendedor', needsHuman: true, reasons };
+}
+
+/**
+ * Decisión para un lead concreto: los umbrales de decide() más las reglas de código que dependen
+ * de lo que sabemos del lead (no de Jev). Es la que usan la API, el eval y el demo.
+ */
+export function decideForLead(lead: Lead, a: JevAnswers, t = THRESHOLDS): Decision {
+  const d = decide(a, t);
+
+  // Agendar ya exige evidencia del formulario. El texto libre (cargo escrito, Luma, WhatsApp,
+  // perfil) es dato no confiable: por sí solo nunca lleva a agenda_ya, diga lo que diga Jev.
+  if (d.action === 'agenda_ya' && !formSupportsAgenda(lead)) {
+    return {
+      ...d, action: 'cola_humana', channel: 'vendedor', needsHuman: true,
+      reasons: [...d.reasons, 'Jev lo ve listo, pero el formulario no lo respalda (cargo, inversión o envío incompleto): lo revisa una persona.'],
+    };
+  }
+  return d;
+}
+
+/** Cargo de decisor elegido en el formulario, inversión posible y envío completo. */
+export function formSupportsAgenda(lead: Lead): boolean {
+  const f = lead.form;
+  return !lead.partial
+    && (f.role === 'founder_ceo' || f.role === 'c_level')
+    && (f.investment === 'listo' || f.investment === 'plan_pagos');
 }
