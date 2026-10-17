@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import leads from '../../../../data/leads.json';
+import weekLeads from '../../../../data/week-leads.json';
 import { askJev, hasRecording } from '../../../engine/jev-client.ts';
 import { buildState } from '../../../engine/state.ts';
 import { decideForLead } from '../../../engine/decide.ts';
@@ -31,7 +32,8 @@ function sanitizeSignals(raw: unknown): Signal[] {
 // simulate: claves del simulador del demo (textos fijos, pregrabados); extraSignals: señales libres.
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { id?: string; simulate?: unknown; extraSignals?: Signal[] };
-  const base = (leads as Lead[]).find((l) => l.id === body.id);
+  // Leads del zoom (L###, con el simulador pregrabado) y de la semana del demo (W###).
+  const base = (leads as Lead[]).find((l) => l.id === body.id) ?? (weekLeads.leads as Lead[]).find((l) => l.id === body.id);
   if (!base) return NextResponse.json({ error: 'Lead no encontrado' }, { status: 404 });
 
   const extra = sanitizeSignals(body.extraSignals);

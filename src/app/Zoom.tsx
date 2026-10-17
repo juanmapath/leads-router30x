@@ -2,6 +2,7 @@
 // Un lead de cerca (docs/ui-plan.md, sección 2): la regla de puntos de 30X frente a Jev para el mismo lead.
 import { useEffect, useState } from 'react';
 import leads from '../../data/leads.json';
+import weekLeads from '../../data/week-leads.json';
 import { FEATURED_ARCHETYPES, SIM_KEYS, SIM_SIGNALS, type SimKey } from '../engine/simulator.ts';
 import type { Lead } from '../engine/types.ts';
 import { JevCard, type JevResult } from './JevCard.tsx';
@@ -19,7 +20,9 @@ const ARCHETYPE_LABEL: Record<string, string> = {
 interface ZoomResult extends JevResult { legacy: { score: number; route: string; breakdown: Record<string, number> }; lead: { id: string; archetype?: string } }
 
 export function Zoom({ selectedId }: { selectedId?: string | null }) {
+  // Destacados (con el simulador pregrabado) de data/leads.json; el selector explora la semana del demo.
   const all = leads as Lead[];
+  const week = weekLeads.leads as Lead[];
   const defaultId = all.find((l) => l.archetype === 'gerente_equipo_multinacional')?.id ?? all[0].id;
   const [id, setId] = useState(defaultId);
   const [res, setRes] = useState<ZoomResult | null>(null);
@@ -80,7 +83,7 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
 
       <label className="faint" htmlFor="lead-select">Explorar los 300 leads de la semana</label>
       <select id="lead-select" className="select" value={id} onChange={(e) => load(e.target.value)}>
-        {all.map((l) => <option key={l.id} value={l.id}>{l.id} · {ARCHETYPE_LABEL[l.archetype ?? ''] ?? l.archetype?.replaceAll('_', ' ')} · {l.country}</option>)}
+        {[...featured, ...week].map((l) => <option key={l.id} value={l.id}>{l.id} · {ARCHETYPE_LABEL[l.archetype ?? ''] ?? l.archetype?.replaceAll('_', ' ')} · {l.country}</option>)}
       </select>
 
       {error && <p className="card" style={{ marginTop: 12 }}>{error} En producción, este lead pasaría a una persona.</p>}
