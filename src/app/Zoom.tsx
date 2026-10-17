@@ -20,9 +20,9 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
   async function load(leadId: string) {
     setId(leadId);
     setError(null);
-    const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id: leadId }) });
-    const body = await r.json();
-    if (!r.ok) { setError(body.error ?? 'No se pudo decidir este lead.'); setRes(null); return; }
+    const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id: leadId }) }).catch(() => null);
+    const body = r ? await r.json().catch(() => ({})) : {};
+    if (!r || !r.ok) { setError(body.error ?? 'No se pudo decidir este lead.'); setRes(null); return; }
     setRes(body);
   }
 
