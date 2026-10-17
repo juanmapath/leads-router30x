@@ -4,6 +4,7 @@ import { askJev } from '../../../engine/jev-client.ts';
 import { buildState } from '../../../engine/state.ts';
 import { decideForLead } from '../../../engine/decide.ts';
 import { legacyRoute } from '../../../engine/legacy.ts';
+import { simSignals } from '../../../engine/simulator.ts';
 import type { Lead, Signal } from '../../../engine/types.ts';
 
 export const runtime = 'nodejs';
@@ -25,14 +26,15 @@ function sanitizeSignals(raw: unknown): Signal[] {
     }));
 }
 
-// POST { id, extraSignals? } → la regla actual y la decisión de Jev, lado a lado.
+// POST { id, simulate?, extraSignals? } → la regla actual y la decisión de Jev, lado a lado.
+// simulate: claves del simulador del demo (textos fijos, pregrabados); extraSignals: señales libres.
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { id?: string; extraSignals?: Signal[] };
+  const body = (await req.json().catch(() => ({}))) as { id?: string; simulate?: unknown; extraSignals?: Signal[] };
   const base = (leads as Lead[]).find((l) => l.id === body.id);
   if (!base) return NextResponse.json({ error: 'Lead no encontrado' }, { status: 404 });
 
   const extra = sanitizeSignals(body.extraSignals);
-  const lead: Lead = { ...base, signals: [...base.signals, ...extra] };
+  const lead: Lead = { ...base, signals: [...base.signals, ...simSignals(body.simulate), ...extra].slice(0, 8) };
   const state = buildState(lead);
 
   try {

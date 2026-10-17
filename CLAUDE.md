@@ -23,7 +23,7 @@ npm install
 npm test          # verificador determinístico, sin red (tsx --test tests/engine.test.ts)
 npm run gen       # regenera data/leads.json (300) y data/eval-set.json (100 etiquetados), determinístico
 npm run ping      # primera llamada real a Jev → data/recordings/_ping.json
-npm run eval      # 100 etiquetados por Jev → data/eval-report.json (precisión, calibración, costo, latencia)
+npm run eval -- --set tuning|test  # set de ajuste o de prueba → data/eval-report-{set}.json
 npm run record    # graba en data/recordings los leads sin grabación (el demo en Vercel responde los 300 sin clave)
 npm run dev       # http://localhost:3000
 ```
