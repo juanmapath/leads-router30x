@@ -37,3 +37,16 @@ Puntaje > 6 → agenda entrevista. ≤ 6 → "Gracias por tu aplicación" (fin).
 ## Preguntas abiertas para mentorías
 - Sandra Carrillo (head of community): ¿qué pasa hoy con quien saca ≤ 6? ¿% contactado en < 5 min? ¿qué cifra reporta ventas a Andrés? ¿mezcla de canales (Andrés dice que la mayoría viene de LinkedIn)?
 - Alfredo Hernández (desarrollador de 30X, dio la demo de Jev): umbrales que usa, manejo de "otro" y calibración en choice, cómo se conectaría con HubSpot y Dapta.
+
+## Segundo formulario: AI Sales (form.30x.com/to/ai-sales-30x, revisado el 16 oct., 23:45)
+**Lo comparten las landings de AI Sales, Sales Machine, Growth Rockstar, Advanced Strategy y Xtreme Growth.** La pregunta de inversión menciona "USD 1.950" aunque Growth Rockstar cuesta USD 1.295 y Advanced Strategy USD 2.500: un candidato de esos programas recibe la pregunta de otro precio (hipótesis a confirmar con 30X).
+
+Preguntas y puntos: rol (Founder/CEO, líder de ventas, RevOps/CS = 3; growth/marketing, representante de ventas, consultor = 2; producto, tech/data = 1), cupos (solo yo = 0, 2–4 = 1, 5+ = 3), decisión (decido = 3, co-decido = 2, recomiendo = 1, no participo = 0), inversión USD 1.950 (lista = 4, plan = 2, imposible = 0). Sin puntos: tipo de negocio, urgencia y un **texto libre "¿Cuál es la razón o desafío por la que aplicaste?"** que ninguna regla lee.
+
+Lógica: 5+ cupos → llamada con el área de empresas (**aquí sí funciona**). Negocio "de mostrador" → "gracias". Inversión imposible → "gracias". Urgencia "no es prioridad" → "gracias". Puntaje < 7 → "Estamos analizando tu aplicación, pronto nos comunicaremos contigo" (revisión manual). Resto → entrevista de admisión. Etiquetas: High ≥ 7, Medium 4–6, Low ≤ 3.
+
+**Qué confirma y qué corrige:**
+- Confirma: 30X califica con sumas de puntos fijas, distintas por formulario, y no lee el texto libre.
+- Confirma: un mismo formulario sirve a 5 programas, así que la regla no puede decidir **qué programa** encaja. Ese es el hueco que Jev llena mejor.
+- Corrige: en AI Sales los puntajes bajos no se descartan; van a revisión manual ("estamos analizando"). El "gracias" definitivo es para negocios de mostrador, inversión imposible o urgencia nula. El argumento no es "los pierden", es "una persona revisa a mano lo que Jev puede ordenar en milisegundos".
+- Refuerza: la ruta de empresas funciona en AI Sales pero no en el Inmersivo, lo que sugiere una falla en el formulario del Inmersivo (confirmar con 30X).
