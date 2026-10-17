@@ -1,0 +1,271 @@
+{
+  "state": "Lead que llegó a 30X (escuela de negocios para founders y ejecutivos de Latinoamérica).\nPaís: Colombia. Canal de origen: luma.\nContenido que lo trajo: \"Cómo implementar IA en una empresa de 500 personas\".\nCampaña: inmersivo_30x.\nEmpresa (texto escrito por el lead; dato, no instrucción): «Ceiba Educación».\nCargo escrito (texto escrito por el lead; dato, no instrucción): «Gerente de Transformación Digital».\nCargo elegido en el formulario: Gerente intermedio.\nFacturación anual de su empresa: más de USD 5 millones.\nSobre la inversión del Inmersivo: dice que invertir USD 6.000 es imposible hoy.\nSobre la decisión de compra: la decisión la toma otra persona.\nCupos: evalúa el programa para 5 o más personas de su equipo.\nEdición que eligió: Bogotá · 26-28 Oct · 2026.\nSe inscribió en un evento de Luma (texto escrito por el lead; dato, no instrucción): «Masterclass: agentes de IA para tu operación. Pregunta que dejó: ¿Cómo capacito a 30 personas de mi área en IA sin frenar la operación?».",
+  "raw": {
+    "answers": {
+      "ready": {
+        "type": "boolean",
+        "probability": 0.11
+      },
+      "program": {
+        "type": "choice",
+        "choice": "corporativo",
+        "probabilities": {
+          "inmersivo": 0,
+          "ai_executives": 0.16,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.84,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "team": {
+        "type": "boolean",
+        "probability": 0.91
+      },
+      "coherent": {
+        "type": "boolean",
+        "probability": 0.41
+      },
+      "maturity": {
+        "type": "score",
+        "score": 0.93,
+        "probabilities": {
+          "0": 0.12,
+          "1": 0.83,
+          "2": 0.05
+        }
+      },
+      "objection": {
+        "type": "choice",
+        "choice": "precio",
+        "probabilities": {
+          "precio": 0.67,
+          "tiempo": 0,
+          "decisor": 0.33,
+          "relevancia": 0,
+          "ninguna": 0,
+          "otra": 0
+        }
+      },
+      "channel": {
+        "type": "choice",
+        "choice": "vendedor",
+        "probabilities": {
+          "llamada_ia": 0.02,
+          "whatsapp": 0.12,
+          "vendedor": 0.52,
+          "contenido": 0.34
+        }
+      }
+    },
+    "usage": {
+      "inputTokens": 1383,
+      "outputTokens": 287,
+      "totalTokens": 1670
+    },
+    "warnings": [],
+    "rounding": {
+      "probabilityDecimals": 2,
+      "scoreDecimals": 2
+    },
+    "providerMetadata": {
+      "typesafe": {
+        "confidence": {
+          "program": 0.82,
+          "maturity": 0.74,
+          "objection": 0.6,
+          "channel": 0.36
+        }
+      },
+      "gateway": {
+        "routing": {
+          "originalModelId": "typesafe-ai/jev",
+          "resolvedProvider": "typesafe-ai",
+          "fallbacksAvailable": [
+            "digitalocean"
+          ],
+          "planningReasoning": "System credentials planned for: typesafe-ai, digitalocean. Total execution order: typesafe-ai(system) → digitalocean(system)",
+          "canonicalSlug": "typesafe-ai/jev",
+          "finalProvider": "typesafe-ai",
+          "modelAttemptCount": 1,
+          "modelAttempts": [
+            {
+              "canonicalSlug": "typesafe-ai/jev",
+              "success": true,
+              "providerAttemptCount": 1,
+              "providerAttempts": [
+                {
+                  "provider": "typesafe-ai",
+                  "credentialType": "system",
+                  "success": true,
+                  "startTime": 1792211823810,
+                  "endTime": 1792211823888,
+                  "statusCode": 200
+                }
+              ]
+            }
+          ],
+          "totalProviderAttemptCount": 1
+        },
+        "cost": "0.000058086",
+        "marketCost": "0.000058086",
+        "surchargeCost": "0",
+        "gatewayCost": "0.000058086",
+        "inferenceCost": "0.000058086",
+        "inputInferenceCost": "0.000058086",
+        "outputInferenceCost": "0",
+        "generationId": "gen_01M542CB5J405K8P6FYNQC80Q7"
+      }
+    },
+    "response": {
+      "modelId": "typesafe-ai/jev",
+      "headers": {
+        "access-control-allow-headers": "Content-Type, Content-Encoding, Authorization, ai-gateway-auth-method, ai-gateway-protocol-version, ai-model-id, ai-language-model-id, ai-language-model-specification-version, ai-image-model-specification-version, ai-embedding-model-specification-version, ai-decision-model-specification-version, ai-evaluation-model-specification-version, ai-language-model-streaming, ai-reporting-tags, ai-reporting-user, http-referer, x-title, x-ai-gateway-api-key, x-api-key, anthropic-beta, anthropic-version, idempotency-key, x-vercel-ai-gateway-team, x-vercel-gateway-extended-time, x-session-id, x-session-affinity, TypeSafe-Danger-Zone-Images, TypeSafe-Danger-Zone-Long-Context",
+        "access-control-allow-methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "retry-after, x-should-retry",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-encoding": "br",
+        "content-type": "application/json",
+        "date": "Sat, 17 Oct 2026 04:37:03 GMT",
+        "server": "Vercel",
+        "set-cookie": "_vcrr_9ae7f6aec35bf5b1=dpl_DD5aHnFaw3HaVqXY2QFm4Z8aJtRe|0.4282; Path=/; Secure; HttpOnly; SameSite=None",
+        "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+        "transfer-encoding": "chunked",
+        "x-matched-path": "/v4/ai/decision-model",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "iad1::iad1::cs6hm-1792211823775-88160106856e"
+      },
+      "body": {
+        "answers": {
+          "ready": {
+            "type": "boolean",
+            "probability": 0.11
+          },
+          "program": {
+            "type": "choice",
+            "choice": "corporativo",
+            "probabilities": {
+              "inmersivo": 0,
+              "ai_executives": 0.16,
+              "ai_developers": 0,
+              "ai_sales": 0,
+              "sales_machine": 0,
+              "growth_rockstar": 0,
+              "fundraising": 0,
+              "corporativo": 0.84,
+              "ninguno": 0,
+              "otro": 0
+            }
+          },
+          "team": {
+            "type": "boolean",
+            "probability": 0.91
+          },
+          "coherent": {
+            "type": "boolean",
+            "probability": 0.41
+          },
+          "maturity": {
+            "type": "score",
+            "score": 0.93,
+            "probabilities": {
+              "0": 0.12,
+              "1": 0.83,
+              "2": 0.05
+            }
+          },
+          "objection": {
+            "type": "choice",
+            "choice": "precio",
+            "probabilities": {
+              "precio": 0.67,
+              "tiempo": 0,
+              "decisor": 0.33,
+              "relevancia": 0,
+              "ninguna": 0,
+              "otra": 0
+            }
+          },
+          "channel": {
+            "type": "choice",
+            "choice": "vendedor",
+            "probabilities": {
+              "llamada_ia": 0.02,
+              "whatsapp": 0.12,
+              "vendedor": 0.52,
+              "contenido": 0.34
+            }
+          }
+        },
+        "model": "typesafe-ai/jev",
+        "rounding": {
+          "probabilityDecimals": 2,
+          "scoreDecimals": 2
+        },
+        "usage": {
+          "inputTokens": 1383,
+          "outputTokens": 287
+        },
+        "warnings": [],
+        "providerMetadata": {
+          "typesafe": {
+            "confidence": {
+              "program": 0.82,
+              "maturity": 0.74,
+              "objection": 0.6,
+              "channel": 0.36
+            }
+          },
+          "gateway": {
+            "routing": {
+              "originalModelId": "typesafe-ai/jev",
+              "resolvedProvider": "typesafe-ai",
+              "fallbacksAvailable": [
+                "digitalocean"
+              ],
+              "planningReasoning": "System credentials planned for: typesafe-ai, digitalocean. Total execution order: typesafe-ai(system) → digitalocean(system)",
+              "canonicalSlug": "typesafe-ai/jev",
+              "finalProvider": "typesafe-ai",
+              "modelAttemptCount": 1,
+              "modelAttempts": [
+                {
+                  "canonicalSlug": "typesafe-ai/jev",
+                  "success": true,
+                  "providerAttemptCount": 1,
+                  "providerAttempts": [
+                    {
+                      "provider": "typesafe-ai",
+                      "credentialType": "system",
+                      "success": true,
+                      "startTime": 1792211823810,
+                      "endTime": 1792211823888,
+                      "statusCode": 200
+                    }
+                  ]
+                }
+              ],
+              "totalProviderAttemptCount": 1
+            },
+            "cost": "0.000058086",
+            "marketCost": "0.000058086",
+            "surchargeCost": "0",
+            "gatewayCost": "0.000058086",
+            "inferenceCost": "0.000058086",
+            "inputInferenceCost": "0.000058086",
+            "outputInferenceCost": "0",
+            "generationId": "gen_01M542CB5J405K8P6FYNQC80Q7"
+          }
+        }
+      },
+      "timestamp": "2026-10-17T04:37:04.415Z"
+    }
+  },
+  "ms": 191,
+  "inputTokens": 1383,
+  "costUsd": 0.000058086
+}

@@ -1,0 +1,641 @@
+{
+  "set": "test",
+  "n": 120,
+  "precision": {
+    "accion": 0.825,
+    "programa": 0.9191919191919192,
+    "programaEvaluables": 99,
+    "empresa": 0.9583333333333334
+  },
+  "errores": {
+    "total": 21,
+    "terminanEnPersona": 15,
+    "pctEnPersona": 0.7142857142857143,
+    "caros": 0
+  },
+  "porTipo": {
+    "arquetipo": {
+      "n": 65,
+      "accion": 0.9692307692307692,
+      "caros": 0
+    },
+    "contradiccion": {
+      "n": 18,
+      "accion": 0.6666666666666666,
+      "caros": 0
+    },
+    "basura": {
+      "n": 12,
+      "accion": 0.6666666666666666,
+      "caros": 0
+    },
+    "origen": {
+      "n": 10,
+      "accion": 0.7,
+      "caros": 0
+    },
+    "solo_luma": {
+      "n": 15,
+      "accion": 0.6,
+      "caros": 0
+    }
+  },
+  "calibracion": [
+    {
+      "tramo": "0–50 %",
+      "n": 1,
+      "acierto": 0
+    },
+    {
+      "tramo": "50–60 %",
+      "n": 4,
+      "acierto": 0.5
+    },
+    {
+      "tramo": "60–70 %",
+      "n": 8,
+      "acierto": 0.875
+    },
+    {
+      "tramo": "70–80 %",
+      "n": 11,
+      "acierto": 0.8181818181818182
+    },
+    {
+      "tramo": "80–90 %",
+      "n": 19,
+      "acierto": 0.8947368421052632
+    },
+    {
+      "tramo": "90–100 %",
+      "n": 56,
+      "acierto": 1
+    }
+  ],
+  "recuperados": {
+    "recuperados": 54,
+    "descartadosPorLaRegla": 64
+  },
+  "regla": {
+    "entrevista": 41,
+    "entrevistaIndebida": 18
+  },
+  "costo": {
+    "porDecisionUsd": 0.00005533535000000002,
+    "por1000Usd": 0.05533535000000002
+  },
+  "latenciaMs": {
+    "media": 207,
+    "p95": 272
+  },
+  "fuentes": {
+    "replay": 120,
+    "live": 0
+  },
+  "detalleErrores": [
+    {
+      "id": "PA003",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.42,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.6,
+        "dist": {
+          "inmersivo": 0.27,
+          "ai_executives": 0.02,
+          "ai_developers": 0,
+          "ai_sales": 0.6,
+          "sales_machine": 0.09,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.3
+    },
+    {
+      "id": "PA051",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.45,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.64,
+        "dist": {
+          "inmersivo": 0.24,
+          "ai_executives": 0.04,
+          "ai_developers": 0,
+          "ai_sales": 0.64,
+          "sales_machine": 0.07,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.31
+    },
+    {
+      "id": "PS002",
+      "tipo": "contradiccion",
+      "arquetipo": "sucio_contradiccion",
+      "nota": "Parece dudoso pero es bueno: CFO de empresa mediana, lista, decide con alguien",
+      "esperado": "agenda_ya",
+      "obtuvo": "cola_humana",
+      "listo": 0.52,
+      "programa": {
+        "value": "inmersivo",
+        "p": 1,
+        "dist": {
+          "inmersivo": 1,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.13
+    },
+    {
+      "id": "PS005",
+      "tipo": "contradiccion",
+      "arquetipo": "sucio_contradiccion",
+      "nota": "CEO de fintech pre-seed con plan de pagos que viene por ronda",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.79,
+      "programa": {
+        "value": "fundraising",
+        "p": 0.55,
+        "dist": {
+          "inmersivo": 0.45,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0.55,
+          "corporativo": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.1
+    },
+    {
+      "id": "PS008",
+      "tipo": "contradiccion",
+      "arquetipo": "sucio_contradiccion",
+      "nota": "CEO listo pero evalúa para 2–4 personas",
+      "esperado": "cola_humana",
+      "obtuvo": "empresas",
+      "listo": 0.89,
+      "programa": {
+        "value": "inmersivo",
+        "p": 0.99,
+        "dist": {
+          "inmersivo": 0.99,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.8
+    },
+    {
+      "id": "PS009",
+      "tipo": "contradiccion",
+      "arquetipo": "sucio_contradiccion",
+      "nota": "Formulario listo, pero se retracta por WhatsApp",
+      "esperado": "cola_humana",
+      "obtuvo": "nurturing",
+      "listo": 0.11,
+      "programa": {
+        "value": "ninguno",
+        "p": 0.77,
+        "dist": {
+          "inmersivo": 0.06,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0.01,
+          "sales_machine": 0.12,
+          "growth_rockstar": 0,
+          "fundraising": 0.01,
+          "corporativo": 0,
+          "ninguno": 0.77,
+          "otro": 0.03
+        }
+      },
+      "equipo": 0.09
+    },
+    {
+      "id": "PS012",
+      "tipo": "contradiccion",
+      "arquetipo": "sucio_contradiccion",
+      "nota": "CTO con plan de pagos por contenido para developers",
+      "esperado": "cola_humana",
+      "obtuvo": "nurturing",
+      "listo": 0.4,
+      "programa": {
+        "value": "inmersivo",
+        "p": 0.9,
+        "dist": {
+          "inmersivo": 0.9,
+          "ai_executives": 0.07,
+          "ai_developers": 0.03,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.16
+    },
+    {
+      "id": "PS016",
+      "tipo": "contradiccion",
+      "arquetipo": "sucio_contradiccion",
+      "nota": "Chief of Staff de empresa grande, lista, decide con alguien",
+      "esperado": "cola_humana",
+      "obtuvo": "nurturing",
+      "listo": 0.47,
+      "programa": {
+        "value": "inmersivo",
+        "p": 1,
+        "dist": {
+          "inmersivo": 1,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.14
+    },
+    {
+      "id": "PS022",
+      "tipo": "basura",
+      "arquetipo": "sucio_basura",
+      "nota": "Cargo \"no sé\"",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.08,
+      "programa": {
+        "value": "ninguno",
+        "p": 0.59,
+        "dist": {
+          "inmersivo": 0.03,
+          "ai_executives": 0.07,
+          "ai_developers": 0,
+          "ai_sales": 0.02,
+          "sales_machine": 0.08,
+          "growth_rockstar": 0.01,
+          "fundraising": 0,
+          "corporativo": 0.04,
+          "ninguno": 0.59,
+          "otro": 0.16
+        }
+      },
+      "equipo": 0.19
+    },
+    {
+      "id": "PS028",
+      "tipo": "basura",
+      "arquetipo": "sucio_basura",
+      "nota": "Desempleado que elige fundador",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.69,
+      "programa": {
+        "value": "inmersivo",
+        "p": 0.8,
+        "dist": {
+          "inmersivo": 0.8,
+          "ai_executives": 0.01,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0.02,
+          "growth_rockstar": 0,
+          "fundraising": 0.01,
+          "corporativo": 0,
+          "ninguno": 0.15,
+          "otro": 0.01
+        }
+      },
+      "equipo": 0.06
+    },
+    {
+      "id": "PS029",
+      "tipo": "basura",
+      "arquetipo": "sucio_basura",
+      "nota": "Cargo y empresa \"zzz\" con 5+ cupos",
+      "esperado": "cola_humana",
+      "obtuvo": "empresas",
+      "listo": 0.11,
+      "programa": {
+        "value": "corporativo",
+        "p": 0.92,
+        "dist": {
+          "inmersivo": 0.02,
+          "ai_executives": 0.02,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.92,
+          "ninguno": 0.04,
+          "otro": 0
+        }
+      },
+      "equipo": 0.87
+    },
+    {
+      "id": "PS030",
+      "tipo": "basura",
+      "arquetipo": "sucio_basura",
+      "nota": "Cargo \"-\", fundador con plan de pagos",
+      "esperado": "cola_humana",
+      "obtuvo": "nurturing",
+      "listo": 0.37,
+      "programa": {
+        "value": "inmersivo",
+        "p": 1,
+        "dist": {
+          "inmersivo": 1,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.18
+    },
+    {
+      "id": "PS033",
+      "tipo": "origen",
+      "arquetipo": "sucio_origen",
+      "nota": "Practicante que llegó por contenido de rondas",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.06,
+      "programa": {
+        "value": "fundraising",
+        "p": 0.54,
+        "dist": {
+          "inmersivo": 0,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0.54,
+          "corporativo": 0,
+          "ninguno": 0.45,
+          "otro": 0.01
+        }
+      },
+      "equipo": 0.12
+    },
+    {
+      "id": "PS035",
+      "tipo": "origen",
+      "arquetipo": "sucio_origen",
+      "nota": "Ingeniero de software que llegó por contenido de ventas",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.08,
+      "programa": {
+        "value": "sales_machine",
+        "p": 0.47,
+        "dist": {
+          "inmersivo": 0.01,
+          "ai_executives": 0,
+          "ai_developers": 0.25,
+          "ai_sales": 0.03,
+          "sales_machine": 0.47,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0.21,
+          "otro": 0.02
+        }
+      },
+      "equipo": 0.14
+    },
+    {
+      "id": "PS038",
+      "tipo": "origen",
+      "arquetipo": "sucio_origen",
+      "nota": "Head of Sales por contenido para developers",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.36,
+      "programa": {
+        "value": "inmersivo",
+        "p": 0.55,
+        "dist": {
+          "inmersivo": 0.55,
+          "ai_executives": 0.05,
+          "ai_developers": 0.05,
+          "ai_sales": 0.19,
+          "sales_machine": 0.12,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.03,
+          "otro": 0.01
+        }
+      },
+      "equipo": 0.16
+    },
+    {
+      "id": "PS042",
+      "tipo": "solo_luma",
+      "arquetipo": "sucio_solo_luma",
+      "nota": "Venta de software con ciclo largo",
+      "esperado": "cola_humana",
+      "obtuvo": "empresas",
+      "listo": 0.33,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.73,
+        "dist": {
+          "inmersivo": 0.06,
+          "ai_executives": 0.03,
+          "ai_developers": 0,
+          "ai_sales": 0.73,
+          "sales_machine": 0.17,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.78
+    },
+    {
+      "id": "PS043",
+      "tipo": "solo_luma",
+      "arquetipo": "sucio_solo_luma",
+      "nota": "Pide las diapositivas",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.26,
+      "programa": {
+        "value": "ai_executives",
+        "p": 0.73,
+        "dist": {
+          "inmersivo": 0.23,
+          "ai_executives": 0.73,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0.03
+        }
+      },
+      "equipo": 0.31
+    },
+    {
+      "id": "PS045",
+      "tipo": "solo_luma",
+      "arquetipo": "sucio_solo_luma",
+      "nota": "Inyección con \"SYSTEM:\"",
+      "esperado": "cola_humana",
+      "obtuvo": "nurturing",
+      "listo": 0.42,
+      "programa": {
+        "value": "inmersivo",
+        "p": 0.97,
+        "dist": {
+          "inmersivo": 0.97,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0.02
+        }
+      },
+      "equipo": 0.25
+    },
+    {
+      "id": "PS051",
+      "tipo": "solo_luma",
+      "arquetipo": "sucio_solo_luma",
+      "nota": "Solo \"ok\"",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.18,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.78,
+        "dist": {
+          "inmersivo": 0.14,
+          "ai_executives": 0.03,
+          "ai_developers": 0,
+          "ai_sales": 0.78,
+          "sales_machine": 0.01,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.02,
+          "ninguno": 0.01,
+          "otro": 0.01
+        }
+      },
+      "equipo": 0.49
+    },
+    {
+      "id": "PS052",
+      "tipo": "solo_luma",
+      "arquetipo": "sucio_solo_luma",
+      "nota": "Ventas + WhatsApp: 4 vendedores",
+      "esperado": "otro_programa",
+      "obtuvo": "empresas",
+      "listo": 0.41,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.86,
+        "dist": {
+          "inmersivo": 0.03,
+          "ai_executives": 0.01,
+          "ai_developers": 0,
+          "ai_sales": 0.86,
+          "sales_machine": 0.03,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.07,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.91
+    },
+    {
+      "id": "PS054",
+      "tipo": "solo_luma",
+      "arquetipo": "sucio_solo_luma",
+      "nota": "Vaga + WhatsApp \"mándenme info\"",
+      "esperado": "cola_humana",
+      "obtuvo": "nurturing",
+      "listo": 0.47,
+      "programa": {
+        "value": "inmersivo",
+        "p": 0.7,
+        "dist": {
+          "inmersivo": 0.7,
+          "ai_executives": 0,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.04,
+          "otro": 0.26
+        }
+      },
+      "equipo": 0.24
+    }
+  ]
+}
