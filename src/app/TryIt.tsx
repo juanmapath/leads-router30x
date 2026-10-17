@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { MAX_FREE_TEXT } from '../engine/state.ts';
 import { TRY_EXAMPLES } from '../engine/try.ts';
+import { ActionPreview } from './ActionPreview.tsx';
 import { JevCard, type JevResult } from './JevCard.tsx';
 
 const ROLES = [['', 'Cargo (opcional)'], ['founder_ceo', 'Socio, fundador o CEO'], ['c_level', 'Director, VP o C-level'], ['gerente', 'Gerente'], ['coordinador', 'Coordinador'], ['analista', 'Analista']];
@@ -56,7 +57,7 @@ export function TryIt() {
         <div className="card" aria-live="polite">
           {error && <p>{error}</p>}
           {!error && !res && <p className="muted">Aquí aparece la decisión de Jev, con sus probabilidades y los umbrales.</p>}
-          {res && <JevCard result={res} />}
+          {res && <><JevCard result={res} /><ActionPreview result={res} /></>}
         </div>
       </div>
     </section>

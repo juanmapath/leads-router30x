@@ -129,7 +129,7 @@ td.num, th.num { text-align: right; }
 .cover .lead { font-size: clamp(16px, 2.1vw, 19px); color: var(--text-2); max-width: 60ch; line-height: 1.5; }
 .counters .value { font-size: 24px; }
 .week-bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
-.dots { position: relative; width: 100%; transition: height 400ms ease; }
+.dots { position: relative; width: 100%; overflow: hidden; transition: height 400ms ease; } /* nunca ensancha la página al cambiar de ancho */
 .dots-label { position: absolute; font-size: 13px; color: var(--text-2); line-height: 1.25; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
 .dots-label strong { color: var(--text); font-size: 15px; }
 .dot {
@@ -270,3 +270,13 @@ section.block { scroll-margin-top: 16px; }
 .supuestos summary h2 { display: inline; }
 .supuestos-body { display: grid; gap: 12px; margin-top: 12px; }
 .supuestos-body ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+
+/* Capa de acción compacta (zoom y Pruébalo tú) */
+.action-preview { display: grid; gap: 10px; }
+.card[aria-live] .action-preview { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.action-preview-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.mock-badge.static { position: static; }
+.action-preview-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.mock-mini { display: grid; gap: 6px; align-content: start; border: 1px dashed var(--border); border-radius: 12px; padding: 12px; font-size: 14px; }
+.mock-mini .mock-cta { justify-self: start; }
+.action-preview .was { color: var(--text-3); }

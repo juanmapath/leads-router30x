@@ -94,6 +94,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
 
   useLayoutEffect(() => {
     if (!box.current) return;
+    setWidth(Math.floor(box.current.clientWidth)); // medida inicial sin esperar al primer callback del observer
     const ro = new ResizeObserver(([e]) => setWidth(Math.floor(e.contentRect.width)));
     ro.observe(box.current);
     return () => ro.disconnect();

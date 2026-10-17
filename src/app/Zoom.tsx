@@ -5,6 +5,7 @@ import leads from '../../data/leads.json';
 import weekLeads from '../../data/week-leads.json';
 import { FEATURED_ARCHETYPES, SIM_KEYS, SIM_SIGNALS, type SimKey } from '../engine/simulator.ts';
 import type { Lead } from '../engine/types.ts';
+import { ActionPreview } from './ActionPreview.tsx';
 import { JevCard, type JevResult } from './JevCard.tsx';
 
 const ROUTE_LABEL: Record<string, string> = { entrevista: 'Entrevista', gracias: '"Gracias por tu aplicación"', abandono: 'Abandonó (sin acción)' };
@@ -119,6 +120,7 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
           </div>
         </div>
       )}
+      {res && <div className="card" style={{ marginTop: 12 }}><ActionPreview result={res} prev={sim.length ? base : null} /></div>}
     </section>
   );
 }
