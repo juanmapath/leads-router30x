@@ -24,6 +24,7 @@ npm test          # verificador determinístico, sin red (tsx --test tests/engin
 npm run gen       # regenera data/leads.json (300) y data/eval-set.json (100 etiquetados), determinístico
 npm run ping      # primera llamada real a Jev → data/recordings/_ping.json
 npm run eval      # 100 etiquetados por Jev → data/eval-report.json (precisión, calibración, costo, latencia)
+npm run record    # graba en data/recordings los leads sin grabación (el demo en Vercel responde los 300 sin clave)
 npm run dev       # http://localhost:3000
 ```
 Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** commitear `.env.local` ni pegar la clave en código, logs o README.

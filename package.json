@@ -11,7 +11,8 @@
     "test": "tsx --test tests/engine.test.ts",
     "gen": "tsx scripts/generate-leads.ts",
     "ping": "tsx --env-file=.env.local scripts/jev-ping.ts",
-    "eval": "tsx --env-file=.env.local scripts/eval.ts"
+    "eval": "tsx --env-file=.env.local scripts/eval.ts",
+    "record": "tsx --env-file=.env.local scripts/record-all.ts"
   },
   "dependencies": {
     "ai": "^7.0.143",

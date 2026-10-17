@@ -33,9 +33,13 @@ function mode(): 'live' | 'record' | 'replay' {
   return process.env.VERCEL ? 'replay' : 'record';
 }
 
+/** Ruta de la grabación para un estado (exista o no). */
+export function recordingPath(state: string, questions: QuestionDef[] = QUESTIONS) {
+  return path.join(DIR, `${keyFor(state, questions)}.json`);
+}
+
 export async function askJev(state: string, questions: QuestionDef[] = QUESTIONS): Promise<JevCall> {
-  const key = keyFor(state, questions);
-  const file = path.join(DIR, `${key}.json`);
+  const file = recordingPath(state, questions);
   const m = mode();
 
   if (m === 'replay' && existsSync(file)) {
