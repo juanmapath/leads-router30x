@@ -1,7 +1,7 @@
 // Primera llamada real a Jev con un lead sintético. Imprime y guarda la respuesta cruda.
 // Uso (PowerShell, en la carpeta del repo):  npm run ping
 import { writeFileSync, mkdirSync } from 'node:fs';
-import { experimental_evaluate as evaluate } from 'ai';
+import { experimental_decide as decideWithJev } from 'ai';
 import { buildState } from '../src/engine/state.ts';
 import { toSdkQuestions, normalize } from '../src/engine/jev.ts';
 import { decide } from '../src/engine/decide.ts';
@@ -23,7 +23,7 @@ console.log('Estado que recibe Jev:\n' + state + '\n');
 // 1) Prueba mínima: una sola pregunta sí/no.
 try {
   const t0 = Date.now();
-  const r = await (evaluate as any)({ model: 'typesafe-ai/jev', state, questions: { team: { type: 'boolean', instructions: '¿Es una oportunidad para formar a un equipo de varias personas?' } } });
+  const r = await decideWithJev({ model: 'typesafe-ai/jev', state, questions: { team: { type: 'boolean', instructions: '¿Es una oportunidad para formar a un equipo de varias personas?' } } });
   report.minimal = { ok: true, ms: Date.now() - t0, raw: r };
   console.log('✔ prueba mínima', Date.now() - t0, 'ms');
 } catch (e: any) {
@@ -34,7 +34,7 @@ try {
 // 2) Las 6 preguntas del PRD en una sola llamada.
 try {
   const t0 = Date.now();
-  const raw = await (evaluate as any)({ model: 'typesafe-ai/jev', state, questions: toSdkQuestions() });
+  const raw = await decideWithJev({ model: 'typesafe-ai/jev', state, questions: toSdkQuestions() });
   const answers = normalize(raw);
   report.full = { ok: true, ms: Date.now() - t0, raw, answers, decision: decide(answers), legacy: legacyRoute(lead) };
   console.log('✔ 6 preguntas', Date.now() - t0, 'ms');

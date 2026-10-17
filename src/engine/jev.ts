@@ -1,72 +1,88 @@
+import type { Experimental_DecisionQuestion } from 'ai';
 import { QUESTIONS, type QuestionDef } from './questions.ts';
 import type { JevAnswers } from './types.ts';
 
 /**
- * Traduce nuestras preguntas al formato del AI SDK (experimental_evaluate).
- * Booleans: { type: 'boolean', instructions }. Choice/score: opciones en `criteria`.
- * Si el formato real difiere, se ajusta solo aquí (scripts/jev-ping.mjs lo verifica).
+ * Traduce nuestras preguntas al formato de `experimental_decide` del AI SDK (ai 7).
+ * Boolean: solo instrucciones. Choice: opciones en `criteria` (nombre → descripción).
+ * Score: niveles ordenados en `criteria`, indexados desde cero.
  */
-export function toSdkQuestions(questions: QuestionDef[] = QUESTIONS): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
+export function toSdkQuestions(questions: QuestionDef[] = QUESTIONS): Record<string, Experimental_DecisionQuestion> {
+  const out: Record<string, Experimental_DecisionQuestion> = {};
   for (const q of questions) {
     if (q.type === 'boolean') out[q.key] = { type: 'boolean', instructions: q.instructions };
-    else if (q.type === 'choice')
-      out[q.key] = {
-        type: 'choice',
-        instructions: q.instructions,
-        criteria: Object.fromEntries(Object.entries(q.options).map(([k, v]) => [k, v])),
-      };
+    else if (q.type === 'choice') out[q.key] = { type: 'choice', instructions: q.instructions, criteria: q.options };
     else out[q.key] = { type: 'score', instructions: q.instructions, criteria: q.levels };
   }
   return out;
 }
 
-type Raw = Record<string, unknown>;
+// Respuesta cruda por pregunta, tal como la devuelve el SDK (ver DecisionModelV4Answer).
+// `refusal`: Jev declinó responder esa pregunta.
+type RawAnswer =
+  | { type: 'boolean'; probability: number }
+  | { type: 'choice'; choice: string; probabilities?: Record<string, number> }
+  | { type: 'score'; score: number; probabilities?: Record<string, number> }
+  | { type: 'refusal' };
 
-/** Lee una probabilidad de un objeto de respuesta, sin importar el nombre del campo. */
-function num(x: unknown): number | undefined {
-  return typeof x === 'number' && Number.isFinite(x) ? x : undefined;
+const isNum = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x);
+
+/** Lee una respuesta y la valida; cualquier cosa inesperada cuenta como negativa. */
+function read(raw: unknown): RawAnswer {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  if (r.type === 'boolean' && isNum(r.probability)) return r as RawAnswer;
+  if (r.type === 'choice' && typeof r.choice === 'string') return r as RawAnswer;
+  if (r.type === 'score' && isNum(r.score)) return r as RawAnswer;
+  return { type: 'refusal' };
 }
 
-function readAnswer(raw: unknown): { value: unknown; p: number; dist?: Record<string, number> } {
-  if (raw === null || typeof raw !== 'object') return { value: raw, p: 0 };
-  const r = raw as Raw;
-  const value = r.value ?? r.answer ?? r.choice ?? r.label ?? r.result;
-  const p = num(r.probability) ?? num(r.p) ?? num(r.confidence) ?? num(r.score);
-  const distRaw = (r.probabilities ?? r.distribution ?? r.scores) as Raw | undefined;
-  let dist: Record<string, number> | undefined;
-  if (distRaw && typeof distRaw === 'object') {
-    dist = Object.fromEntries(Object.entries(distRaw).filter(([, v]) => typeof v === 'number')) as Record<string, number>;
+/** `probability` ya es P(sí): se usa tal cual, sin invertir. */
+function yes(a: RawAnswer): { value: boolean; p: number } | undefined {
+  return a.type === 'boolean' ? { value: a.probability >= 0.5, p: a.probability } : undefined;
+}
+
+/** Sin distribución no hay confianza conocida: p = 0 (lo conservador, manda a persona). */
+function choice<T extends string>(a: RawAnswer, fallback: T): { value: T; p: number } {
+  if (a.type !== 'choice') return { value: fallback, p: 0 };
+  return { value: a.choice as T, p: a.probabilities?.[a.choice] ?? 0 };
+}
+
+/** Score: nivel más probable si hay distribución; si no, el nivel más cercano a la posición. */
+function level<T extends string>(a: RawAnswer, levels: readonly T[], fallback: T): { value: T; p: number } {
+  if (a.type !== 'score') return { value: fallback, p: 0 };
+  const entries = Object.entries(a.probabilities ?? {}).filter(([, v]) => isNum(v));
+  if (entries.length) {
+    const [k, p] = entries.sort((x, y) => y[1] - x[1])[0];
+    return { value: levels[Number(k)] ?? fallback, p };
   }
-  let best = value;
-  let bestP = p;
-  if (dist && Object.keys(dist).length) {
-    const [k, v] = Object.entries(dist).sort((x, y) => y[1] - x[1])[0];
-    if (best === undefined) best = k;
-    if (bestP === undefined) bestP = v;
-  }
-  return { value: best, p: bestP ?? 0, dist };
+  const i = Math.min(levels.length - 1, Math.max(0, Math.round(a.score)));
+  return { value: levels[i], p: Math.max(0, 1 - Math.abs(a.score - i)) };
 }
 
-/** Para booleans devolvemos P(sí), aunque el modelo informe la probabilidad de su respuesta. */
-function yesProb(a: { value: unknown; p: number; dist?: Record<string, number> }): { value: boolean; p: number } {
-  if (a.dist && typeof a.dist.true === 'number') return { value: a.dist.true >= 0.5, p: a.dist.true };
-  const v = a.value === true || a.value === 'true' || a.value === 'yes' || a.value === 'sí';
-  return { value: v, p: v ? a.p : 1 - a.p };
-}
+const MATURITY = ['baja', 'media', 'alta'] as const;
 
-/** Normaliza el resultado crudo del SDK a JevAnswers. */
+/**
+ * Normaliza el resultado de `experimental_decide` a JevAnswers.
+ * Si Jev se niega (o falta) en ready, program o team, el programa queda en "otro" con p = 0:
+ * decide() lo manda a cola humana.
+ */
 export function normalize(result: unknown): JevAnswers {
-  const r = (result ?? {}) as Raw;
-  const answers = (r.answers ?? r.results ?? r) as Raw;
-  const get = (k: string) => readAnswer(answers[k]);
-  const program = get('program');
+  const answers = ((result ?? {}) as { answers?: Record<string, unknown> }).answers ?? {};
+  const get = (k: string) => read(answers[k]);
+
+  const ready = yes(get('ready'));
+  const team = yes(get('team'));
+  const rawProgram = get('program');
+  let program: JevAnswers['program'] = choice<JevAnswers['program']['value']>(rawProgram, 'otro');
+  if (rawProgram.type === 'choice' && rawProgram.probabilities) program.dist = rawProgram.probabilities;
+  if (!ready || !team || rawProgram.type === 'refusal') program = { value: 'otro', p: 0 };
+
   return {
-    ready: yesProb(get('ready')),
-    program: { value: (program.value as JevAnswers['program']['value']) ?? 'otro', p: program.p, dist: program.dist },
-    team: yesProb(get('team')),
-    maturity: { value: (get('maturity').value as JevAnswers['maturity']['value']) ?? 'media', p: get('maturity').p },
-    objection: { value: (get('objection').value as JevAnswers['objection']['value']) ?? 'otra', p: get('objection').p },
-    channel: { value: (get('channel').value as JevAnswers['channel']['value']) ?? 'vendedor', p: get('channel').p },
+    ready: ready ?? { value: false, p: 0.5 },
+    program,
+    team: team ?? { value: false, p: 0 },
+    maturity: level(get('maturity'), MATURITY, 'media'),
+    objection: choice<JevAnswers['objection']['value']>(get('objection'), 'otra'),
+    channel: choice<JevAnswers['channel']['value']>(get('channel'), 'vendedor'),
   };
 }

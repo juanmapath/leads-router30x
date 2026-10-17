@@ -52,6 +52,11 @@ Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** co
 - Commits pequeños, mensajes en español. El repo debe correr con `npm install && npm test && npm run build`.
 - Free tier del AI Gateway tiene límites estrictos (429): una llamada por lead con las 6 preguntas, grabar y reutilizar. **No comprar créditos** (se pierde el crédito gratis de USD 5/mes).
 
-## Estado (vie 16 oct, 21:45)
-Hecho: motor, regla actual replicada, 300 leads + 100 etiquetados, verificador (6 tests verdes), cliente Jev con grabar/reproducir, script de evaluación, página mínima, CI.
-Pendiente inmediato: `npm install` → `npm run ping` → ajustar `toSdkQuestions`/`normalize` al formato real → `npm run eval` → push a GitHub → deploy en Vercel. Luego ver `docs/plan.md`.
+## Estado (vie 16 oct, noche)
+Hecho: motor, regla actual replicada, 300 leads + 100 etiquetados, verificador (8 tests), CI, página mínima.
+Jev conectado (crédito pagado en el AI Gateway: el free tier no incluye `typesafe-ai/jev`). `jev.ts` usa `experimental_decide` y el formato real
+(boolean.probability = P(sí); choice con distribución; score por índice; `refusal` → cola humana). Ping y eval grabados en `data/recordings/`.
+Eval (100): acción 80 %, programa 93 %, empresa 100 %; recupera 55 de 73 que la regla actual descarta; ~USD 0,05 por 1.000 decisiones; 234 ms media.
+Cambio en `decide.ts` tras el eval: programa claro distinto al Inmersivo → `otro_programa` aunque `ready` sea bajo (`ready` mide el Inmersivo).
+Pendiente: decidir umbrales (`readyHigh` 0,8 deja fuera founders con plan de pagos en 0,79; `program` 0,7 manda gerente_comercial 0,61–0,68 a persona),
+CMO → Jev elige AI for Executives en vez de Growth Rockstar, push a GitHub, deploy en Vercel. Luego ver `docs/plan.md`.

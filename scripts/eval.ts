@@ -36,7 +36,6 @@ const buckets = [0.5, 0.6, 0.7, 0.8, 0.9, 1.01].map((hi, i, arr) => {
 });
 const recovered = rows.filter((r) => r.legacy !== 'entrevista' && r.expected.action !== 'nurturing' && r.actionOk).length;
 const lostByLegacy = rows.filter((r) => r.legacy !== 'entrevista' && r.expected.action !== 'nurturing').length;
-const live = rows.filter((r) => r.source === 'live');
 
 const report = {
   n,
@@ -44,7 +43,8 @@ const report = {
   calibracion: buckets,
   recuperados: { recuperados: recovered, descartadosPorLaRegla: lostByLegacy },
   costo: { porDecisionUsd: rows.reduce((a, r) => a + r.costUsd, 0) / n, por1000Usd: (rows.reduce((a, r) => a + r.costUsd, 0) / n) * 1000 },
-  latenciaMs: live.length ? Math.round(live.reduce((a, r) => a + r.ms, 0) / live.length) : null,
+  // ms medidos en la llamada en vivo (también quedan en la grabación, así que replay los reporta igual).
+  latenciaMs: { media: Math.round(rows.reduce((a, r) => a + r.ms, 0) / n), p95: [...rows.map((r) => r.ms)].sort((a, b) => a - b)[Math.floor(n * 0.95)] },
   errores: rows.filter((r) => !r.actionOk).map((r) => ({ id: r.id, arquetipo: r.archetype, esperado: r.expected.action, obtuvo: r.decision.action, programa: r.answers.program })),
 };
 writeFileSync('data/eval-report.json', JSON.stringify(report, null, 2));

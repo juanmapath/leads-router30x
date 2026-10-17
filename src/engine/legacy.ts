@@ -26,7 +26,7 @@ export function legacyScore(form: FormAnswers): { score: number; breakdown: Reco
     inversion: form.investment ? INVESTMENT_POINTS[form.investment] : 0,
     decisor: form.decider ? DECIDER_POINTS[form.decider] : 0,
   };
-  const score = Object.values(breakdown).reduce((a, b) => a + b, 0);
+  const score = Object.values(breakdown).reduce<number>((a, b) => a + b, 0);
   return { score, breakdown };
 }
 

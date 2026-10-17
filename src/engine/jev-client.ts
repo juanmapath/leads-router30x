@@ -5,7 +5,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { experimental_evaluate as evaluate } from 'ai';
+import { experimental_decide as decideWithJev } from 'ai';
 import { QUESTIONS, type QuestionDef } from './questions.ts';
 import { normalize, toSdkQuestions } from './jev.ts';
 import type { JevAnswers } from './types.ts';
@@ -45,16 +45,10 @@ export async function askJev(state: string, questions: QuestionDef[] = QUESTIONS
 
   const t0 = Date.now();
   const raw = await withRetry(() =>
-    // El tipo exacto de evaluate() depende de la versión del SDK; validamos la salida con normalize().
-    (evaluate as unknown as (args: unknown) => Promise<unknown>)({
-      model: JEV_MODEL,
-      state,
-      questions: toSdkQuestions(questions),
-    }),
+    decideWithJev({ model: JEV_MODEL, state, questions: toSdkQuestions(questions), maxRetries: 0 }),
   );
   const ms = Date.now() - t0;
-  const usage = (raw as { usage?: { inputTokens?: number } })?.usage;
-  const inputTokens = usage?.inputTokens ?? Math.ceil((state.length + JSON.stringify(questions).length) / 4);
+  const inputTokens = raw.usage.inputTokens ?? Math.ceil((state.length + JSON.stringify(questions).length) / 4);
   const call = { raw, ms, inputTokens, costUsd: (inputTokens / 1_000_000) * PRICE_PER_MTOK };
 
   if (m === 'record') {

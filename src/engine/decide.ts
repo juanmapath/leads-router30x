@@ -41,15 +41,16 @@ export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
     return { action: 'agenda_ya', program: a.program.value, channel: channelFor('llamada_ia'), needsHuman: false, reasons };
   }
 
+  // `ready` mide la conversación comercial del Inmersivo: un programa claro distinto se ofrece igual.
+  if (programClear && a.program.value !== 'inmersivo') {
+    reasons.push(`Le encaja otro programa, no el Inmersivo: se le ofrece ${programName(a.program.value)}.`);
+    if (a.objection.value === 'precio') reasons.push('Objeción probable: precio. Ofrecer plan de pagos.');
+    return { action: 'otro_programa', program: a.program.value, channel: channelFor('whatsapp'), needsHuman: false, reasons };
+  }
+
   if (readyYes < t.readyLow && (programClear || a.program.value === 'ninguno')) {
     reasons.push('No está listo hoy: se nutre con contenido del programa que le encaja.');
     return { action: 'nurturing', program: a.program.value, channel: 'contenido', needsHuman: false, reasons };
-  }
-
-  if (programClear && a.program.value !== 'inmersivo' && readyYes >= t.readyLow) {
-    reasons.push(`Interés real pero no para el Inmersivo: se le ofrece ${programName(a.program.value)}.`);
-    if (a.objection.value === 'precio') reasons.push('Objeción probable: precio. Ofrecer plan de pagos.');
-    return { action: 'otro_programa', program: a.program.value, channel: channelFor('whatsapp'), needsHuman: false, reasons };
   }
 
   reasons.push('Caso dudoso: lo revisa una persona.');

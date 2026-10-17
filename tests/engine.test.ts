@@ -41,6 +41,17 @@ test('umbrales: cada probabilidad va a la acción correcta', () => {
   assert.equal(decide({ ...base, program: { value: 'otro', p: 0.9 } }).action, 'cola_humana');
 });
 
+// Hallazgo del eval con Jev real: `ready` mide si está listo para la conversación comercial
+// (el Inmersivo). Un founder con Sales Machine o Fundraising claro tiene ready bajo y no por eso
+// es nurturing: es otro programa. Nurturing es para quien no tiene programa o no está listo para el suyo.
+test('programa claro distinto al Inmersivo se ofrece aunque no esté listo para el Inmersivo', () => {
+  const founder = decide({ ...base, ready: { value: false, p: 0.3 }, program: { value: 'sales_machine', p: 0.95 } });
+  assert.equal(founder.action, 'otro_programa');
+  assert.equal(founder.program, 'sales_machine');
+  assert.equal(decide({ ...base, ready: { value: false, p: 0.06 }, program: { value: 'ninguno', p: 0.8 } }).action, 'nurturing');
+  assert.equal(decide({ ...base, ready: { value: false, p: 0.3 }, program: { value: 'inmersivo', p: 0.95 } }).action, 'nurturing');
+});
+
 test('la zona dudosa siempre pasa por una persona', () => {
   for (let p = 0; p <= 1.0001; p += 0.05) {
     for (const prog of ['inmersivo', 'ai_sales', 'otro', 'ninguno'] as const) {
@@ -50,19 +61,45 @@ test('la zona dudosa siempre pasa por una persona', () => {
   }
 });
 
-test('normalize entiende varias formas de respuesta', () => {
+// Formato real de experimental_decide (ai 7): boolean.probability es P(sí), no la confianza;
+// score es la posición fraccional del nivel y sus probabilidades vienen por índice ("0", "1", ...).
+test('normalize lee el formato real del AI SDK', () => {
   const a = normalize({ answers: {
-    ready: { value: true, probability: 0.82 },
-    program: { value: 'ai_sales', probability: 0.71 },
-    team: { value: false, probability: 0.9 },
-    maturity: { value: 'alta', probability: 0.6 },
-    objection: { probabilities: { precio: 0.7, tiempo: 0.3 } },
-    channel: { answer: 'whatsapp', confidence: 0.66 },
+    ready: { type: 'boolean', probability: 0.82 },
+    program: { type: 'choice', choice: 'ai_sales', probabilities: { ai_sales: 0.71, inmersivo: 0.29 } },
+    team: { type: 'boolean', probability: 0.1 },
+    maturity: { type: 'score', score: 1.8, probabilities: { '0': 0.05, '1': 0.1, '2': 0.85 } },
+    objection: { type: 'choice', choice: 'precio' },
+    channel: { type: 'choice', choice: 'whatsapp', probabilities: { whatsapp: 0.66, vendedor: 0.34 } },
   } });
-  assert.equal(a.ready.p, 0.82);
-  assert.ok(Math.abs(a.team.p - 0.1) < 1e-9); // P(sí) = 1 - 0.9
-  assert.equal(a.objection.value, 'precio');
-  assert.equal(a.channel.value, 'whatsapp');
+  assert.deepEqual(a.ready, { value: true, p: 0.82 });
+  assert.deepEqual(a.team, { value: false, p: 0.1 }); // P(sí) tal cual, sin invertir
+  assert.equal(a.program.value, 'ai_sales');
+  assert.equal(a.program.p, 0.71);
+  assert.deepEqual(a.maturity, { value: 'alta', p: 0.85 });
+  assert.deepEqual(a.objection, { value: 'precio', p: 0 }); // sin distribución no inventamos confianza
+  assert.deepEqual(a.channel, { value: 'whatsapp', p: 0.66 });
+  assert.equal(decide(a).action, 'agenda_ya'); // ready 0,82 ≥ 0,8 y programa claro
+});
+
+test('si Jev se niega a responder algo clave, el lead pasa a una persona', () => {
+  const ok = {
+    ready: { type: 'boolean', probability: 0.95 },
+    program: { type: 'choice', choice: 'inmersivo', probabilities: { inmersivo: 0.9 } },
+    team: { type: 'boolean', probability: 0.05 },
+    maturity: { type: 'score', score: 1 },
+    objection: { type: 'choice', choice: 'ninguna' },
+    channel: { type: 'choice', choice: 'llamada_ia', probabilities: { llamada_ia: 0.9 } },
+  };
+  assert.equal(decide(normalize({ answers: ok })).action, 'agenda_ya');
+  for (const key of ['ready', 'program', 'team']) {
+    const d = decide(normalize({ answers: { ...ok, [key]: { type: 'refusal' } } }));
+    assert.equal(d.action, 'cola_humana', `negativa en ${key}`);
+  }
+  const noChannel = decide(normalize({ answers: { ...ok, channel: { type: 'refusal' } } }));
+  assert.equal(noChannel.action, 'agenda_ya');
+  assert.equal(noChannel.channel, 'llamada_ia'); // canal por defecto de la acción
+  assert.equal(decide(normalize({})).action, 'cola_humana'); // respuesta vacía o rota
 });
 
 test('estado: corto, en español y sin datos de contacto', () => {
