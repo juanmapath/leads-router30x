@@ -22,7 +22,7 @@ const JEV_COLS = [
   { key: 'otro_programa', label: 'Otro programa' },
   { key: 'empresas', label: 'Área de empresas' },
   { key: 'cola_humana', label: 'Lo revisa una persona' },
-  { key: 'nurturing', label: 'Seguir nutriendo' },
+  { key: 'nurturing', label: 'Mantener en contacto' },
 ] as const;
 const WITH_PROGRAM: Action[] = ['agenda_ya', 'otro_programa', 'empresas'];
 const FEATURED = 'gerente_equipo_multinacional';
@@ -276,7 +276,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
         <p className="ops-row">
           <span><strong className="num">{moved ? Math.round(live.autoNextStep * 100) : 0} %</strong> recibe su siguiente paso sin intervención humana</span>
           <span><strong className="num">{live.abandonRescue}</strong> abandonos pasan a contacto ({live.abandonVoice} con llamada inmediata del agente de voz)</span>
-          <span><strong className="num">{live.nurturing}</strong> siguen en nurturing</span>
+          <span><strong className="num">{live.nurturing}</strong> se mantienen en contacto (les enviamos contenido de su tema)</span>
           <span><strong className="num">{live.toPerson}</strong> revisa una persona</span>
         </p>
 
@@ -319,7 +319,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
               <div className="legend-items">
                 <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--jev)' }} />Descartado que recibe siguiente paso ({m.rescued})</span>
                 <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--human)' }} />Lo revisa una persona ({m.toPerson})</span>
-                <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--text-3)', opacity: 0.65 }} />Ya iba a entrevista o queda en nurturing</span>
+                <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--text-3)', opacity: 0.65 }} />Ya iba a entrevista o se mantiene en contacto</span>
               </div>
             )}
           </div>

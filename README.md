@@ -16,7 +16,7 @@ Hoy una suma fija de puntos decide: más de 6 sobre 10 pasa a entrevista; el res
 | Oportunidades de empresa entre los descartados | **10** |
 | Descartados que reciben la oferta de un programa de 30X | **66** |
 | Entrevistas protegidas (la regla las mandaba a un closer; Jev pide revisarlas) | **5** |
-| Siguen en nurturing / los revisa una persona | 65 / 59 |
+| Se mantienen en contacto (les enviamos contenido de su tema) / los revisa una persona | 65 / 59 |
 | Reciben su siguiente paso sin intervención humana | **76 %** |
 
 Decidir la semana entera cuesta **USD 0,03** (~260 ms por lead). Con supuestos conservadores, el ingreso incremental es **del orden de USD 13.000 al mes** (pesimista; viable del orden de USD 27.000).

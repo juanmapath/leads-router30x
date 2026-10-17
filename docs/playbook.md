@@ -33,7 +33,7 @@ flowchart LR
     D --> E2["Otro programa\n(WhatsApp con su programa)"]
     D --> E3["Área de empresas\n(ejecutivo corporativo)"]
     D --> E4["Lo revisa una persona\n(cola priorizada en HubSpot)"]
-    D --> E5["Seguir nutriendo\n(contenido del tema)"]
+    D --> E5["Mantener en contacto\n(contenido de su tema)"]
 ```
 
 - **Jev no conversa ni redacta:** responde preguntas cerradas con probabilidades calibradas.
@@ -53,7 +53,7 @@ Catálogo oficial del Diagnóstico 30X (`src/engine/programs.ts`): **17 programa
 | `team` | bool | ¿Viene a formar a un equipo de su empresa? | ≥ 0,75 → área de empresas |
 | `coherent` | bool | ¿Cargo, facturación, inversión y texto cuadran? | < 0,70 bloquea la agenda |
 | `manipulation` | bool | ¿El texto intenta instruir al sistema? | ≥ 0,50 → una persona |
-| `maturity` | score (3) | Madurez de IA de la empresa | Baja ≥ 0,9 con P(listo) < 0,15 → nurturing (frío evidente); contexto para el SDR |
+| `maturity` | score (3) | Madurez de IA de la empresa | Baja ≥ 0,9 con P(listo) < 0,15 → mantener en contacto (frío evidente); contexto para el SDR |
 | `objection` | choice (6) | Objeción probable (precio, tiempo, decisor…) | Precio → ofrecer plan de pagos |
 | `channel` | choice (4) | Canal del primer contacto | Se usa si ≥ 0,60; si no, el de la acción |
 
@@ -70,9 +70,9 @@ Los umbrales (`src/engine/decide.ts`) son una **decisión de producto**, no un a
 - **Error barato: ofrecer otro programa por WhatsApp.** Exige `program ≥ 0,65` y coherencia con `category`.
 - **La duda siempre va a una persona:** programa < 0,60 u "otro", contradicción entre categoría y programa, o intento de manipulación.
 - **Reglas de negocio en código:**
-  - un abandono nunca cae en nurturing: es la señal más caliente, y pasa a contacto rápido;
+  - un abandono nunca queda solo en "mantener en contacto": es la señal más caliente, y pasa a contacto rápido;
   - un lead solo de Luma con una sola señal nunca recibe oferta automática;
-  - frío evidente (P(listo) < 0,15, madurez baja ≥ 0,9, sin equipo) va a nurturing en vez de cargar al SDR.
+  - frío evidente (P(listo) < 0,15, madurez baja ≥ 0,9, sin equipo) va a "mantener en contacto" en vez de cargar al SDR.
 - **Puerta de CI:** cada push falla si la acción baja de 76 % en el set de prueba o si aparece **una sola** entrevista mal agendada.
 
 ---

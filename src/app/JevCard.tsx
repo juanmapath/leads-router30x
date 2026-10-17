@@ -10,7 +10,7 @@ export const ACTION_LABEL: Record<string, string> = {
   otro_programa: 'Otro programa',
   empresas: 'Área de empresas',
   cola_humana: 'Lo revisa una persona',
-  nurturing: 'Seguir nutriendo',
+  nurturing: 'Mantener en contacto',
 };
 
 export interface JevResult { decision: Decision; jev: { answers: JevAnswers; ms: number; costUsd: number; source: 'live' | 'replay' }; state?: string }

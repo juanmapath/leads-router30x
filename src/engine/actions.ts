@@ -5,7 +5,7 @@ import { CATEGORIES, PROGRAMS, programCategory, programName } from './programs.t
 import type { Action, Channel, Decision, JevAnswers, ProgramId } from './types.ts';
 
 export interface LeadView {
-  /** calendario = agenda una llamada · oferta = programa concreto · seguimiento = nurturing · asesor = lo revisa una persona. */
+  /** calendario = agenda una llamada · oferta = programa concreto · seguimiento = mantener en contacto · asesor = lo revisa una persona. */
   kind: 'calendario' | 'oferta' | 'seguimiento' | 'asesor';
   title: string;
   body: string;
@@ -18,7 +18,7 @@ export interface ActionPlan { lead: LeadView; followUp: FollowUp; team: TeamView
 type CatalogId = keyof typeof PROGRAMS;
 const inCatalog = (p: ProgramId): p is CatalogId => p in PROGRAMS;
 const ACTION_LABEL: Record<Action, string> = {
-  agenda_ya: 'Agenda ya', otro_programa: 'Otro programa', empresas: 'Área de empresas', nurturing: 'Seguir nutriendo', cola_humana: 'Lo revisa una persona',
+  agenda_ya: 'Agenda ya', otro_programa: 'Otro programa', empresas: 'Área de empresas', nurturing: 'Mantener en contacto', cola_humana: 'Lo revisa una persona',
 };
 const CHANNEL_LABEL: Record<Channel, string> = { llamada_ia: 'Llamada con agente de voz', whatsapp: 'WhatsApp', vendedor: 'Vendedor', contenido: 'Contenido por correo' };
 const pct = (p: number) => `${Math.round(p * 100)} %`;

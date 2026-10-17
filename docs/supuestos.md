@@ -15,7 +15,7 @@ No pudimos validar con 30X (los enlaces de mentoría no funcionaron). Estos son 
 ## Mezcla de una semana (para `data/week-mix.json`)
 | Grupo | % | Acción esperada |
 | --- | --- | --- |
-| Baja intención: estudiantes, curiosos de clase gratis, junior o independientes sin presupuesto, "solo Luma" vago | **45 %** | Nurturing (o una persona si es ambiguo) |
+| Baja intención: estudiantes, curiosos de clase gratis, junior o independientes sin presupuesto, "solo Luma" vago | **45 %** | Mantener en contacto: le enviamos contenido de su tema (o una persona si es ambiguo) |
 | Encaja en la Inmersión: CEO o founder con presupuesto y decisión | **20 %** | Agenda ya |
 | Otro de los 17 programas | **23 %** | Otro programa |
 | Viene por su empresa (equipo, 5+ cupos) | **4 %** | Área de empresas |
