@@ -1,5 +1,7 @@
 # Plan de UI/UX del demo (sábado 17 oct.)
 
+> **Actualización 10:15:** `docs/ux-negocio.md` (métricas de negocio, dónde vive Jev, capa de acción) manda sobre este plan donde choquen.
+
 El pitch ES el demo: una sola página que se presenta de arriba abajo como si fueran slides, y que también se entiende sola si el jurado la abre sin nosotros. Diseñada hacia atrás desde el guion de 3 minutos.
 
 ## Tesis que la página tiene que dejar en la cabeza del CTO
