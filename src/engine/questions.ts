@@ -23,7 +23,7 @@ export const QUESTIONS: QuestionDef[] = [
       ai_developers: 'AI for Developers (online, USD 2.000): perfiles técnicos que quieren construir agentes con código',
       ai_sales: 'AI Sales (online): founders y vendedores que quieren vender más con IA',
       sales_machine: 'Sales Machine (online, USD 1.990): founders B2B que necesitan un proceso comercial',
-      growth_rockstar: 'Growth Rockstar (online): equipos de marketing y growth',
+      growth_rockstar: 'Growth Rockstar (online): CMO, VP de marketing, head of growth y equipos de marketing y growth que quieren crecer con IA',
       fundraising: 'Fundraising School (online): founders preparando una ronda de inversión',
       corporativo: 'Plan corporativo: una empresa que quiere formar a un equipo',
       ninguno: 'Ninguno por ahora: no encaja o no tiene interés real',
