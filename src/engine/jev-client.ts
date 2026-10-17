@@ -39,6 +39,11 @@ export function recordingPath(state: string, questions: QuestionDef[] = QUESTION
   return path.join(DIR, `${keyFor(state, questions)}.json`);
 }
 
+/** ¿Hay grabación para este estado? (si no, askJev llamaría a Jev en vivo). */
+export function hasRecording(state: string, questions: QuestionDef[] = QUESTIONS) {
+  return existsSync(recordingPath(state, questions));
+}
+
 export async function askJev(state: string, questions: QuestionDef[] = QUESTIONS): Promise<JevCall> {
   const file = recordingPath(state, questions);
   const m = mode();

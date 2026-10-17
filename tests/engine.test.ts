@@ -241,3 +241,20 @@ test('coherencia: agenda_ya exige que Jev vea el formulario coherente y creíble
   assert.equal(decideForLead(ceoLead, normalize({ answers: { ...raw, coherent: { type: 'boolean', probability: 0.9 } } })).action, 'agenda_ya');
   assert.ok(toSdkQuestions().coherent, 'la pregunta de coherencia va en la misma llamada');
 });
+
+// La URL pública no puede quemar el crédito de Jev: las llamadas en vivo (sin grabación) tienen tope
+// por IP por hora y un tope global diario. Las reproducciones de grabaciones no cuentan.
+test('límite de llamadas en vivo: 30 por IP por hora y tope global diario', async () => {
+  const { createLimiter } = await import('../src/engine/rate-limit.ts');
+  const lim = createLimiter({ perIpPerHour: 30, globalPerDay: 50 });
+  const t0 = Date.parse('2026-10-17T12:00:00Z');
+  for (let i = 0; i < 30; i++) assert.ok(lim.check('1.1.1.1', t0 + i).ok, `llamada ${i + 1}`);
+  const blocked = lim.check('1.1.1.1', t0 + 31);
+  assert.equal(blocked.ok, false);
+  assert.ok(blocked.retryAfterSec > 0);
+  assert.ok(lim.check('2.2.2.2', t0 + 32).ok, 'otra IP sigue pudiendo');
+  assert.ok(lim.check('1.1.1.1', t0 + 3_600_001).ok, 'pasada la hora se libera');
+  for (let i = 0; i < 30; i++) lim.check(`9.9.9.${i}`, t0 + 40 + i); // llena el tope global (50)
+  assert.equal(lim.check('3.3.3.3', t0 + 100).ok, false, 'tope global diario');
+  assert.ok(lim.check('3.3.3.3', t0 + 86_400_001).ok, 'al día siguiente se libera');
+});

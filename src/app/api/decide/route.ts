@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import leads from '../../../../data/leads.json';
-import { askJev } from '../../../engine/jev-client.ts';
+import { askJev, hasRecording } from '../../../engine/jev-client.ts';
+import { createLimiter } from '../../../engine/rate-limit.ts';
 import { buildState } from '../../../engine/state.ts';
 import { decideForLead } from '../../../engine/decide.ts';
 import { legacyRoute } from '../../../engine/legacy.ts';
@@ -13,6 +14,9 @@ export const runtime = 'nodejs';
 // Evita estados enormes (costo) y reduce la superficie de prompt injection.
 const SIGNAL_TYPES: Signal['type'][] = ['luma_event', 'whatsapp_reply', 'email_open', 'form_abandoned', 'video_watched'];
 const MAX_TEXT = 300;
+
+// Tope de llamadas EN VIVO (sin grabación): 30 por IP por hora y 500 al día en total. Protege el crédito.
+const limiter = createLimiter({ perIpPerHour: 30, globalPerDay: 500 });
 
 function sanitizeSignals(raw: unknown): Signal[] {
   if (!Array.isArray(raw)) return [];
@@ -36,6 +40,17 @@ export async function POST(req: Request) {
   const extra = sanitizeSignals(body.extraSignals);
   const lead: Lead = { ...base, signals: [...base.signals, ...simSignals(body.simulate), ...extra].slice(0, 8) };
   const state = buildState(lead);
+
+  if (!hasRecording(state)) {
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'local';
+    const gate = limiter.check(ip);
+    if (!gate.ok) {
+      return NextResponse.json(
+        { error: 'Se alcanzó el límite de pruebas en vivo con Jev. Intenta más tarde; en producción el lead pasaría a la cola humana.', retryAfterSec: gate.retryAfterSec, legacy: legacyRoute(lead), state },
+        { status: 429, headers: { 'Retry-After': String(gate.retryAfterSec) } },
+      );
+    }
+  }
 
   try {
     const call = await askJev(state);
