@@ -1,5 +1,7 @@
 // Esquema de preguntas tipadas para Jev (ver PRD, sección "Esquema de preguntas").
 // Preguntas simples; la combinación y los umbrales viven en decide.ts.
+// Categoría y programa se arman desde el catálogo oficial (programs.ts): una sola fuente.
+import { CATEGORIES, CATEGORY_IDS, PROGRAMS, PROGRAM_IDS } from './programs.ts';
 
 export type QuestionDef =
   | { key: string; type: 'boolean'; instructions: string }
@@ -14,18 +16,17 @@ export const QUESTIONS: QuestionDef[] = [
       '¿Esta persona está lista para una conversación comercial con 30X esta semana? Sí solo si muestra interés claro y tiene capacidad de decidir o pagar un programa.',
   },
   {
+    key: 'category',
+    type: 'choice',
+    instructions: '¿En qué categoría del catálogo de 30X está lo que esta persona necesita hoy, según su cargo, su empresa, la razón o desafío que escribió y el contenido que la trajo?',
+    options: { ...Object.fromEntries(CATEGORY_IDS.map((id) => [id, CATEGORIES[id].forJev])), ninguna: 'Ninguna: no hay una necesidad clara o no tiene interés real' },
+  },
+  {
     key: 'program',
     type: 'choice',
-    instructions: '¿Qué programa de 30X le encaja mejor hoy a esta persona, según su cargo, su empresa, su presupuesto y sus intereses?',
+    instructions: '¿Qué programa de 30X le encaja mejor hoy a esta persona, según su cargo, su empresa, su presupuesto, la razón o desafío que escribió y sus intereses?',
     options: {
-      inmersivo: 'Inmersivo presencial de 3 días (USD 6.000): founders, CEOs y C-level con empresa en crecimiento y presupuesto',
-      ai_executives: 'AI for Executives (online): ejecutivos que lideran la adopción de IA en su empresa',
-      ai_developers: 'AI for Developers (online, USD 2.000): perfiles técnicos que quieren construir agentes con código',
-      ai_sales: 'AI Sales (online): founders y vendedores que quieren vender más con IA',
-      sales_machine: 'Sales Machine (online, USD 1.990): founders B2B que necesitan un proceso comercial',
-      growth_rockstar: 'Growth Rockstar (online): CMO, VP de marketing, head of growth y equipos de marketing y growth que quieren crecer con IA',
-      fundraising: 'Fundraising School (online): founders preparando una ronda de inversión',
-      corporativo: 'Plan corporativo: una empresa que quiere formar a un equipo',
+      ...Object.fromEntries(PROGRAM_IDS.map((id) => [id, PROGRAMS[id].forJev])),
       ninguno: 'Ninguno por ahora: no encaja o no tiene interés real',
       otro: 'Otro: no es claro, mejor que decida una persona',
     },

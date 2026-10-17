@@ -33,51 +33,87 @@ interface Archetype {
   build: () => { form: Partial<Lead['form']>; partial?: boolean; noForm?: boolean; content: string; luma?: [string, string]; expected: Expected };
 }
 
+// reason = "¿Cuál es la razón o desafío por la que aplicaste?" (texto libre que el formulario de AI Sales ya pide).
 const ARCHETYPES: Archetype[] = [
   { id: 'ceo_listo', weight: 15, build: () => ({
-    form: { role: 'founder_ceo', roleText: pick(['CEO y cofundador', 'Fundadora', 'CEO']), revenue: pick(['1m_5m', 'mas_5m'] as const), investment: 'listo', decider: 'solo', seats: 'solo' },
+    form: { role: 'founder_ceo', roleText: pick(['CEO y cofundador', 'Fundadora', 'CEO']), revenue: pick(['1m_5m', 'mas_5m'] as const), investment: 'listo', decider: 'solo', seats: 'solo',
+      reason: pick(['Queremos expandirnos a otro país el próximo año y necesito ordenar el equipo directivo.', 'Crecimos rápido y ya no puedo estar en todo; quiero aprender a delegar y escalar.', 'Busco red con otros CEOs y una estrategia para duplicar la empresa.']) },
     content: 'Inmersivo 30X: escala tu empresa con los fundadores de Rappi',
-    expected: { action: 'agenda_ya', program: 'inmersivo', team: false } }) },
+    expected: { action: 'agenda_ya', program: 'inmersion', team: false } }) },
   { id: 'founder_plan_pagos', weight: 10, build: () => ({
-    form: { role: 'founder_ceo', roleText: 'Fundador', revenue: '200k_500k', investment: 'plan_pagos', decider: 'solo', seats: 'solo' },
+    form: { role: 'founder_ceo', roleText: 'Fundador', revenue: '200k_500k', investment: 'plan_pagos', decider: 'solo', seats: 'solo',
+      reason: pick(['Sigo metido en la operación diaria y quiero empezar a dirigir.', 'Quiero estructurar la empresa para pasar de 300 mil a un millón de dólares.']) },
     content: 'Qué cambia cuando dejas de ejecutar y empiezas a dirigir',
-    expected: { action: 'agenda_ya', program: 'inmersivo', team: false } }) },
+    expected: { action: 'agenda_ya', program: 'inmersion', team: false } }) },
   { id: 'gerente_equipo_multinacional', weight: 12, build: () => ({
-    form: { role: 'gerente', roleText: pick(['Gerente de Innovación', 'Gerente de Transformación Digital', 'Head of People']), revenue: 'mas_5m', investment: 'imposible', decider: 'otro', seats: '5_mas' },
+    form: { role: 'gerente', roleText: pick(['Gerente de Innovación', 'Gerente de Transformación Digital', 'Head of People']), revenue: 'mas_5m', investment: 'imposible', decider: 'otro', seats: '5_mas',
+      reason: pick(['Nos pidieron capacitar al equipo en IA este año.', 'Busco un programa de IA para 30 personas de mi área.']) },
     content: 'Cómo implementar IA en una empresa de 500 personas',
     luma: ['Masterclass: agentes de IA para tu operación', '¿Cómo capacito a 30 personas de mi área en IA sin frenar la operación?'],
-    expected: { action: 'empresas', program: 'corporativo', team: true } }) },
+    expected: { action: 'empresas', program: 'corporativos', team: true } }) },
   { id: 'gerente_comercial', weight: 12, build: () => ({
-    form: { role: 'gerente', roleText: pick(['Gerente Comercial', 'Gerente de Ventas', 'Head of Sales']), revenue: pick(['1m_5m', '500k_1m'] as const), investment: 'plan_pagos', decider: 'compartido', seats: 'solo' },
+    form: { role: 'gerente', roleText: pick(['Gerente Comercial', 'Gerente de Ventas', 'Head of Sales']), revenue: pick(['1m_5m', '500k_1m'] as const), investment: 'plan_pagos', decider: 'compartido', seats: 'solo',
+      reason: pick(['Mi equipo de ventas no da abasto con los leads y quiero automatizar el seguimiento.', 'Queremos usar IA para calificar y contactar leads más rápido.']) },
     content: 'Experto en VENTAS con IA revela su sistema completo',
     luma: ['Clase gratis: IA para tu equipo comercial', '¿Cómo uso agentes de voz para contactar leads en 5 minutos?'],
     expected: { action: 'otro_programa', program: 'ai_sales', team: false } }) },
   { id: 'founder_pequeno_ventas', weight: 12, build: () => ({
-    form: { role: 'founder_ceo', roleText: 'Fundadora de agencia B2B', revenue: 'menos_200k', investment: 'imposible', decider: 'solo', seats: 'solo' },
+    form: { role: 'founder_ceo', roleText: 'Fundadora de agencia B2B', revenue: 'menos_200k', investment: 'imposible', decider: 'solo', seats: 'solo',
+      reason: pick(['No tengo un proceso de ventas: todo depende de mí y de referidos.', 'Quiero conseguir clientes B2B de forma predecible.']) },
     content: 'Cómo armar un proceso de ventas B2B desde cero',
     expected: { action: 'otro_programa', program: 'sales_machine', team: false } }) },
   { id: 'perfil_tecnico', weight: 8, build: () => ({
-    form: { role: pick(['analista', 'coordinador'] as const), roleText: pick(['Tech Lead', 'Desarrollador senior', 'Ingeniero de datos']), revenue: '500k_1m', investment: 'imposible', decider: 'otro', seats: 'solo' },
+    form: { role: pick(['analista', 'coordinador'] as const), roleText: pick(['Tech Lead', 'Desarrollador senior', 'Ingeniero de datos']), revenue: '500k_1m', investment: 'imposible', decider: 'otro', seats: 'solo',
+      reason: pick(['Quiero construir agentes con Python para mi empresa.', 'Quiero pasar de usar ChatGPT a programar agentes.']) },
     content: 'De developer a builder: agentes con código',
-    expected: { action: 'otro_programa', program: 'ai_developers', team: false } }) },
+    expected: { action: 'otro_programa', program: 'ai_dev', team: false } }) },
   { id: 'abandono_caliente', weight: 8, build: () => ({
     form: {}, partial: true,
     content: 'Inmersivo 30X: escala tu empresa con los fundadores de Rappi',
     luma: ['Live Mentoring: De crecer a escalar', 'Ya facturamos 2M al año, ¿qué tengo que tener listo para expandirme a México?'],
-    expected: { action: 'cola_humana', program: 'inmersivo', team: false } }) },
+    expected: { action: 'cola_humana', program: 'inmersion', team: false } }) },
   { id: 'estudiante', weight: 8, build: () => ({
-    form: { role: 'analista', roleText: pick(['Estudiante de administración', 'Practicante', 'Recién graduado']), revenue: 'menos_200k', investment: 'imposible', decider: 'otro', seats: 'solo' },
+    form: { role: 'analista', roleText: pick(['Estudiante de administración', 'Practicante', 'Recién graduado']), revenue: 'menos_200k', investment: 'imposible', decider: 'otro', seats: 'solo',
+      reason: pick(['Quiero aprender de IA para mi carrera.', 'Me gustaría emprender algún día.']) },
     content: 'Qué es la IA y cómo va a cambiar tu carrera',
     expected: { action: 'nurturing', program: 'ninguno', team: false } }) },
   { id: 'founder_ronda', weight: 7, build: () => ({
-    form: { role: 'founder_ceo', roleText: 'Cofundador de startup', revenue: '200k_500k', investment: 'imposible', decider: 'solo', seats: 'solo' },
+    form: { role: 'founder_ceo', roleText: 'Cofundador de startup', revenue: '200k_500k', investment: 'imposible', decider: 'solo', seats: 'solo',
+      reason: pick(['Vamos a levantar una pre-seed en los próximos meses.', 'Necesito preparar el pitch para inversionistas.']) },
     content: 'Cómo levantar tu ronda pre-seed en Latinoamérica',
     luma: ['Clase gratis: cómo levantar tu primera ronda', 'Estamos por salir a levantar 500k, ¿cómo armo el data room?'],
     expected: { action: 'otro_programa', program: 'fundraising', team: false } }) },
   { id: 'cmo_growth', weight: 8, build: () => ({
-    form: { role: 'c_level', roleText: pick(['CMO', 'VP de Marketing', 'Head of Growth']), revenue: '500k_1m', investment: 'imposible', decider: 'compartido', seats: 'solo' },
+    form: { role: 'c_level', roleText: pick(['CMO', 'VP de Marketing', 'Head of Growth']), revenue: '500k_1m', investment: 'imposible', decider: 'compartido', seats: 'solo',
+      reason: pick(['Necesitamos más leads sin subir el presupuesto de pauta.', 'Nuestro CAC subió mucho y quiero bajarlo.']) },
     content: 'Growth con IA: cómo duplicar leads con el mismo presupuesto',
     expected: { action: 'otro_programa', program: 'growth_rockstar', team: false } }) },
+  // Arquetipos de programas del catálogo completo (sáb 17 oct).
+  { id: 'gerente_operaciones', weight: 5, build: () => ({
+    form: { role: 'gerente', roleText: pick(['Gerente de Operaciones', 'Jefe de Logística', 'Gerente de Back Office']), revenue: '1m_5m', investment: 'plan_pagos', decider: 'compartido', seats: 'solo',
+      reason: pick(['Queremos automatizar procesos repetitivos de bodega y facturación.', 'La operación crece y los procesos manuales ya no dan.']) },
+    content: 'Agentes de IA para tu operación: menos tareas manuales',
+    expected: { action: 'otro_programa', program: 'ops_ai', team: false } }) },
+  { id: 'consultor_linkedin', weight: 5, build: () => ({
+    form: { role: 'founder_ceo', roleText: pick(['Consultor independiente B2B', 'Fundadora de consultora de RRHH']), revenue: 'menos_200k', investment: 'plan_pagos', decider: 'solo', seats: 'solo',
+      reason: pick(['Vendo consultoría a empresas y quiero conseguir clientes con mi contenido en LinkedIn.', 'Publico en LinkedIn pero no me llegan clientes.']) },
+    content: 'Cómo conseguir clientes B2B desde LinkedIn',
+    expected: { action: 'otro_programa', program: 'linkedin_sales', team: false } }) },
+  { id: 'marca_redes', weight: 5, build: () => ({
+    form: { role: 'founder_ceo', roleText: pick(['Dueña de marca de ropa', 'Fundador de e-commerce de cosmética']), revenue: '200k_500k', investment: 'imposible', decider: 'solo', seats: 'solo',
+      reason: pick(['Tenemos 20 mil seguidores pero casi no vendemos por redes.', 'Quiero vender por TikTok e Instagram sin depender de la pauta.']) },
+    content: 'Cómo vender por Instagram y TikTok sin pauta',
+    expected: { action: 'otro_programa', program: 'ig_tiktok', team: false } }) },
+  { id: 'product_manager', weight: 5, build: () => ({
+    form: { role: 'gerente', roleText: pick(['Product Manager', 'Head of Product']), revenue: '1m_5m', investment: 'imposible', decider: 'otro', seats: 'solo',
+      reason: pick(['Me cuesta priorizar el roadmap con tantas solicitudes de ventas.', 'Quiero que el equipo de producto mida impacto en el negocio, no solo entregas.']) },
+    content: 'Roadmaps de producto que mueven el negocio',
+    expected: { action: 'otro_programa', program: 'product_rockstar', team: false } }) },
+  { id: 'director_growth', weight: 5, build: () => ({
+    form: { role: 'c_level', roleText: pick(['Director de Growth', 'VP de Growth']), revenue: 'mas_5m', investment: 'plan_pagos', decider: 'compartido', seats: 'solo',
+      reason: pick(['Dirijo un equipo de 12 personas de growth y necesito una estrategia para entrar a tres países.', 'Lidero growth y quiero pasar de ejecutar campañas a definir la estrategia de la empresa.']) },
+    content: 'Liderar growth en una empresa que escala',
+    expected: { action: 'otro_programa', program: 'advanced_strategy', team: false } }) },
   // Solo Luma: se inscribió a una clase gratis (nombre, correo y pregunta opcional) y nunca llenó el formulario.
   // Con una sola pregunta escrita no se actúa solo: si apunta a un programa lo confirma una persona; si es vaga, nurturing.
   { id: 'solo_luma', weight: 8, build: () => {

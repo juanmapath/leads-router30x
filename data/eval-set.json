@@ -1,162 +1,162 @@
 {
   "L001": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
+    "action": "otro_programa",
+    "program": "ai_sales",
+    "team": false
   },
   "L002": {
-    "action": "nurturing",
-    "program": "ninguno",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L003": {
     "action": "otro_programa",
-    "program": "sales_machine",
+    "program": "ai_sales",
     "team": false
   },
   "L004": {
     "action": "empresas",
-    "program": "corporativo",
+    "program": "corporativos",
     "team": true
   },
   "L005": {
-    "action": "cola_humana",
-    "program": "ai_sales",
-    "team": false
+    "action": "empresas",
+    "program": "corporativos",
+    "team": true
   },
   "L006": {
-    "action": "cola_humana",
+    "action": "empresas",
+    "program": "corporativos",
+    "team": true
+  },
+  "L007": {
+    "action": "otro_programa",
     "program": "fundraising",
     "team": false
   },
-  "L007": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
-    "team": false
-  },
   "L008": {
-    "action": "nurturing",
-    "program": "ninguno",
+    "action": "otro_programa",
+    "program": "ig_tiktok",
     "team": false
   },
   "L009": {
     "action": "otro_programa",
-    "program": "ai_developers",
+    "program": "fundraising",
     "team": false
   },
   "L010": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "sales_machine",
     "team": false
   },
   "L011": {
-    "action": "otro_programa",
-    "program": "ai_developers",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L012": {
-    "action": "otro_programa",
-    "program": "growth_rockstar",
-    "team": false
+    "action": "empresas",
+    "program": "corporativos",
+    "team": true
   },
   "L013": {
     "action": "otro_programa",
-    "program": "fundraising",
+    "program": "sales_machine",
     "team": false
   },
   "L014": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "sales_machine",
     "team": false
   },
   "L015": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "advanced_strategy",
     "team": false
   },
   "L016": {
     "action": "otro_programa",
-    "program": "ai_sales",
-    "team": false
-  },
-  "L017": {
-    "action": "otro_programa",
     "program": "fundraising",
     "team": false
   },
+  "L017": {
+    "action": "agenda_ya",
+    "program": "inmersion",
+    "team": false
+  },
   "L018": {
-    "action": "otro_programa",
-    "program": "ai_sales",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L019": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "ai_dev",
     "team": false
   },
   "L020": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "product_rockstar",
     "team": false
   },
   "L021": {
-    "action": "nurturing",
-    "program": "ninguno",
+    "action": "otro_programa",
+    "program": "ops_ai",
     "team": false
   },
   "L022": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
+    "action": "otro_programa",
+    "program": "ai_dev",
+    "team": false
   },
   "L023": {
-    "action": "otro_programa",
-    "program": "growth_rockstar",
-    "team": false
-  },
-  "L024": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L025": {
     "action": "nurturing",
     "program": "ninguno",
     "team": false
   },
+  "L024": {
+    "action": "otro_programa",
+    "program": "ops_ai",
+    "team": false
+  },
+  "L025": {
+    "action": "otro_programa",
+    "program": "linkedin_sales",
+    "team": false
+  },
   "L026": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "sales_machine",
     "team": false
   },
   "L027": {
     "action": "otro_programa",
-    "program": "fundraising",
+    "program": "ops_ai",
     "team": false
   },
   "L028": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "product_rockstar",
     "team": false
   },
   "L029": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "nurturing",
+    "program": "ninguno",
     "team": false
   },
   "L030": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "advanced_strategy",
     "team": false
   },
   "L031": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "fundraising",
     "team": false
   },
   "L032": {
-    "action": "otro_programa",
-    "program": "fundraising",
+    "action": "nurturing",
+    "program": "ninguno",
     "team": false
   },
   "L033": {
@@ -166,78 +166,78 @@
   },
   "L034": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "growth_rockstar",
     "team": false
   },
   "L035": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "advanced_strategy",
     "team": false
   },
   "L036": {
-    "action": "otro_programa",
-    "program": "ai_developers",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L037": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L038": {
-    "action": "nurturing",
-    "program": "ninguno",
-    "team": false
-  },
-  "L039": {
     "action": "otro_programa",
     "program": "ai_sales",
     "team": false
   },
-  "L040": {
+  "L038": {
     "action": "otro_programa",
     "program": "fundraising",
     "team": false
   },
+  "L039": {
+    "action": "otro_programa",
+    "program": "ai_dev",
+    "team": false
+  },
+  "L040": {
+    "action": "agenda_ya",
+    "program": "inmersion",
+    "team": false
+  },
   "L041": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "ai_dev",
     "team": false
   },
   "L042": {
     "action": "otro_programa",
-    "program": "sales_machine",
+    "program": "ai_dev",
     "team": false
   },
   "L043": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L044": {
-    "action": "cola_humana",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "ai_dev",
     "team": false
   },
   "L045": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "ops_ai",
     "team": false
   },
   "L046": {
-    "action": "otro_programa",
-    "program": "growth_rockstar",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L047": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "fundraising",
     "team": false
   },
   "L048": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
+    "action": "otro_programa",
+    "program": "product_rockstar",
+    "team": false
   },
   "L049": {
     "action": "nurturing",
@@ -245,183 +245,183 @@
     "team": false
   },
   "L050": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
-  },
-  "L051": {
-    "action": "otro_programa",
-    "program": "ai_developers",
-    "team": false
-  },
-  "L052": {
     "action": "cola_humana",
     "program": "ai_sales",
     "team": false
   },
+  "L051": {
+    "action": "otro_programa",
+    "program": "growth_rockstar",
+    "team": false
+  },
+  "L052": {
+    "action": "otro_programa",
+    "program": "sales_machine",
+    "team": false
+  },
   "L053": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "growth_rockstar",
     "team": false
   },
   "L054": {
-    "action": "otro_programa",
-    "program": "ai_sales",
-    "team": false
+    "action": "empresas",
+    "program": "corporativos",
+    "team": true
   },
   "L055": {
     "action": "otro_programa",
-    "program": "fundraising",
+    "program": "sales_machine",
     "team": false
   },
   "L056": {
-    "action": "nurturing",
-    "program": "ninguno",
+    "action": "otro_programa",
+    "program": "ops_ai",
     "team": false
   },
   "L057": {
-    "action": "otro_programa",
-    "program": "ai_sales",
+    "action": "cola_humana",
+    "program": "inmersion",
     "team": false
   },
   "L058": {
     "action": "otro_programa",
-    "program": "ai_developers",
+    "program": "ai_sales",
     "team": false
   },
   "L059": {
     "action": "otro_programa",
-    "program": "growth_rockstar",
+    "program": "advanced_strategy",
     "team": false
   },
   "L060": {
-    "action": "otro_programa",
-    "program": "fundraising",
-    "team": false
-  },
-  "L061": {
-    "action": "otro_programa",
-    "program": "fundraising",
-    "team": false
-  },
-  "L062": {
-    "action": "otro_programa",
-    "program": "fundraising",
-    "team": false
-  },
-  "L063": {
-    "action": "otro_programa",
-    "program": "sales_machine",
-    "team": false
-  },
-  "L064": {
     "action": "nurturing",
     "program": "ninguno",
     "team": false
   },
-  "L065": {
-    "action": "otro_programa",
-    "program": "ai_sales",
+  "L061": {
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
-  "L066": {
+  "L062": {
+    "action": "otro_programa",
+    "program": "advanced_strategy",
+    "team": false
+  },
+  "L063": {
+    "action": "cola_humana",
+    "program": "inmersion",
+    "team": false
+  },
+  "L064": {
     "action": "otro_programa",
     "program": "sales_machine",
     "team": false
   },
+  "L065": {
+    "action": "agenda_ya",
+    "program": "inmersion",
+    "team": false
+  },
+  "L066": {
+    "action": "agenda_ya",
+    "program": "inmersion",
+    "team": false
+  },
   "L067": {
-    "action": "otro_programa",
-    "program": "ai_sales",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L068": {
-    "action": "otro_programa",
-    "program": "ai_sales",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L069": {
-    "action": "otro_programa",
-    "program": "growth_rockstar",
+    "action": "nurturing",
+    "program": "ninguno",
     "team": false
   },
   "L070": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
+    "action": "cola_humana",
+    "program": "inmersion",
+    "team": false
   },
   "L071": {
     "action": "agenda_ya",
-    "program": "inmersivo",
+    "program": "inmersion",
     "team": false
   },
   "L072": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "linkedin_sales",
     "team": false
   },
   "L073": {
-    "action": "otro_programa",
-    "program": "growth_rockstar",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L074": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "product_rockstar",
     "team": false
   },
   "L075": {
-    "action": "otro_programa",
-    "program": "growth_rockstar",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L076": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "ops_ai",
     "team": false
   },
   "L077": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "ai_sales",
     "team": false
   },
   "L078": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
-  },
-  "L079": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
-  },
-  "L080": {
     "action": "otro_programa",
     "program": "growth_rockstar",
     "team": false
   },
+  "L079": {
+    "action": "otro_programa",
+    "program": "linkedin_sales",
+    "team": false
+  },
+  "L080": {
+    "action": "otro_programa",
+    "program": "fundraising",
+    "team": false
+  },
   "L081": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
+    "action": "otro_programa",
+    "program": "ai_sales",
     "team": false
   },
   "L082": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
+    "action": "otro_programa",
+    "program": "growth_rockstar",
+    "team": false
   },
   "L083": {
     "action": "otro_programa",
-    "program": "sales_machine",
+    "program": "ai_sales",
     "team": false
   },
   "L084": {
-    "action": "otro_programa",
-    "program": "sales_machine",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L085": {
     "action": "otro_programa",
-    "program": "sales_machine",
+    "program": "growth_rockstar",
     "team": false
   },
   "L086": {
@@ -430,73 +430,73 @@
     "team": false
   },
   "L087": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L088": {
     "action": "empresas",
-    "program": "corporativo",
+    "program": "corporativos",
     "team": true
   },
-  "L089": {
-    "action": "cola_humana",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L090": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L091": {
-    "action": "agenda_ya",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L092": {
-    "action": "cola_humana",
-    "program": "inmersivo",
-    "team": false
-  },
-  "L093": {
+  "L088": {
     "action": "otro_programa",
     "program": "ai_sales",
     "team": false
   },
-  "L094": {
+  "L089": {
     "action": "nurturing",
     "program": "ninguno",
     "team": false
   },
+  "L090": {
+    "action": "otro_programa",
+    "program": "ai_sales",
+    "team": false
+  },
+  "L091": {
+    "action": "agenda_ya",
+    "program": "inmersion",
+    "team": false
+  },
+  "L092": {
+    "action": "otro_programa",
+    "program": "fundraising",
+    "team": false
+  },
+  "L093": {
+    "action": "nurturing",
+    "program": "ninguno",
+    "team": false
+  },
+  "L094": {
+    "action": "otro_programa",
+    "program": "product_rockstar",
+    "team": false
+  },
   "L095": {
-    "action": "empresas",
-    "program": "corporativo",
-    "team": true
+    "action": "otro_programa",
+    "program": "ai_dev",
+    "team": false
   },
   "L096": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "ig_tiktok",
     "team": false
   },
   "L097": {
-    "action": "otro_programa",
-    "program": "ai_developers",
-    "team": false
+    "action": "empresas",
+    "program": "corporativos",
+    "team": true
   },
   "L098": {
-    "action": "otro_programa",
-    "program": "ai_sales",
+    "action": "agenda_ya",
+    "program": "inmersion",
     "team": false
   },
   "L099": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "ig_tiktok",
     "team": false
   },
   "L100": {
     "action": "otro_programa",
-    "program": "ai_sales",
+    "program": "growth_rockstar",
     "team": false
   }
 }

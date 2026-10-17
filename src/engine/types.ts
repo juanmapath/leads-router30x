@@ -19,6 +19,8 @@ export interface FormAnswers {
   whatsappCountry: string;
   company?: string;
   role?: Role;
+  /** "¿Cuál es la razón o desafío por la que aplicaste?" (texto libre del formulario; dato no confiable). */
+  reason?: string;
   /** Cargo como lo escribiría la persona (texto libre), si lo tenemos. */
   roleText?: string;
   revenue?: Revenue;
@@ -56,17 +58,29 @@ export interface Lead {
   archetype?: string;
 }
 
+/** Ids oficiales del catálogo de 30X (Diagnóstico 30X) + Raise Your Round. Ver programs.ts. */
 export type ProgramId =
-  | 'inmersivo'
-  | 'ai_executives'
-  | 'ai_developers'
-  | 'ai_sales'
+  | 'inmersion'
+  | 'ai_exec'
+  | 'ai_dev'
+  | 'ops_ai'
+  | 'second_brain'
   | 'sales_machine'
+  | 'ai_sales'
+  | 'linkedin_sales'
   | 'growth_rockstar'
+  | 'advanced_strategy'
+  | 'xtreme_growth'
+  | 'ig_tiktok'
   | 'fundraising'
-  | 'corporativo'
+  | 'raise_your_round'
+  | 'product_rockstar'
+  | 'corporativos'
+  | 'multipliers'
   | 'ninguno'
   | 'otro';
+
+export type CategoryAnswer = 'presencial' | 'ia' | 'ventas' | 'growth' | 'startups' | 'empresas' | 'ninguna';
 
 export type Channel = 'llamada_ia' | 'whatsapp' | 'vendedor' | 'contenido';
 export type Objection = 'precio' | 'tiempo' | 'decisor' | 'relevancia' | 'ninguna' | 'otra';
@@ -80,6 +94,8 @@ export interface JevAnswers {
   maturity: { value: Maturity; p: number };
   objection: { value: Objection; p: number };
   channel: { value: Channel; p: number };
+  /** Categoría del catálogo (misma estructura que el Diagnóstico 30X). Siempre presente en respuestas reales; opcional en pruebas. */
+  category?: { value: CategoryAnswer; p: number };
   /** P(el formulario es coherente y creíble). Siempre presente en respuestas reales (normalize); opcional en pruebas. */
   coherent?: { value: boolean; p: number };
 }
@@ -97,6 +113,8 @@ export interface Decision {
   channel: Channel;
   needsHuman: boolean;
   reasons: string[];
+  /** Categoría clara cuando el programa no lo es: el vendedor elige entre sus programas. */
+  category?: CategoryAnswer;
 }
 
 export interface Expected {

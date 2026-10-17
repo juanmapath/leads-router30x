@@ -55,6 +55,7 @@ export function buildState(lead: Lead): string {
   if (lead.utm.campaign) lines.push(`Campaña: ${lead.utm.campaign}.`);
   if (f.company) lines.push(`Empresa ${untrusted(f.company)}.`);
   if (f.roleText) lines.push(`Cargo escrito ${untrusted(f.roleText)}.`);
+  if (f.reason) lines.push(`Razón o desafío ${untrusted(f.reason)}.`);
   if (f.role) lines.push(`Cargo elegido en el formulario: ${ROLE_TEXT[f.role]}.`);
   if (f.revenue) lines.push(`Facturación anual de su empresa: ${REVENUE_TEXT[f.revenue]}.`);
   if (f.investment) lines.push(`Sobre la inversión del Inmersivo: ${INVEST_TEXT[f.investment]}.`);

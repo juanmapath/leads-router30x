@@ -1,4 +1,4 @@
-import { programName } from './programs.ts';
+import { CATEGORIES, programCategory, programName, programsIn, type CategoryId } from './programs.ts';
 import type { Decision, JevAnswers, Lead, ProgramId } from './types.ts';
 
 // Umbrales por costo del error (decisión de producto, ver docs/playbook.md), no ajustados al set de prueba.
@@ -13,6 +13,7 @@ export const THRESHOLDS = {
   programMin: 0.6, // por debajo, siempre una persona (también para nurturing)
   channel: 0.6, // si el canal es menos seguro, se usa el canal por defecto de la acción
   coherent: 0.7, // P(formulario coherente y creíble) para agendar ya
+  category: 0.65, // categoría clara: se exige que el programa sea de esa categoría
 };
 
 const UNCLEAR: ProgramId[] = ['ninguno', 'otro'];
@@ -25,13 +26,19 @@ const pct = (p: number) => `${Math.round(p * 100)} %`;
  */
 export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
   const reasons: string[] = [];
-  const unclear = UNCLEAR.includes(a.program.value);
+  // Categoría y programa van en la misma llamada (como el Diagnóstico 30X). Si la categoría es clara,
+  // el programa tiene que pertenecer a ella; si no coinciden, el programa cuenta como poco claro.
+  const category = a.category && a.category.value !== 'ninguna' && a.category.p >= t.category ? (a.category.value as CategoryId) : undefined;
+  const programCat = programCategory(a.program.value);
+  const mismatch = category !== undefined && programCat !== undefined && programCat !== category;
+  const unclear = UNCLEAR.includes(a.program.value) || mismatch;
   const programClear = a.program.p >= t.programOther && !unclear;
 
   if (a.team.value && a.team.p >= t.team) {
     reasons.push(`Oportunidad de equipo con ${pct(a.team.p)} de probabilidad.`);
-    return { action: 'empresas', program: 'corporativo', channel: 'vendedor', needsHuman: false, reasons };
+    return { action: 'empresas', program: 'corporativos', channel: 'vendedor', needsHuman: false, reasons };
   }
+  if (mismatch) reasons.push(`La categoría (${CATEGORIES[category].name}) y el programa (${programName(a.program.value)}) no coinciden.`);
 
   const readyYes = a.ready.p;
   reasons.push(`Listo para hablar con ventas: ${pct(readyYes)}.`);
@@ -47,9 +54,9 @@ export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
     return { action: 'agenda_ya', program: a.program.value, channel: channelFor('llamada_ia'), needsHuman: false, reasons };
   }
 
-  // `ready` mide la conversación comercial del Inmersivo: un programa claro distinto se ofrece igual.
-  if (programClear && a.program.value !== 'inmersivo') {
-    reasons.push(`Le encaja otro programa, no el Inmersivo: se le ofrece ${programName(a.program.value)}.`);
+  // `ready` mide la conversación comercial de la Inmersión: un programa claro distinto se ofrece igual.
+  if (programClear && a.program.value !== 'inmersion') {
+    reasons.push(`Le encaja otro programa, no la Inmersión: se le ofrece ${programName(a.program.value)}.`);
     if (a.objection.value === 'precio') reasons.push('Objeción probable: precio. Ofrecer plan de pagos.');
     return { action: 'otro_programa', program: a.program.value, channel: channelFor('whatsapp'), needsHuman: false, reasons };
   }
@@ -60,6 +67,10 @@ export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
     return { action: 'nurturing', program: a.program.value, channel: 'contenido', needsHuman: false, reasons };
   }
 
+  if (category && !programClear) {
+    reasons.push(`Jev ve la categoría ${CATEGORIES[category].name}, no el programa: el vendedor elige entre ${programsIn(category).map(programName).join(', ')}.`);
+    return { action: 'cola_humana', program: a.program.value, channel: 'vendedor', needsHuman: true, reasons, category };
+  }
   reasons.push('Caso dudoso: lo revisa una persona.');
   return { action: 'cola_humana', program: a.program.value, channel: 'vendedor', needsHuman: true, reasons };
 }

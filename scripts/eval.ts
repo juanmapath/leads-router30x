@@ -1,8 +1,7 @@
 // Corre un set etiquetado por Jev y mide: precisión, calibración, errores que terminan en una persona,
 // errores caros (agenda_ya indebido), leads recuperados frente a la regla actual, costo y latencia.
 // Uso: npm run eval -- --set tuning   (100 de ajuste; con estos se eligieron preguntas y reglas)
-//      npm run eval -- --set test     (set de prueba v2: de aquí salen los números del pitch)
-//      npm run eval -- --set test-v1  (primer set de prueba, ya visto: cuenta como ajuste)
+//      npm run eval -- --set test     (set de prueba v3: de aquí salen los números del pitch)
 // Por defecto JEV_MODE=record en local (graba lo que falte); JEV_MODE=replay no gasta crédito.
 import { readFileSync, writeFileSync } from 'node:fs';
 import leads from '../data/leads.json' with { type: 'json' };
@@ -15,10 +14,10 @@ import type { Expected, Lead } from '../src/engine/types.ts';
 
 const arg = (name: string) => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : undefined; };
 const setName = arg('--set') ?? 'tuning';
-if (!['tuning', 'test', 'test-v1'].includes(setName)) throw new Error('--set debe ser tuning, test o test-v1');
+if (!['tuning', 'test'].includes(setName)) throw new Error('--set debe ser tuning o test');
 
 // --gate: puerta de CI. Solo grabaciones (nunca llama a Jev ni necesita clave); falla si la acción baja del piso
-// o si hay un solo error caro. Piso = acción medida en el set de prueba v2 (82 %) menos 5 puntos.
+// o si hay un solo error caro. Piso = acción medida en el set de prueba menos 5 puntos.
 const gate = process.argv.includes('--gate');
 const FLOOR = Number(arg('--floor') ?? 0.77);
 if (gate) process.env.JEV_MODE = 'replay-only';
@@ -27,8 +26,8 @@ type Exp = Expected & { kind?: string; note?: string };
 let set: Lead[];
 let expected: Record<string, Exp>;
 if (setName !== 'tuning') {
-  // test-v1: primer set de prueba, ya visto (motivó la pregunta de coherencia); cuenta como ajuste.
-  const t = JSON.parse(readFileSync(setName === 'test' ? 'data/test-set.json' : 'data/test-set-v1.json', 'utf8')) as { leads: Lead[]; expected: Record<string, Exp> };
+  // Set de prueba v3. Los v1 y v2 (data/test-set-v1.json, -v2.json) y sus reportes quedan como histórico.
+  const t = JSON.parse(readFileSync('data/test-set.json', 'utf8')) as { leads: Lead[]; expected: Record<string, Exp> };
   set = t.leads;
   expected = t.expected;
 } else {

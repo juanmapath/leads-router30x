@@ -44,6 +44,14 @@ export function hasRecording(state: string, questions: QuestionDef[] = QUESTIONS
   return existsSync(recordingPath(state, questions));
 }
 
+/** Solo la grabación (nunca llama a Jev, sin importar JEV_MODE); null si no existe. */
+export function replayJev(state: string, questions: QuestionDef[] = QUESTIONS): JevCall | null {
+  const file = recordingPath(state, questions);
+  if (!existsSync(file)) return null;
+  const rec = JSON.parse(readFileSync(file, 'utf8'));
+  return { ...rec, answers: normalize(rec.raw), source: 'replay' };
+}
+
 export async function askJev(state: string, questions: QuestionDef[] = QUESTIONS): Promise<JevCall> {
   const file = recordingPath(state, questions);
   const m = mode();

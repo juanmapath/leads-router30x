@@ -84,6 +84,8 @@ export function normalize(result: unknown): JevAnswers {
     maturity: level(get('maturity'), MATURITY, 'media'),
     objection: choice<JevAnswers['objection']['value']>(get('objection'), 'otra'),
     channel: choice<JevAnswers['channel']['value']>(get('channel'), 'vendedor'),
+    // Sin categoría no hay chequeo de coincidencia (p = 0 la deja fuera).
+    category: choice<NonNullable<JevAnswers['category']>['value']>(get('category'), 'ninguna'),
     // Sin respuesta de coherencia no se agenda solo: p = 0.
     coherent: yes(get('coherent')) ?? { value: false, p: 0 },
   };
