@@ -80,6 +80,8 @@ export interface JevAnswers {
   maturity: { value: Maturity; p: number };
   objection: { value: Objection; p: number };
   channel: { value: Channel; p: number };
+  /** P(el formulario es coherente y creíble). Siempre presente en respuestas reales (normalize); opcional en pruebas. */
+  coherent?: { value: boolean; p: number };
 }
 
 export type Action =

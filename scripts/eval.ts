@@ -1,7 +1,8 @@
 // Corre un set etiquetado por Jev y mide: precisión, calibración, errores que terminan en una persona,
 // errores caros (agenda_ya indebido), leads recuperados frente a la regla actual, costo y latencia.
 // Uso: npm run eval -- --set tuning   (100 de ajuste; con estos se eligieron preguntas y reglas)
-//      npm run eval -- --set test     (set de prueba: de aquí salen los números del pitch)
+//      npm run eval -- --set test     (set de prueba v2: de aquí salen los números del pitch)
+//      npm run eval -- --set test-v1  (primer set de prueba, ya visto: cuenta como ajuste)
 // Por defecto JEV_MODE=record en local (graba lo que falte); JEV_MODE=replay no gasta crédito.
 import { readFileSync, writeFileSync } from 'node:fs';
 import leads from '../data/leads.json' with { type: 'json' };
@@ -14,13 +15,14 @@ import type { Expected, Lead } from '../src/engine/types.ts';
 
 const arg = (name: string) => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : undefined; };
 const setName = arg('--set') ?? 'tuning';
-if (setName !== 'tuning' && setName !== 'test') throw new Error('--set debe ser tuning o test');
+if (!['tuning', 'test', 'test-v1'].includes(setName)) throw new Error('--set debe ser tuning, test o test-v1');
 
 type Exp = Expected & { kind?: string; note?: string };
 let set: Lead[];
 let expected: Record<string, Exp>;
-if (setName === 'test') {
-  const t = JSON.parse(readFileSync('data/test-set.json', 'utf8')) as { leads: Lead[]; expected: Record<string, Exp> };
+if (setName !== 'tuning') {
+  // test-v1: primer set de prueba, ya visto (motivó la pregunta de coherencia); cuenta como ajuste.
+  const t = JSON.parse(readFileSync(setName === 'test' ? 'data/test-set.json' : 'data/test-set-v1.json', 'utf8')) as { leads: Lead[]; expected: Record<string, Exp> };
   set = t.leads;
   expected = t.expected;
 } else {

@@ -109,7 +109,8 @@ test('estado: corto, en español y sin datos de contacto', () => {
     assert.ok(!s.includes(l.form.email), `${l.id} expone el correo`);
     assert.ok(!s.includes(l.form.name), `${l.id} expone el nombre`);
   }
-  assert.equal(Object.keys(toSdkQuestions()).length, 6);
+  // 7 preguntas en una sola llamada: las 6 originales + coherencia del formulario (sáb 17 oct, ver test de coherencia).
+  assert.equal(Object.keys(toSdkQuestions()).length, 7);
 });
 
 test('datos: la regla actual descarta a muchos leads que sí tienen un programa', () => {
@@ -215,4 +216,28 @@ test('umbrales por costo del error: bordes de agenda, otro programa y nurturing'
   const frio = { ...base, ready: { value: false, p: 0.1 } };
   assert.equal(decide({ ...frio, program: { value: 'ninguno', p: 0.6 } }).action, 'nurturing');
   assert.equal(decide({ ...frio, program: { value: 'ninguno', p: 0.55 } }).action, 'cola_humana');
+});
+
+// El set de prueba v1 ya se vio (motivó la pregunta de coherencia): el v2 no puede repetir ninguno de sus estados.
+test('set de prueba v2: ningún lead idéntico al v1 (ya visto)', () => {
+  const v1 = new Set((JSON.parse(readFileSync('data/test-set-v1.json', 'utf8')) as { leads: Lead[] }).leads.map(buildState));
+  const v2: { leads: Lead[] } = JSON.parse(readFileSync('data/test-set.json', 'utf8'));
+  assert.deepEqual(v2.leads.filter((l) => v1.has(buildState(l))).map((l) => l.id), []);
+});
+
+// Hallazgo del set de prueba v1: formularios marcados "al máximo" con cargo escrito basura o contradictorio
+// ("yo", "test", estudiante) pasaban a agenda_ya. Jev responde en la misma llamada si el formulario es coherente
+// y creíble; agenda_ya lo exige. Si Jev no lo responde, no se agenda solo.
+test('coherencia: agenda_ya exige que Jev vea el formulario coherente y creíble', () => {
+  assert.notEqual(decideForLead(ceoLead, { ...fooled, coherent: { value: false, p: 0.3 } }).action, 'agenda_ya');
+  assert.equal(decideForLead(ceoLead, { ...fooled, coherent: { value: true, p: 0.9 } }).action, 'agenda_ya');
+  const raw = {
+    ready: { type: 'boolean', probability: 0.95 },
+    program: { type: 'choice', choice: 'inmersivo', probabilities: { inmersivo: 0.9 } },
+    team: { type: 'boolean', probability: 0.05 },
+  };
+  assert.notEqual(decideForLead(ceoLead, normalize({ answers: raw })).action, 'agenda_ya');
+  assert.notEqual(decideForLead(ceoLead, normalize({ answers: { ...raw, coherent: { type: 'refusal' } } })).action, 'agenda_ya');
+  assert.equal(decideForLead(ceoLead, normalize({ answers: { ...raw, coherent: { type: 'boolean', probability: 0.9 } } })).action, 'agenda_ya');
+  assert.ok(toSdkQuestions().coherent, 'la pregunta de coherencia va en la misma llamada');
 });

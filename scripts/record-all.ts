@@ -1,5 +1,5 @@
 // Graba la respuesta de Jev para todo lo que el demo y los evals necesitan y aún no tiene grabación:
-// los 300 leads del demo (incluye los 100 de ajuste), el set de prueba y las combinaciones del simulador
+// los 300 leads del demo (incluye los 100 de ajuste), los sets de prueba (v2 y v1) y las combinaciones del simulador
 // para los leads destacados. Así el demo en Vercel (modo replay) responde sin red.
 // Uso: npm run record            (solo graba lo que falta)
 //      npm run record -- --dry   (cuenta lo que falta y estima el costo, sin llamar a Jev)
@@ -13,11 +13,11 @@ import { buildState } from '../src/engine/state.ts';
 import type { Lead } from '../src/engine/types.ts';
 
 process.env.JEV_MODE = 'record';
-const testSet = JSON.parse(readFileSync('data/test-set.json', 'utf8')) as { leads: Lead[] };
+const testLeads = ['data/test-set.json', 'data/test-set-v1.json'].flatMap((f) => (JSON.parse(readFileSync(f, 'utf8')) as { leads: Lead[] }).leads);
 
 const states = new Set<string>();
 for (const l of leads as Lead[]) states.add(buildState(l));
-for (const l of testSet.leads) states.add(buildState(l));
+for (const l of testLeads) states.add(buildState(l));
 for (const l of featuredLeads(leads as Lead[])) {
   for (const combo of simCombos()) states.add(buildState({ ...l, signals: [...l.signals, ...simSignals(combo)] }));
 }

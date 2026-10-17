@@ -12,6 +12,7 @@ export const THRESHOLDS = {
   programOther: 0.65, // confianza mínima para ofrecer otro programa (error barato)
   programMin: 0.6, // por debajo, siempre una persona (también para nurturing)
   channel: 0.6, // si el canal es menos seguro, se usa el canal por defecto de la acción
+  coherent: 0.7, // P(formulario coherente y creíble) para agendar ya
 };
 
 const UNCLEAR: ProgramId[] = ['ninguno', 'otro'];
@@ -95,6 +96,14 @@ export function decideForLead(lead: Lead, a: JevAnswers, t = THRESHOLDS): Decisi
     return {
       ...d, action: 'cola_humana', channel: 'vendedor', needsHuman: true,
       reasons: [...d.reasons, 'Solo tenemos un texto escrito por el lead, sin formulario: una persona confirma antes de ofrecer el programa.'],
+    };
+  }
+  // Agendar ya también exige que Jev vea el formulario coherente y creíble (cargo escrito vs. elegido,
+  // facturación e inversión que cuadran, nada de respuestas de relleno).
+  if (d.action === 'agenda_ya' && a.coherent && a.coherent.p < t.coherent) {
+    return {
+      ...d, action: 'cola_humana', channel: 'vendedor', needsHuman: true,
+      reasons: [...d.reasons, `El formulario no parece coherente (${pct(a.coherent.p)}): una persona lo confirma antes de agendar.`],
     };
   }
   return d;
