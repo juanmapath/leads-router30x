@@ -1,17 +1,18 @@
 {
-  "supuesto": "Mezcla sintética de una semana del formulario del Inmersivo (300 leads). No es un dato de 30X: se valida con el equipo comercial (Sandra) y en el piloto se reemplaza por los leads reales.",
+  "supuesto": "Mezcla de una semana del formulario (250 leads) tomada de docs/supuestos.md. No es un dato de 30X: se valida en la semana en modo sombra.",
   "semilla": 17102026,
   "prefijo": "W",
+  "n": 250,
   "grupos": [
-    { "grupo": "baja_intencion", "nombre": "Baja intención (esperado: nurturing)", "pct": 40,
-      "arquetipos": { "estudiante": 30, "curioso_clase_gratis": 30, "junior_sin_presupuesto": 30, "solo_luma_vago": 30 } },
+    { "grupo": "baja_intencion", "nombre": "Baja intención (esperado: nurturing o una persona si es ambiguo)", "pct": 45,
+      "arquetipos": { "estudiante": 28, "curioso_clase_gratis": 28, "junior_sin_presupuesto": 28, "solo_luma_vago": 28 } },
     { "grupo": "inmersion", "nombre": "Encaja en la Inmersión", "pct": 20,
-      "arquetipos": { "ceo_listo": 36, "founder_plan_pagos": 24 } },
-    { "grupo": "empresas", "nombre": "Oportunidad de empresa", "pct": 6,
-      "arquetipos": { "gerente_equipo_multinacional": 18 } },
-    { "grupo": "otro_programa", "nombre": "Otro programa de los 17 (o a confirmar por una persona si solo hay Luma)", "pct": 26,
-      "arquetipos": { "gerente_comercial": 10, "founder_pequeno_ventas": 9, "perfil_tecnico": 7, "founder_ronda": 7, "cmo_growth": 8, "gerente_operaciones": 7, "consultor_linkedin": 6, "marca_redes": 6, "product_manager": 6, "director_growth": 6, "solo_luma_programa": 6 } },
+      "arquetipos": { "ceo_listo": 30, "founder_plan_pagos": 20 } },
+    { "grupo": "otro_programa", "nombre": "Otro de los 17 programas (o a confirmar por una persona si solo hay Luma)", "pct": 23,
+      "arquetipos": { "gerente_comercial": 7, "founder_pequeno_ventas": 6, "perfil_tecnico": 5, "founder_ronda": 5, "cmo_growth": 6, "gerente_operaciones": 5, "consultor_linkedin": 5, "marca_redes": 5, "product_manager": 5, "director_growth": 5, "solo_luma_programa": 4 } },
+    { "grupo": "empresas", "nombre": "Viene por su empresa (equipo, 5+ cupos)", "pct": 4,
+      "arquetipos": { "gerente_equipo_multinacional": 10 } },
     { "grupo": "abandonos", "nombre": "Abandonó el formulario", "pct": 8,
-      "arquetipos": { "abandono_caliente": 24 } }
+      "arquetipos": { "abandono_caliente": 20 } }
   ]
 }

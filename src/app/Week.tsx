@@ -254,7 +254,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
               <div role="radiogroup" aria-label="Escenario de tasa de cierre" className="segmented">
                 {(Object.keys(SCENARIOS) as Scenario[]).map((k) => (
                   <button key={k} role="radio" aria-checked={scenario === k} className={scenario === k ? 'on' : ''} onClick={() => setScenario(k)}>
-                    {SCENARIO_LABEL[k]} · {Math.round(SCENARIOS[k] * 100)} %
+                    {SCENARIO_LABEL[k]}
                   </button>
                 ))}
               </div>

@@ -324,12 +324,14 @@ test('set de prueba v3: ningún lead idéntico al v1 ni al v2', () => {
 
 // La semana del demo (data/week-leads.json) sale de otra semilla y una mezcla explícita (data/week-mix.json).
 // Ningún lead puede repetir el estado de un lead de prueba: si no, el demo mostraría casos del set de prueba.
-test('semana del demo: 300 leads con la mezcla declarada, sintéticos y sin repetir ningún lead de prueba', () => {
-  const mix = JSON.parse(readFileSync('data/week-mix.json', 'utf8')) as { grupos: Array<{ pct: number; arquetipos: Record<string, number> }> };
-  assert.equal(weekLeads.length, 300);
+test('semana del demo: 250 leads con la mezcla de docs/supuestos.md, sintéticos y sin repetir ningún lead de prueba', () => {
+  const mix = JSON.parse(readFileSync('data/week-mix.json', 'utf8')) as { n: number; grupos: Array<{ pct: number; arquetipos: Record<string, number> }> };
+  assert.equal(weekLeads.length, 250);
+  assert.equal(mix.n, 250);
+  assert.deepEqual(mix.grupos.map((g) => g.pct), [45, 20, 23, 4, 8]);
   for (const g of mix.grupos) {
     const k = Object.values(g.arquetipos).reduce((a, b) => a + b, 0);
-    assert.equal(k, Math.round((g.pct / 100) * 300), `grupo con ${k} leads declara ${g.pct} %`);
+    assert.ok(Math.abs(k - (g.pct / 100) * 250) <= 1, `grupo con ${k} leads declara ${g.pct} %`);
     for (const [a, n] of Object.entries(g.arquetipos)) assert.equal(weekLeads.filter((l) => l.archetype === a).length, n, a);
   }
   const testStates = new Set(['data/test-set-v1.json', 'data/test-set-v2.json', 'data/test-set.json'].flatMap((f) => (JSON.parse(readFileSync(f, 'utf8')) as { leads: Lead[] }).leads.map(buildState)));
@@ -412,12 +414,12 @@ test('Pruébalo tú: valida la razón, ignora campos desconocidos y no lleva dat
 });
 
 // Una sola fuente para las cifras (docs/ux-negocio.md §1): cuadra con data/week.json, las columnas suman n y nada cuenta dos veces.
-test('week-metrics: cuadra con la semana precalculada, suma 300 y no cuenta dos veces', async () => {
+test('week-metrics: cuadra con la semana precalculada, suma 250 y no cuenta dos veces', async () => {
   const { weekMetrics } = await import('../src/engine/week-metrics.ts');
   const week = JSON.parse(readFileSync('data/week.json', 'utf8'));
   const m = weekMetrics(week.rows);
   assert.equal(m.n, week.n);
-  assert.equal(m.n, 300);
+  assert.equal(m.n, 250);
   assert.equal(Object.values(m.byAction).reduce((a, b) => a + b, 0), m.n, 'las columnas de Jev suman n');
   assert.equal(m.toPerson + m.nurturing + m.byAction.agenda_ya + m.byAction.otro_programa + m.byAction.empresas, m.n);
   assert.equal(m.rescued, m.b2b + m.offers, 'rescatados = empresas + ofertas, sin solaparse');
@@ -430,6 +432,24 @@ test('week-metrics: cuadra con la semana precalculada, suma 300 y no cuenta dos 
   assert.ok(Math.abs(m.costUsd - week.costUsd) < 1e-9);
   assert.equal(m.msMean, week.msMean);
   assert.ok(m.monthly.pesimista < m.monthly.viable && m.monthly.viable < m.monthly.optimista);
+  assert.equal(m.corporatePipelineWeek, m.b2b * 7_500);
   assert.ok(m.nurturing > 0, 'la semana tiene nurturing');
   assert.ok(m.autoNextStep > 0 && m.autoNextStep <= 1);
+});
+
+// Prueba de cordura (docs/supuestos.md, obligatoria antes de publicar dólares): con la semana del demo, el ingreso
+// incremental mensual pesimista no pasa del 10 % y el viable del 25 % de las ventas mensuales estimadas de 30X.
+test('cordura: pesimista ≤ 10 % y viable ≤ 25 % de USD 150.000 al mes', async () => {
+  const { weekMetrics } = await import('../src/engine/week-metrics.ts');
+  const { MONTHLY_SALES_30X_USD, SANITY_MAX, realizedTicket, monthlyImpact } = await import('../src/engine/impact.ts');
+  assert.equal(MONTHLY_SALES_30X_USD, 150_000);
+  assert.equal(realizedTicket('ai_sales'), 1950 * 0.85, 'ticket realizado = 85 % del precio público');
+  assert.equal(realizedTicket('corporativos'), 7_500);
+  assert.equal(realizedTicket('second_brain'), undefined, 'sin precio público no suma');
+  // Una oferta de AI Sales y una oportunidad de empresa, pesimista: 1,5 % y 3 %.
+  const one = monthlyImpact([{ action: 'otro_programa', program: 'ai_sales' }, { action: 'empresas', program: 'corporativos' }]);
+  assert.ok(Math.abs(one.pesimista - (1950 * 0.85 * 0.015 + 7_500 * 0.03) * 4.33) < 1e-6);
+  const m = weekMetrics(JSON.parse(readFileSync('data/week.json', 'utf8')).rows);
+  assert.ok(m.monthly.pesimista <= SANITY_MAX.pesimista * MONTHLY_SALES_30X_USD, `pesimista USD ${Math.round(m.monthly.pesimista)}`);
+  assert.ok(m.monthly.viable <= SANITY_MAX.viable * MONTHLY_SALES_30X_USD, `viable USD ${Math.round(m.monthly.viable)}`);
 });

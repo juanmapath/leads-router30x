@@ -92,23 +92,24 @@ La línea base anterior (sáb en la mañana, set v2 con 8 programas: Jev 85 % fr
 
 ## Semana del demo (supuesto, no dato de 30X)
 
-"La semana de 30X" ya no sale de `data/leads.json` (sus primeros 100 son el set de ajuste): sale de `data/week-leads.json`, 300 leads con otra semilla (17102026) y una **mezcla explícita** en `data/week-mix.json`. Es un supuesto conservador a validar con el equipo comercial de 30X; en el piloto se reemplaza por los leads reales.
+"La semana de 30X" no sale de `data/leads.json` (sus primeros 100 son el set de ajuste): sale de `data/week-leads.json`, **250 leads** con otra semilla (17102026) y la mezcla de `docs/supuestos.md`, escrita en `data/week-mix.json`. Se valida en la semana en modo sombra.
 
 | Grupo | Leads | % | Arquetipos |
 |---|---|---|---|
-| Baja intención (esperado: nurturing) | 120 | 40 % | estudiante, curioso de clase gratis, junior sin presupuesto, solo Luma vago (30 c/u) |
-| Encaja en la Inmersión | 60 | 20 % | CEO listo (36), fundador con plan de pagos (24) |
-| Oportunidad de empresa | 18 | 6 % | gerente de equipo de multinacional (5+ cupos) |
-| Otro programa de los 17 | 78 | 26 % | 10 arquetipos de programa + solo Luma con programa (6) |
-| Abandonó el formulario | 24 | 8 % | abandono caliente |
+| Baja intención | 112 | 45 % (44,8) | estudiante, curioso de clase gratis, junior sin presupuesto, solo Luma vago (28 c/u) |
+| Encaja en la Inmersión | 50 | 20 % | CEO listo (30), fundador con plan de pagos (20) |
+| Otro de los 17 programas | 58 | 23 % (23,2) | 10 arquetipos de programa + solo Luma con programa (4) |
+| Viene por su empresa | 10 | 4 % | gerente de equipo de multinacional (5+ cupos) |
+| Abandonó el formulario | 20 | 8 % | abandono caliente |
 
 - Ningún lead de la semana repite el estado de un lead de los sets de prueba v1, v2 o v3 (4 re-sorteados al generar; un test lo garantiza).
-- Grabar los 272 estados nuevos costó USD 0,034. `npm run gen:week` la regenera; `npm run week` la precalcula.
+- Dólares con los supuestos de `docs/supuestos.md` (`src/engine/impact.ts`): ticket realizado 85 % del precio público, corporativo USD 7.500, tasas por acción y escenario. Un test aplica la prueba de cordura (pesimista ≤ 10 % y viable ≤ 25 % de USD 150.000 al mes).
+- `npm run gen:week` la regenera; `npm run week` la precalcula.
 
 ## Cómo reproducir
 
 ```bash
-npm test                                   # 28 tests, sin red (incluye cobertura de grabaciones)
+npm test                                   # 31 tests, sin red (incluye cobertura de grabaciones)
 JEV_MODE=replay-only npm run eval -- --set test   # reproduce v3 sin gastar crédito
 npm run eval:gate                          # puerta de CI (sin clave)
 npm run baseline                           # línea base con Sonnet (gasta crédito, ~USD 0,27)
