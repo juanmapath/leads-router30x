@@ -1,12 +1,12 @@
 # Jev Lead Router · 30X
 
-**Reto JEV en 30X · Hackathon 30X (oct. 2026)** · Demo: [leads-router30x.vercel.app](https://leads-router30x.vercel.app/) · Playbook: [`docs/playbook.md`](docs/playbook.md) · Supuestos: [`docs/supuestos.md`](docs/supuestos.md)
+**Reto JEV en 30X · Hackathon 30X (oct. 2026)** · Demo: [leads-router30x.vercel.app](https://leads-router30x.vercel.app/) · Playbook: [`docs/playbook.md`](docs/playbook.md) · Supuestos: [`docs/supuestos.md`](docs/supuestos.md) · Video: pendiente
 
 **Cada semana, el formulario de 30X descarta en automático a 195 de 250 personas. Entre ellas, 10 empresas que venían a formar a su equipo.**
 
 Hoy una suma fija de puntos decide: más de 6 sobre 10 pasa a entrevista; el resto ve "Gracias por tu aplicación" y sale del embudo. Esa barra servía para un solo producto de USD 6.000; con 17 programas y clientes corporativos ya no. Jev Lead Router reemplaza la suma por decisiones calibradas de **Jev** (TypeSafe AI): en una sola llamada responde 9 preguntas tipadas por lead (si está listo, qué programa le encaja, si es una venta a empresa, por qué canal contactarlo…), los umbrales en código eligen la acción y los casos dudosos pasan a una persona.
 
-**Por qué importan los milisegundos:** Jev decide en ~250 ms, antes de que cargue la página final del formulario (supuesto A: redirección al terminar). Así la persona ve un calendario, la oferta de su programa o una página de seguimiento en vez de "gracias". Un LLM general tarda 1,7–3 s y no cabe ahí. Si el formulario no puede redirigir (supuesto B), Jev actúa por webhook y el primer contacto sale en el primer minuto.
+**Por qué importan los milisegundos:** Jev decide en ~250 ms, antes de que cargue la página final del formulario (supuesto A: redirección al terminar). Así la persona ve un calendario, la oferta de su programa o una página de seguimiento en vez de "gracias". Un LLM general tarda ~2,1 s de media (más de 5 s en el 5 % más lento, `data/baseline-llm.json`) y no cabe ahí. Si el formulario no puede redirigir (supuesto B), Jev actúa por webhook y el primer contacto sale en el primer minuto.
 
 ## La semana del demo (250 leads sintéticos)
 
@@ -45,6 +45,6 @@ npm run dev                      # http://localhost:3000
 
 - `src/engine/` — motor de decisión, sin interfaz: regla actual de 30X (`legacy.ts`), estado del lead (`state.ts`), preguntas tipadas (`questions.ts`), umbrales y reglas (`decide.ts`), cliente de Jev con grabar/reproducir (`jev-client.ts`), cifras de la semana (`week-metrics.ts`), dólares con supuestos (`impact.ts`) y plantillas fijas de la capa de acción (`actions.ts`).
 - `src/app/` — interfaz y API (`/api/decide`) en Next.js. Portada, semana y capa de acción se renderizan en el servidor.
-- `data/` — leads sintéticos (`leads.json`: demo y ajuste), semana del demo (`week-leads.json` + `week-mix.json`), sets de prueba y grabaciones de Jev.
+- `data/` — la semana del demo sale de `week-leads.json` (250 leads) con la mezcla de `week-mix.json`; `leads.json` es el set de ajuste (sus primeros 100 están etiquetados en `eval-set.json`) y de ahí salen los casos destacados del zoom; además, los sets de prueba (`test-set*.json`) y las grabaciones de Jev (`recordings/`).
 - `scripts/` — generadores de datos, grabación, evaluación y semana precalculada.
 - `tests/` — verificador que corre en CI en cada push.

@@ -1,6 +1,6 @@
 # Guion del video pitch (3:00 min · 1 voz) — Jev Lead Router para 30X
 
-> **Actualizado sáb 17 oct (capa de acción en la sección 3).** Cifras de `weekMetrics` (`data/week.json`: semana de **250 leads** con la mezcla de `docs/supuestos.md`), `src/engine/impact.ts` (dólares con supuestos conservadores), `data/eval-report-test.json` (set v3) y `data/baseline-llm.json`. Ya **no valen**: 300 leads, 234 descartados, 18 empresas, 90 ofertas, USD 92.000 ni USD 8.000 al mes, ni 85 % vs 45 %, 167 rescatados o USD 211.000. Los dólares se dicen siempre como "del orden de" y como supuesto.
+> **Actualizado sáb 17 oct (capa de acción en la sección 3).** Cifras de `weekMetrics` (`data/week.json`: semana de **250 leads** con la mezcla de `docs/supuestos.md`), `src/engine/impact.ts` (dólares con supuestos conservadores), `data/eval-report-test.json` (set v3) y `data/baseline-llm.json`. Ya **no valen** las cifras de versiones anteriores (la semana sintética previa y los dólares sin los supuestos de `docs/supuestos.md`). Los dólares se dicen siempre como "del orden de" y como supuesto.
 
 ## Cómo encajan los entregables
 
@@ -17,7 +17,7 @@
 1. Demo en pantalla completa, zoom 100–110 %, tema oscuro, arriba del todo en la **portada**.
 2. Ensaya una vez "Pruébalo tú" para que no te toque un arranque en frío de la función en el video.
 3. Graba con Cap. Si algo falla en vivo, corta y retoma en la sección: se edita después.
-4. Pausa de 1 segundo antes de cada cifra clave. Ritmo ~135 palabras por minuto; el texto hablado suma ~390 palabras (~2:55).
+4. Pausa de 1 segundo antes de cada cifra clave. Ritmo ~135 palabras por minuto; el texto hablado suma ~395 palabras (~2:55).
 
 ---
 
@@ -50,13 +50,11 @@
 
 **[0:55 · ACCIÓN: baja a "Lo que cambia para el lead y para el equipo". Las tres columnas dicen "maqueta".]**
 
-> "Un gerente de innovación de una multinacional quiere formar a cinco o más personas. No es CEO, así que la regla le da **2 de 10** *(confirma el puntaje en pantalla)* y ve 'gracias'. Fin.
-> Con Jev, en unos 200 milisegundos, antes de que cargue la página final, ve un calendario con el **área de empresas**, y a los dos minutos le escribe el ejecutivo por WhatsApp.
-> Eso solo cabe porque la decisión llega antes que la página: un LLM general tarda de 1,7 a 3 segundos."
+> "Un gerente de innovación quiere formar a cinco personas de su multinacional. No es CEO: la regla le da **2 de 10** y ve 'gracias'.
+> Con Jev, en unos 200 milisegundos y antes de que cargue la página, ve un calendario con el **área de empresas**, y el equipo recibe su ficha en HubSpot, con mensajes de plantilla, no inventados.
+> Un LLM general, con dos segundos o más, no cabe ahí."
 
 **[1:12 · ACCIÓN: señala la ficha del CRM (propiedades `jev_*`, asignado a "AE de empresas").]**
-
-> "Y el equipo recibe la ficha en HubSpot con la acción, el programa y las probabilidades. Los mensajes son plantillas fijas, no texto inventado por un modelo."
 
 *(El zoom "Un lead de cerca", con la marca del umbral en cada barra, queda en la página para el jurado, fuera del guion.)*
 
@@ -89,7 +87,7 @@
 
 **[2:20 · ACCIÓN: baja a "Cómo lo adopta 30X".]**
 
-> "Sin cambiar formulario ni CRM: Jev escribe en HubSpot, 'Agenda ya' dispara la llamada de Dapta y 'Otro programa' va por WhatsApp.
+> "Sin cambiar formulario ni CRM: Jev escribe en HubSpot, 'Agenda ya' dispara la llamada de Dapta y 'Otro programa', un WhatsApp.
 > Ningún dato personal viaja al modelo, y operar un mes cuesta **41 centavos de dólar**.
 > Pedimos **una semana en modo sombra** con leads reales: Jev decide sin actuar, y el viernes comparamos con el equipo.
 > El playbook y el código están en el enlace."
@@ -107,7 +105,7 @@
 3. **"Si Sonnet acierta casi igual, ¿por qué Jev?"**
    *"Porque decide en ~250 ms frente a ~2 s, y eso cabe entre el envío del formulario y la página final. Cuesta ~100 veces menos, lo que permite recalcular con cada señal nueva, y sus probabilidades están medidas: con 90 % o más acierta 97 %. Las del LLM son valores redondos que no sirven como umbral. El LLM queda para redactar los mensajes."*
 4. **"¿Qué pasa cuando 30X abre o cierra cohortes?"**
-   *"Jev no compara fechas. El catálogo vive en un solo archivo (`programs.ts`) y un flag de cohorte abierta filtra las opciones en código."*
+   *"Jev no compara fechas: eso va en código. El catálogo vive en un solo archivo (`programs.ts`); en el piloto se agrega un flag de cohorte abierta que filtra las opciones antes de preguntarle a Jev. Hoy no está implementado."*
 5. **"¿Cómo funciona el modo sombra en HubSpot?"**
    *"Un workflow de HubSpot hace un POST a nuestro endpoint cuando entra o cambia un lead, sin nombre, correo ni teléfono. Respondemos en ~250 ms y escribimos propiedades `jev_shadow_*` para auditar al final de la semana."*
 6. **"¿De dónde salen los 13.000 dólares al mes?"**

@@ -1,8 +1,9 @@
-// Cómo lo adopta 30X (docs/ui-plan.md, sección 5): quién lo opera, cuánto cuesta, cómo se mide y el pedido.
+// Cómo lo adopta 30X (docs/historial/ui-plan.md, sección 5): quién lo opera, cuánto cuesta, cómo se mide y el pedido.
 import baseline from '../../data/baseline-llm.json';
 import { monthlyRunCost } from '../engine/impact.ts';
 
 const REPO = 'https://github.com/juanmapath/leads-router30x';
+const PLAYBOOK_URL = `${REPO}/blob/master/docs/playbook.md`;
 const usd = (v: number, d = 2) => `USD ${v.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
 
 export function Adopt() {
@@ -42,6 +43,9 @@ export function Adopt() {
       </div>
       <div className="card ask">
         <p className="ask-text">Pedimos <strong>una semana en modo sombra</strong> con su formulario y HubSpot: Jev decide pero no actúa; al final comparamos sus decisiones con lo que hizo el equipo.</p>
+        <div className="ask-actions">
+          <a className="btn" href={PLAYBOOK_URL} target="_blank" rel="noreferrer">Ver el playbook de implementación →</a>
+        </div>
         <p className="faint"><a href={REPO}>Repositorio y verificador</a> · <a href={`${REPO}/blob/master/docs/resultados-eval.md`}>Resultados del eval</a></p>
       </div>
     </section>

@@ -1,3 +1,5 @@
+> Documento de trabajo del hackathon. Las cifras pueden estar superadas; las vigentes están en el README, docs/playbook.md y docs/resultados-eval.md.
+
 # Plan de UI/UX del demo (sábado 17 oct.)
 
 > **Actualización 10:15:** `docs/ux-negocio.md` (métricas de negocio, dónde vive Jev, capa de acción) manda sobre este plan donde choquen.

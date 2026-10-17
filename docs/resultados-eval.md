@@ -1,6 +1,6 @@
 # Resultados de las pruebas con Jev (estado al sáb 17 oct. 2026)
 
-Jev (`typesafe-ai/jev` vía Vercel AI Gateway) responde en **una sola llamada** 9 preguntas tipadas por lead; los umbrales de `src/engine/decide.ts` eligen la acción. Fuentes: `data/eval-report-test.json` (set de prueba v3), `data/eval-report-tuning.json` (ajuste), `data/baseline-llm.json` (línea base con un LLM general) y las grabaciones de `data/recordings/` (459 estados, regrabados una vez el sábado por USD 0,058).
+Jev (`typesafe-ai/jev` vía Vercel AI Gateway) responde en **una sola llamada** 9 preguntas tipadas por lead; los umbrales de `src/engine/decide.ts` eligen la acción. Fuentes: `data/eval-report-test.json` (set de prueba v3), `data/eval-report-tuning.json` (ajuste), `data/baseline-llm.json` (línea base con un LLM general) y las grabaciones de `data/recordings/` (953 estados grabados; la semana del demo de 250 leads se grabó por USD 0,028).
 
 ## Resumen (set de prueba v3: 127 leads, nunca usados para ajustar)
 
@@ -11,7 +11,7 @@ Jev (`typesafe-ai/jev` vía Vercel AI Gateway) responde en **una sola llamada** 
 | Categoría correcta | **82,4 %** · programa correcto dentro de la categoría acertada: **92,9 %** |
 | Venta a empresa (equipo) correcta | 97 % |
 | Errores caros (definición abajo) | **0** · la regla actual de 30X manda a entrevista a 27 personas que no debía |
-| Errores que terminan frente a una persona | 13 de 21 (**62 %**); los otros 8 son nurturing o una acción distinta a la esperada. Antes de la regla de frío evidente: 19 de 25 (76 %): los 4 errores que la regla corrige eran nurturing esperado que iba a una persona |
+| Errores que terminan frente a una persona | 15 de 21 (**71 %**); los otros 6 son nurturing o una acción distinta a la esperada. Antes de la regla de frío evidente: 19 de 25 (76 %); los 4 errores que la regla corrige eran nurturing esperado que iba a una persona |
 | Recuperados frente a la regla actual | 64 de los 70 que la regla descarta y sí tienen un camino comercial |
 | Costo | ~3.000 tokens por lead → **USD 0,13 por 1.000 decisiones** |
 | Latencia | **239 ms** de media, 333 ms en el 5 % más lento |
@@ -109,7 +109,7 @@ La línea base anterior (sáb en la mañana, set v2 con 8 programas: Jev 85 % fr
 ## Cómo reproducir
 
 ```bash
-npm test                                   # 31 tests, sin red (incluye cobertura de grabaciones)
+npm test                                   # 32 tests, sin red (incluye cobertura de grabaciones)
 JEV_MODE=replay-only npm run eval -- --set test   # reproduce v3 sin gastar crédito
 npm run eval:gate                          # puerta de CI (sin clave)
 npm run baseline                           # línea base con Sonnet (gasta crédito, ~USD 0,27)

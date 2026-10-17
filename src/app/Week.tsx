@@ -1,8 +1,9 @@
 'use client';
-// Portada + "La semana de 30X" (docs/ux-negocio.md §2–3). Se renderiza en el servidor con el resultado final:
+// Portada + "La semana de 30X" (docs/historial/ux-negocio.md §2–3). Se renderiza en el servidor con el resultado final:
 // cifras de weekMetrics (una sola fuente), nunca "…" ni ceros. "Repetir la semana" lleva los 300 puntos a las
 // columnas de la regla y los hace viajar a las de Jev, escalonados según la latencia grabada de cada llamada.
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { LLM_LATENCY } from '../engine/baseline.ts';
 import { CORPORATE_TICKET_USD, REALIZED_SHARE, SCENARIOS, type Scenario } from '../engine/impact.ts';
 import type { Action } from '../engine/types.ts';
 import { weekMetrics, type WeekMetrics } from '../engine/week-metrics.ts';
@@ -37,7 +38,7 @@ const SCENARIO_LABEL: Record<Scenario, string> = {
 // Franja "dónde vive Jev" (4 nodos; vertical en móvil).
 const FLOW = (ms: number) => [
   { title: 'El lead envía el formulario de siempre', body: 'El mismo formulario de 30X; nada cambia para quien aplica.' },
-  { title: `Jev decide en ~${ms} ms`, body: 'Antes de que cargue la página final: al terminar, el formulario redirige a una URL que llama a Jev (supuesto A). Un LLM general de 1,7–3 s no cabe ahí.', jev: true },
+  { title: `Jev decide en ~${ms} ms`, body: `Antes de que cargue la página final: al terminar, el formulario redirige a una URL que llama a Jev (supuesto A). Un LLM general tarda ${LLM_LATENCY}: no cabe ahí.`, jev: true },
   { title: 'Lo que ve el lead', body: 'Calendario, la oferta de su programa o una página de seguimiento, en vez de "gracias".' },
   { title: 'Lo que recibe el equipo', body: 'Propiedades en HubSpot, llamada del agente de voz (Dapta) o WhatsApp.' },
 ];

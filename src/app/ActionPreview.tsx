@@ -1,4 +1,4 @@
-// Capa de acción compacta (docs/ux-negocio.md §4, P2): debajo de la tarjeta de Jev en el zoom y en "Pruébalo tú".
+// Capa de acción compacta (docs/historial/ux-negocio.md §4, P2): debajo de la tarjeta de Jev en el zoom y en "Pruébalo tú".
 // Mismas plantillas fijas de src/engine/actions.ts. Con el simulador muestra antes → después.
 import { actionPlan } from '../engine/actions.ts';
 import { ACTION_LABEL, type JevResult } from './JevCard.tsx';

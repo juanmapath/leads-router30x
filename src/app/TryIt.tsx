@@ -1,5 +1,5 @@
 'use client';
-// "Pruébalo tú" (docs/ui-plan.md, sección 3): el jurado escribe la razón o desafío y Jev decide en vivo.
+// "Pruébalo tú" (docs/historial/ui-plan.md, sección 3): el jurado escribe la razón o desafío y Jev decide en vivo.
 // Los ejemplos están pregrabados como respaldo; lo escrito a mano va en vivo, con límite de llamadas.
 import { useState } from 'react';
 import { MAX_FREE_TEXT } from '../engine/state.ts';

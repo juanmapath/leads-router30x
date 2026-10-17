@@ -38,7 +38,7 @@ Referencia: en embudos de aplicación de alto ticket, la solicitud cierra ~5–1
 - Orden de magnitud esperado con estos supuestos: ~USD 15.000–35.000 al mes. Se dice como "del orden de", no con decimales.
 
 ## Dónde vive Jev
-- **Supuesto A (preferido):** el formulario permite redirigir al terminar a una URL con el id de la respuesta (Typeform lo permite en sus pantallas finales). La URL llama a Jev (~300 ms) y redirige al calendario, a la oferta o a la página de seguimiento. **Aquí los ms importan:** un LLM de 1,7–3 s no cabe antes de que cargue la página.
+- **Supuesto A (preferido):** el formulario permite redirigir al terminar a una URL con el id de la respuesta (Typeform lo permite en sus pantallas finales). La URL llama a Jev (~250 ms) y redirige al calendario, a la oferta o a la página de seguimiento. **Aquí los ms importan:** un LLM general tarda ~2,1 s de media y más de 5 s en el 5 % más lento (`data/baseline-llm.json`): no cabe antes de que cargue la página.
 - **Supuesto B (respaldo):** si no se puede redirigir, Jev actúa por webhook en < 1 s: la página final no cambia, pero el primer contacto (llamada del agente de voz, WhatsApp o AE de empresas) sale en el primer minuto.
 - En ambos casos el piloto empieza **en modo sombra**: Jev decide y registra en HubSpot, sin cambiar nada de lo que ve el lead.
 

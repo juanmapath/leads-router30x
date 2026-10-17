@@ -1,3 +1,5 @@
+> Documento de trabajo del hackathon. Las cifras pueden estar superadas; las vigentes están en el README, docs/playbook.md y docs/resultados-eval.md.
+
 # Plan UX v2: hablar en el idioma de 30X sin perder credibilidad
 
 Origen: revisión externa del demo (sáb 17 oct, 10:00) y nuestra respuesta (10:20). Este plan manda sobre `docs/ui-plan.md` donde choquen.

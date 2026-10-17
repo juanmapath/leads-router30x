@@ -1,3 +1,5 @@
+> Documento de trabajo del hackathon. Las cifras pueden estar superadas; las vigentes están en el README, docs/playbook.md y docs/resultados-eval.md.
+
 # Plan hasta la entrega
 
 Meta: **todo publicado el sábado en la noche** (demo en Vercel, repo público, video, playbook y entrega en HackRadar). El domingo queda solo como margen.

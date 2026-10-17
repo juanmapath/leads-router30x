@@ -1,4 +1,4 @@
-// Panel "por qué confiar" (docs/ui-plan.md, sección 4): números del set de prueba v3 (nunca usado para ajustar),
+// Panel "por qué confiar" (docs/historial/ui-plan.md, sección 4): números del set de prueba v3 (nunca usado para ajustar),
 // calibración, errores que terminan en una persona y Jev frente a un LLM general. Componente de servidor.
 import baseline from '../../data/baseline-llm.json';
 import testReport from '../../data/eval-report-test.json';

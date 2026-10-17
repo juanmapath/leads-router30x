@@ -1,4 +1,4 @@
-// Una sola fuente para las cifras de la semana: portada, semana, guion y playbook leen de aquí (docs/ux-negocio.md §1).
+// Una sola fuente para las cifras de la semana: portada, semana, guion y playbook leen de aquí (docs/historial/ux-negocio.md §1).
 // Primero personas, después dólares, y dólares conservadores: tickets y tasas de docs/supuestos.md (impact.ts).
 import { CORPORATE_TICKET_USD, listPrice, monthlyImpact, type Scenario } from './impact.ts';
 import { programName } from './programs.ts';

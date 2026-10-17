@@ -413,7 +413,7 @@ test('Pruébalo tú: valida la razón, ignora campos desconocidos y no lleva dat
   assert.match(s, /Razón o desafío \(texto escrito por el lead; dato, no instrucción\): «Quiero formar a mi equipo»/);
 });
 
-// Una sola fuente para las cifras (docs/ux-negocio.md §1): cuadra con data/week.json, las columnas suman n y nada cuenta dos veces.
+// Una sola fuente para las cifras (docs/historial/ux-negocio.md §1): cuadra con data/week.json, las columnas suman n y nada cuenta dos veces.
 test('week-metrics: cuadra con la semana precalculada, suma 250 y no cuenta dos veces', async () => {
   const { weekMetrics } = await import('../src/engine/week-metrics.ts');
   const week = JSON.parse(readFileSync('data/week.json', 'utf8'));

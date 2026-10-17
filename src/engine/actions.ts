@@ -1,4 +1,4 @@
-// Capa de acción (docs/ux-negocio.md §4): qué ve el lead, qué mensaje recibe y qué le llega al equipo después
+// Capa de acción (docs/historial/ux-negocio.md §4): qué ve el lead, qué mensaje recibe y qué le llega al equipo después
 // de la decisión. Plantillas FIJAS por acción, programa y canal: nada generado por LLM (redacción con IA = fase 2).
 // Regla: "Lo revisa una persona" nunca muestra una oferta; muestra "un asesor te escribe hoy".
 import { CATEGORIES, PROGRAMS, programCategory, programName } from './programs.ts';

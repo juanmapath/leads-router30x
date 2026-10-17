@@ -1,5 +1,5 @@
 'use client';
-// Un lead de cerca (docs/ui-plan.md, sección 2): la regla de puntos de 30X frente a Jev para el mismo lead.
+// Un lead de cerca (docs/historial/ui-plan.md, sección 2): la regla de puntos de 30X frente a Jev para el mismo lead.
 import { useEffect, useState } from 'react';
 import leads from '../../data/leads.json';
 import weekLeads from '../../data/week-leads.json';

@@ -1,6 +1,7 @@
 // Supuestos de negocio (docs/supuestos.md), plegados al final de la página. Sin datos internos de 30X:
 // todo número en dólares del demo sale de aquí, y cada supuesto dice cómo se valida en la semana en modo sombra.
 import { CORPORATE_TICKET_USD, MONTHLY_SALES_30X_USD, REALIZED_SHARE, SANITY_MAX, SCENARIOS, type Scenario } from '../engine/impact.ts';
+import { LLM_LATENCY } from '../engine/baseline.ts';
 import type { WeekMetrics } from '../engine/week-metrics.ts';
 
 export const SUPUESTOS_DOC = 'https://github.com/juanmapath/leads-router30x/blob/master/docs/supuestos.md';
@@ -45,7 +46,7 @@ export function Supuestos({ m, mix }: { m: WeekMetrics; mix: Array<{ nombre: str
 
           <h3>Dónde vive Jev</h3>
           <ul className="muted">
-            <li><strong>Supuesto A (preferido):</strong> el formulario redirige al terminar a una URL que llama a Jev (~{m.msMean} ms) y lleva al calendario, a la oferta o al seguimiento. Aquí los ms importan: un LLM de 1,7–3 s no cabe antes de que cargue la página.</li>
+            <li><strong>Supuesto A (preferido):</strong> el formulario redirige al terminar a una URL que llama a Jev (~{m.msMean} ms) y lleva al calendario, a la oferta o al seguimiento. Aquí los ms importan: un LLM general tarda {LLM_LATENCY} y no cabe antes de que cargue la página.</li>
             <li><strong>Supuesto B (respaldo):</strong> Jev actúa por webhook en menos de 1 s; la página final no cambia, pero el primer contacto sale en el primer minuto.</li>
           </ul>
 

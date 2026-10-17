@@ -118,7 +118,7 @@ Cada decisión cuesta ~USD 0,00013, así que recalcular en cada señal no es un 
 ## Slide 7 · Quién lo opera y cómo se mide
 
 **Dónde vive Jev (supuestos, a confirmar con 30X):**
-- **A (preferido):** al terminar, el formulario redirige a una URL nuestra; Jev decide en ~250 ms y la persona ve un calendario, la oferta de su programa o una página de seguimiento en vez de "gracias". Los ms importan aquí: un LLM general de 1,7–3 s no cabe antes de que cargue la página.
+- **A (preferido):** al terminar, el formulario redirige a una URL nuestra; Jev decide en ~250 ms y la persona ve un calendario, la oferta de su programa o una página de seguimiento en vez de "gracias". Los ms importan aquí: un LLM general (~2,1 s de media y más de 5 s en el 5 % más lento) no cabe antes de que cargue la página.
 - **B (respaldo):** webhook en < 1 s; la página final no cambia, pero el primer contacto sale en el primer minuto.
 
 **Integración con el stack de 30X:**

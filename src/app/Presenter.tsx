@@ -1,5 +1,5 @@
 'use client';
-// Modo presentación (docs/ui-plan.md): ↑/↓ o PageUp/PageDown saltan de sección, puntos laterales de progreso
+// Modo presentación (docs/historial/ui-plan.md): ↑/↓ o PageUp/PageDown saltan de sección, puntos laterales de progreso
 // y botón de tema claro/oscuro. No captura teclas mientras se escribe en un campo.
 import { useEffect, useState } from 'react';
 

@@ -1,8 +1,9 @@
-// Capa de acción (docs/ux-negocio.md §4): un solo caso, el gerente de innovación de una multinacional con 5+ cupos.
+// Capa de acción (docs/historial/ux-negocio.md §4): un solo caso, el gerente de innovación de una multinacional con 5+ cupos.
 // Server component: la decisión sale de la grabación real de Jev y las plantillas fijas de src/engine/actions.ts.
 // Maquetas genéricas, marcadas "maqueta": sin identidad visual de 30X ni teléfonos reales.
 import type { ReactNode } from 'react';
 import type { ActionPlan } from '../engine/actions.ts';
+import { LLM_LATENCY } from '../engine/baseline.ts';
 
 export interface ActionCase {
   roleText: string;
@@ -61,7 +62,7 @@ export function ActionLayer({ c }: { c: ActionCase }) {
               <p className="mock-bubble">{followUp.text}</p>
             </div>
           </Phone>
-          <p className="faint">Esto solo es posible porque la decisión llega antes que la página: un LLM general tarda 1,7–3 s (supuesto A; si no se puede redirigir, el mensaje sale igual en el primer minuto).</p>
+          <p className="faint">Esto solo es posible porque la decisión llega antes que la página: un LLM general tarda {LLM_LATENCY} (supuesto A; si no se puede redirigir, el mensaje sale igual en el primer minuto).</p>
         </div>
 
         <div className="action-col">

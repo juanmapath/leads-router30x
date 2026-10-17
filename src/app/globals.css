@@ -229,6 +229,7 @@ a { color: var(--jev); }
 :root[data-theme='light'] .adopt-num { color: var(--text); }
 .ask { margin-top: 16px; display: grid; gap: 8px; border-color: var(--brand-border); background: linear-gradient(180deg, var(--brand-soft), var(--surface) 85%); }
 .ask-text { font-size: clamp(17px, 2.3vw, 21px); }
+.ask-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
 /* Modo presentación */
 .progress { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); display: grid; gap: 10px; z-index: 5; }
