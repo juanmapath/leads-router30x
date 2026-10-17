@@ -89,10 +89,25 @@ La línea base anterior (sáb en la mañana, set v2 con 8 programas: Jev 85 % fr
 2. **v2 (sáb, 120 leads, escrito antes de la pregunta de coherencia):** acción 82 % y 0 errores caros con el catálogo de 8 programas. Sobre el v2 no se ajustó nada (`data/test-set-v2.json`).
 3. **v3 (sáb, 127 leads):** al pasar al catálogo de 17 programas y agregar la razón o desafío hacía falta otro set: arquetipos con otra semilla (incluye 5 de programas nuevos), los casos sucios del v2 (con ids renombrados; se descartan los que quedaban idénticos) y 12 casos nuevos de razón o desafío. Es el set actual (`data/test-set.json`); de aquí salen los números del pitch. Un test garantiza que ningún lead de v3 repite un estado del demo, del ajuste, del v1 ni del v2.
 
+## Semana del demo (supuesto, no dato de 30X)
+
+"La semana de 30X" ya no sale de `data/leads.json` (sus primeros 100 son el set de ajuste): sale de `data/week-leads.json`, 300 leads con otra semilla (17102026) y una **mezcla explícita** en `data/week-mix.json`. Es un supuesto conservador a validar con el equipo comercial de 30X; en el piloto se reemplaza por los leads reales.
+
+| Grupo | Leads | % | Arquetipos |
+|---|---|---|---|
+| Baja intención (esperado: nurturing) | 120 | 40 % | estudiante, curioso de clase gratis, junior sin presupuesto, solo Luma vago (30 c/u) |
+| Encaja en la Inmersión | 60 | 20 % | CEO listo (36), fundador con plan de pagos (24) |
+| Oportunidad de empresa | 18 | 6 % | gerente de equipo de multinacional (5+ cupos) |
+| Otro programa de los 17 | 78 | 26 % | 10 arquetipos de programa + solo Luma con programa (6) |
+| Abandonó el formulario | 24 | 8 % | abandono caliente |
+
+- Ningún lead de la semana repite el estado de un lead de los sets de prueba v1, v2 o v3 (4 re-sorteados al generar; un test lo garantiza).
+- Grabar los 272 estados nuevos costó USD 0,034. `npm run gen:week` la regenera; `npm run week` la precalcula.
+
 ## Cómo reproducir
 
 ```bash
-npm test                                   # 26 tests, sin red (incluye cobertura de grabaciones)
+npm test                                   # 28 tests, sin red (incluye cobertura de grabaciones)
 JEV_MODE=replay-only npm run eval -- --set test   # reproduce v3 sin gastar crédito
 npm run eval:gate                          # puerta de CI (sin clave)
 npm run baseline                           # línea base con Sonnet (gasta crédito, ~USD 0,27)

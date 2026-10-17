@@ -1,5 +1,5 @@
 // Graba la respuesta de Jev para todo lo que el demo y los evals necesitan y aún no tiene grabación:
-// los 300 leads del demo (incluye los 100 de ajuste), el set de prueba (v3; v1 y v2 quedan como histórico) y las combinaciones del simulador
+// los 300 leads del demo (incluye los 100 de ajuste), la semana del demo (data/week-leads.json), el set de prueba (v3; v1 y v2 quedan como histórico) y las combinaciones del simulador
 // para los leads destacados, y los ejemplos de "Pruébalo tú". Así el demo en Vercel (modo replay) responde sin red.
 // Uso: npm run record            (solo graba lo que falta)
 //      npm run record -- --dry   (cuenta lo que falta y estima el costo, sin llamar a Jev)
@@ -7,6 +7,7 @@
 import { existsSync, readdirSync, readFileSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import leads from '../data/leads.json' with { type: 'json' };
+import weekLeads from '../data/week-leads.json' with { type: 'json' };
 import { askJev, recordingPath } from '../src/engine/jev-client.ts';
 import { featuredLeads, simCombos, simSignals } from '../src/engine/simulator.ts';
 import { buildState } from '../src/engine/state.ts';
@@ -18,6 +19,7 @@ const testLeads = ['data/test-set.json'].flatMap((f) => (JSON.parse(readFileSync
 
 const states = new Set<string>();
 for (const l of leads as Lead[]) states.add(buildState(l));
+for (const l of weekLeads.leads as Lead[]) states.add(buildState(l));
 for (const l of testLeads) states.add(buildState(l));
 for (const l of featuredLeads(leads as Lead[])) {
   for (const combo of simCombos()) states.add(buildState({ ...l, signals: [...l.signals, ...simSignals(combo)] }));

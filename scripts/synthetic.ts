@@ -127,39 +127,108 @@ const ARCHETYPES: Archetype[] = [
   } },
 ];
 
+// Arquetipos solo de la semana del demo (data/week-leads.json): baja intención y "solo Luma" separado en vago y
+// con programa. No entran en ARCHETYPES para no cambiar data/leads.json ni los sets de prueba.
+const LOW = 'Qué es la IA y cómo va a cambiar tu carrera';
+export const WEEK_ARCHETYPES: Archetype[] = [
+  { id: 'curioso_clase_gratis', weight: 0, build: () => {
+    const event = pick(LUMA);
+    return {
+      form: { role: pick(['coordinador', 'analista'] as const), roleText: pick(['Asistente administrativa', 'Coordinador de eventos', 'Analista de compras']), revenue: pick(['menos_200k', '200k_500k'] as const), investment: 'imposible', decider: 'otro', seats: 'solo',
+        reason: pick(['Vi la clase gratis y quiero seguir aprendiendo.', 'Me gustan sus videos, quería ver de qué se trata.', 'Curiosidad, vi el anuncio.']) },
+      content: event,
+      luma: [event, pick(['¿Van a hacer más clases gratis?', '¿Me pueden compartir las diapositivas?'])],
+      expected: { action: 'nurturing', program: 'ninguno', team: false },
+    };
+  } },
+  { id: 'junior_sin_presupuesto', weight: 0, build: () => ({
+    form: { role: pick(['analista', 'coordinador'] as const), roleText: pick(['Analista junior de marketing', 'Asistente comercial', 'Diseñadora freelance', 'Community manager']), revenue: 'menos_200k', investment: 'imposible', decider: 'otro', seats: 'solo',
+      reason: pick(['Quiero aprender a usar IA en mi trabajo.', 'Busco mejorar mi perfil para conseguir un mejor empleo.', 'Me interesa la IA pero ahora no tengo presupuesto.']) },
+    content: pick([LOW, 'Experto en VENTAS con IA revela su sistema completo']),
+    expected: { action: 'nurturing', program: 'ninguno', team: false } }) },
+  { id: 'solo_luma_vago', weight: 0, build: () => {
+    const event = pick(LUMA);
+    const question = pick(['¿Cuándo es la próxima clase gratis?', 'Me encantó, ¿dónde veo la grabación?', '¿La clase queda grabada?', 'Gracias, muy buena clase.', '¿Me pueden enviar las diapositivas?']);
+    return { form: {}, noForm: true, content: event, luma: [event, question], expected: { action: 'nurturing', program: 'ninguno', team: false } };
+  } },
+  { id: 'solo_luma_programa', weight: 0, build: () => {
+    const [event, question, expected] = pick<[string, string, Expected]>([
+      ['Clase gratis: cómo levantar tu primera ronda', 'Estamos por levantar nuestra pre-seed, ¿qué métricas piden los fondos?', { action: 'cola_humana', program: 'fundraising', team: false }],
+      ['Clase gratis: IA para tu equipo comercial', 'Tengo una agencia y quiero que la IA me ayude a hacer seguimiento a los prospectos, ¿por dónde empiezo?', { action: 'cola_humana', program: 'ai_sales', team: false }],
+      ['Masterclass: agentes de IA para tu operación', 'Tenemos 40 personas en bodega con procesos manuales, ¿qué se puede automatizar primero?', { action: 'cola_humana', program: 'ops_ai', team: false }],
+    ]);
+    return { form: {}, noForm: true, content: event, luma: [event, question], expected };
+  } },
+];
+
+/** Arma un lead con el arquetipo dado (consume el generador en el mismo orden de siempre). */
+function makeLead(a: Archetype, i: number, prefix: string): { lead: Lead; expected: Expected } {
+  const b = a.build();
+  const country = weighted(COUNTRY);
+  const channel = b.noForm ? 'luma' : b.luma && rand() < 0.4 ? 'luma' : weighted(CHANNEL);
+  const name = `${pick(FIRST)} ${pick(LAST)}`;
+  const id = `${prefix}${String(i + 1).padStart(3, '0')}`;
+  const company = `${pick(COMPANY_PREFIX)} ${pick(COMPANY_SUFFIX)}`;
+  const lead: Lead = {
+    id,
+    country,
+    channel,
+    utm: { source: channel, medium: channel.endsWith('ads') ? 'paid' : 'organic', campaign: 'inmersivo_30x', content: `pieza_${Math.floor(rand() * 40) + 1}` },
+    sourceContent: b.content,
+    form: {
+      name,
+      email: `${name.split(' ')[0].toLowerCase()}.${id.toLowerCase()}@ejemplo.test`,
+      whatsappCountry: country,
+      ...(b.partial || b.noForm ? {} : { company, edition: EDITION[country] }),
+      ...b.form,
+    } as Lead['form'],
+    partial: Boolean(b.partial),
+    signals: b.luma ? [{ type: 'luma_event', at: '2026-10-14T19:00:00-05:00', text: `${b.luma[0]}. Pregunta que dejó: ${b.luma[1]}` }] : [],
+    archetype: a.id,
+  };
+  return { lead, expected: b.expected };
+}
+
 /** Genera n leads con la semilla dada. Devuelve los leads y lo esperado por id. */
 export function generate(s: number, n: number, prefix = 'L'): { leads: Lead[]; expected: Record<string, Expected> } {
   reseed(s);
   const leads: Lead[] = [];
   const expected: Record<string, Expected> = {};
-
   for (let i = 0; i < n; i++) {
     const a = weighted(ARCHETYPES.map((x) => [x, x.weight] as [Archetype, number]));
-    const b = a.build();
-    const country = weighted(COUNTRY);
-    const channel = b.noForm ? 'luma' : b.luma && rand() < 0.4 ? 'luma' : weighted(CHANNEL);
-    const name = `${pick(FIRST)} ${pick(LAST)}`;
-    const id = `${prefix}${String(i + 1).padStart(3, '0')}`;
-    const company = `${pick(COMPANY_PREFIX)} ${pick(COMPANY_SUFFIX)}`;
-    const lead: Lead = {
-      id,
-      country,
-      channel,
-      utm: { source: channel, medium: channel.endsWith('ads') ? 'paid' : 'organic', campaign: 'inmersivo_30x', content: `pieza_${Math.floor(rand() * 40) + 1}` },
-      sourceContent: b.content,
-      form: {
-        name,
-        email: `${name.split(' ')[0].toLowerCase()}.${id.toLowerCase()}@ejemplo.test`,
-        whatsappCountry: country,
-        ...(b.partial || b.noForm ? {} : { company, edition: EDITION[country] }),
-        ...b.form,
-      } as Lead['form'],
-      partial: Boolean(b.partial),
-      signals: b.luma ? [{ type: 'luma_event', at: '2026-10-14T19:00:00-05:00', text: `${b.luma[0]}. Pregunta que dejó: ${b.luma[1]}` }] : [],
-      archetype: a.id,
-    };
+    const { lead, expected: e } = makeLead(a, i, prefix);
     leads.push(lead);
-    expected[id] = b.expected;
+    expected[lead.id] = e;
   }
   return { leads, expected };
+}
+
+/**
+ * Genera una semana con una mezcla exacta: `counts` = cuántos leads de cada arquetipo (de ARCHETYPES o WEEK_ARCHETYPES),
+ * en orden aleatorio. `taken(lead)` = true si el lead repite uno ya visto (p. ej. de un set de prueba): se vuelve a sortear.
+ */
+export function generateMix(s: number, counts: Record<string, number>, prefix: string, taken: (l: Lead) => boolean = () => false) {
+  reseed(s);
+  const byId = new Map([...ARCHETYPES, ...WEEK_ARCHETYPES].map((a) => [a.id, a]));
+  const order: Archetype[] = [];
+  for (const [id, k] of Object.entries(counts)) {
+    const a = byId.get(id);
+    if (!a) throw new Error(`Arquetipo desconocido en la mezcla: ${id}`);
+    for (let j = 0; j < k; j++) order.push(a);
+  }
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  const leads: Lead[] = [];
+  const expected: Record<string, Expected> = {};
+  let rerolls = 0;
+  for (const [i, a] of order.entries()) {
+    let r = makeLead(a, i, prefix);
+    for (let t = 0; taken(r.lead); t++) {
+      if (t >= 50) throw new Error(`No se pudo generar un ${a.id} que no repita un lead ya visto`);
+      r = makeLead(a, i, prefix);
+      rerolls++;
+    }
+    leads.push(r.lead);
+    expected[r.lead.id] = r.expected;
+  }
+  return { leads, expected, rerolls };
 }

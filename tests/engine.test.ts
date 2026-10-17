@@ -10,6 +10,7 @@ import { CATEGORY_IDS, PROGRAM_IDS } from '../src/engine/programs.ts';
 import type { JevAnswers, Lead, ProgramId } from '../src/engine/types.ts';
 
 const leads: Lead[] = JSON.parse(readFileSync('data/leads.json', 'utf8'));
+const weekLeads: Lead[] = (JSON.parse(readFileSync('data/week-leads.json', 'utf8')) as { leads: Lead[] }).leads;
 
 test('la regla de puntos replica la lógica pública de 30X', () => {
   assert.equal(legacyScore({ name: '', email: '', whatsappCountry: '', role: 'founder_ceo', revenue: 'mas_5m', investment: 'listo', decider: 'solo' }).score, 10);
@@ -297,6 +298,21 @@ test('set de prueba v3: ningún lead idéntico al v1 ni al v2', () => {
   assert.deepEqual(v3.leads.filter((l) => seen.has(buildState(l))).map((l) => l.id), []);
 });
 
+// La semana del demo (data/week-leads.json) sale de otra semilla y una mezcla explícita (data/week-mix.json).
+// Ningún lead puede repetir el estado de un lead de prueba: si no, el demo mostraría casos del set de prueba.
+test('semana del demo: 300 leads con la mezcla declarada, sintéticos y sin repetir ningún lead de prueba', () => {
+  const mix = JSON.parse(readFileSync('data/week-mix.json', 'utf8')) as { grupos: Array<{ pct: number; arquetipos: Record<string, number> }> };
+  assert.equal(weekLeads.length, 300);
+  for (const g of mix.grupos) {
+    const k = Object.values(g.arquetipos).reduce((a, b) => a + b, 0);
+    assert.equal(k, Math.round((g.pct / 100) * 300), `grupo con ${k} leads declara ${g.pct} %`);
+    for (const [a, n] of Object.entries(g.arquetipos)) assert.equal(weekLeads.filter((l) => l.archetype === a).length, n, a);
+  }
+  const testStates = new Set(['data/test-set-v1.json', 'data/test-set-v2.json', 'data/test-set.json'].flatMap((f) => (JSON.parse(readFileSync(f, 'utf8')) as { leads: Lead[] }).leads.map(buildState)));
+  assert.deepEqual(weekLeads.filter((l) => testStates.has(buildState(l))).map((l) => l.id), []);
+  for (const l of weekLeads) assert.ok(l.form.email.endsWith('@ejemplo.test'), `${l.id} correo no sintético`);
+});
+
 // Definición acordada (sáb 17 oct): error caro = agenda_ya cuando lo esperado era cola_humana o nurturing,
 // o agenda_ya con un programa de otra categoría que el esperado. Aplica a todos los sets y a la puerta de CI.
 test('error caro: agenda_ya indebido para una persona/nurturing o con un programa de otra categoría', async () => {
@@ -335,6 +351,7 @@ test('cobertura: la semana, el simulador y los ejemplos de "Pruébalo tú" tiene
   const { TRY_EXAMPLES, buildTryLead } = await import('../src/engine/try.ts');
   const states = [
     ...leads.map((l) => [l.id, buildState(l)]),
+    ...weekLeads.map((l) => [`semana:${l.id}`, buildState(l)]),
     ...featuredLeads(leads).flatMap((l) => simCombos().map((c) => [`${l.id}+${c.join('+')}`, buildState({ ...l, signals: [...l.signals, ...simSignals(c)] })])),
     ...TRY_EXAMPLES.map((e) => [`try:${e.label}`, buildState(buildTryLead({ reason: e.reason })!)]),
   ];

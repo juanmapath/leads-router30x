@@ -12,6 +12,7 @@
     "test": "tsx --test tests/engine.test.ts",
     "gen": "tsx scripts/generate-leads.ts",
     "gen:test": "tsx scripts/generate-test-set.ts",
+    "gen:week": "tsx scripts/generate-week.ts",
     "week": "tsx scripts/build-week.ts",
     "ping": "tsx --env-file=.env.local scripts/jev-ping.ts",
     "eval": "tsx --env-file=.env.local scripts/eval.ts",
