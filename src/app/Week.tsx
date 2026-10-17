@@ -1,8 +1,8 @@
 'use client';
-// Portada + "La semana de 30X" (docs/historial/ux-negocio.md §2–3). Se renderiza en el servidor con el resultado final:
-// cifras de weekMetrics (una sola fuente), nunca "…" ni ceros. "Repetir la semana" lleva los 300 puntos a las
-// columnas de la regla y los hace viajar a las de Jev, escalonados según la latencia grabada de cada llamada.
+// Portada + "La semana de 30X" (docs/historial/ux-negocio.md §2–3). Arranca en 'antes' (contadores en 0 y 250 puntos
+// en las 3 columnas grises de la regla) para que al oprimir el botón principal ocurra el momento WOW en vivo.
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import weekLeads from '../../data/week-leads.json';
 import { LLM_LATENCY } from '../engine/baseline.ts';
 import { CORPORATE_TICKET_USD, REALIZED_SHARE, SCENARIOS, type Scenario } from '../engine/impact.ts';
 import type { Action } from '../engine/types.ts';
@@ -26,8 +26,8 @@ const JEV_COLS = [
 ] as const;
 const WITH_PROGRAM: Action[] = ['agenda_ya', 'otro_programa', 'empresas'];
 const FEATURED = 'gerente_equipo_multinacional';
-const RUN_MS = 3600;
-const MOVE_MS = 700;
+const RUN_MS = 3400;
+const MOVE_MS = 680;
 
 const SCENARIO_LABEL: Record<Scenario, string> = {
   pesimista: 'Pesimista',
@@ -66,10 +66,10 @@ function layout(rows: Row[], cols: ReadonlyArray<{ key: string; label: string }>
     let maxRows = 0;
     groups.forEach((g, c) => {
       labels.push({ x: c * colW, y: 0, w: colW - 8, label: g.label, count: g.idx.length });
-      g.idx.forEach((i, k) => { pos[i] = { x: c * colW + (k % per) * step, y: 52 + Math.floor(k / per) * step }; });
+      g.idx.forEach((i, k) => { pos[i] = { x: c * colW + (k % per) * step, y: 44 + Math.floor(k / per) * step }; });
       maxRows = Math.max(maxRows, Math.ceil(g.idx.length / per));
     });
-    return { pos, labels, height: 52 + maxRows * step };
+    return { pos, labels, height: 44 + maxRows * step };
   }
   const per = Math.max(1, Math.floor((width + G) / step));
   let y = 0;
@@ -84,18 +84,37 @@ function layout(rows: Row[], cols: ReadonlyArray<{ key: string; label: string }>
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+function CursorIcon() {
+  return (
+    <svg className="cursor-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z" />
+    </svg>
+  );
+}
+
+export function downloadSyntheticLeads() {
+  const blob = new Blob([JSON.stringify(weekLeads, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'leads-sinteticos-semana-30x.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: WeekMetrics; onSelect: (id: string) => void }) {
-  // En reposo se ve el resultado final (también en el HTML del servidor); "Repetir la semana" anima desde la regla.
-  const [phase, setPhase] = useState<'antes' | 'corriendo' | 'listo'>('listo');
-  const [elapsed, setElapsed] = useState(RUN_MS);
+  // Al cargar la página empieza en 'antes' (contadores en 0 y puntos en las 3 columnas de la regla) para provocar el WOW al hacer clic.
+  const [phase, setPhase] = useState<'antes' | 'corriendo' | 'listo'>('antes');
+  const [elapsed, setElapsed] = useState(0);
   const [scenario, setScenario] = useState<Scenario>('pesimista');
+  const [showData, setShowData] = useState(false);
   const [width, setWidth] = useState(0);
   const box = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
 
   useLayoutEffect(() => {
     if (!box.current) return;
-    setWidth(Math.floor(box.current.clientWidth)); // medida inicial sin esperar al primer callback del observer
+    setWidth(Math.floor(box.current.clientWidth));
     const ro = new ResizeObserver(([e]) => setWidth(Math.floor(e.contentRect.width)));
     ro.observe(box.current);
     return () => ro.disconnect();
@@ -118,6 +137,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
   function finish() { setPhase('listo'); setElapsed(RUN_MS); }
 
   function run() {
+    if (reducedMotion()) return finish();
     setElapsed(0);
     setPhase('corriendo');
     const t0 = performance.now();
@@ -129,25 +149,37 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
     requestAnimationFrame(tick);
   }
 
-  /** Vuelve a la regla y repite la semana. Con movimiento reducido no hay viaje: muestra el resultado. */
-  function replay() {
+  /** Desde la portada: baja a la sección completa (no al título) y arranca solo cuando el scroll terminó. */
+  function runFromCover() {
     window.clearTimeout(timer.current);
-    if (reducedMotion()) return finish();
+    if (phase !== 'antes') { setPhase('antes'); setElapsed(0); }
+    const section = document.getElementById('semana')?.closest('section');
+    if (!section) return run();
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      window.removeEventListener('scrollend', start);
+      timer.current = window.setTimeout(run, 250);
+    };
+    window.addEventListener('scrollend', start, { once: true });
+    timer.current = window.setTimeout(start, 1100); // respaldo si el navegador no emite scrollend
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /** Vuelve a la regla (contadores en 0); el botón principal reaparece y arranca la animación de inmediato. */
+  function reset() {
+    if (phase === 'corriendo') return;
+    window.clearTimeout(timer.current);
     setPhase('antes');
     setElapsed(0);
-    timer.current = window.setTimeout(run, MOVE_MS + 250); // el ojo ve las 3 columnas grises antes del vuelo
   }
 
-  function toggleBeforeAfter() {
-    if (phase === 'corriendo') return;
-    if (phase === 'listo') { setPhase('antes'); setElapsed(0); return; }
-    if (reducedMotion()) finish(); else run();
-  }
-
-  // Durante el viaje, las cifras son las de los leads ya decididos; en reposo, las finales (las del servidor).
+  // En 'antes' todo está en 0; durante el viaje suben las cifras de los leads ya decididos; en 'listo' quedan las finales.
   const launched = phase === 'corriendo' ? rows.filter((_, i) => delays[i] <= elapsed - MOVE_MS / 2) : phase === 'listo' ? rows : [];
   const live = phase === 'listo' ? m : weekMetrics(launched);
   const featured = rows.findIndex((r) => r.archetype === FEATURED);
+  const sampleLeads = (weekLeads.leads ?? []).slice(0, 6);
 
   return (
     <>
@@ -169,49 +201,87 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
             </li>
           ))}
         </ol>
-        <p className="faint">Respaldo (supuesto B): si el formulario no puede redirigir, Jev actúa por webhook en menos de 1 s; la página final no cambia, pero el primer contacto (agente de voz, WhatsApp o AE de empresas) sale en el primer minuto.</p>
-        <p className="faint">En el piloto, Jev corre en modo sombra: decide y registra en HubSpot, pero no cambia lo que ve el lead.</p>
+        <p className="faint">Respaldo (supuesto B): si el formulario no puede redirigir, Jev actúa por webhook en menos de 1 s; la página final no cambia, pero el primer contacto (agente de voz, WhatsApp o AE de empresas) sale en el primer minuto. En el piloto corre en modo sombra.</p>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <a className="btn" href="#semana">Ver la semana de 30X →</a>
-          <span className="faint">Datos sintéticos · decisiones de Jev grabadas de llamadas reales · prueba en vivo más abajo</span>
+          <button className="btn btn-cta-pulse" onClick={runFromCover}>
+            <CursorIcon /> Clasificar los leads de una semana con Jev →
+          </button>
+          <button className="btn-ghost" onClick={() => setShowData((v) => !v)}>
+            {showData ? 'Ocultar muestra de datos' : `👁 Ver datos sintéticos (${m.n})`}
+          </button>
+          <button className="btn-ghost" onClick={downloadSyntheticLeads}>
+            ⬇ Descargar JSON
+          </button>
         </div>
+        {showData && (
+          <div className="card data-drawer">
+            <div className="week-bar" style={{ marginBottom: 8 }}>
+              <div>
+                <strong>Muestra de `data/week-leads.json` ({m.n} leads 100 % sintéticos)</strong>
+                <p className="faint">Correos `@ejemplo.test`, sin datos reales. Incluye respuestas del formulario, señales de Luma/WhatsApp y envíos parciales.</p>
+              </div>
+              <button className="btn-ghost" onClick={downloadSyntheticLeads}>⬇ Descargar los {m.n} leads (.json)</button>
+            </div>
+            <pre className="state" style={{ maxHeight: 190, overflow: 'auto', margin: 0 }}>{JSON.stringify(sampleLeads, null, 2)}</pre>
+          </div>
+        )}
       </section>
 
       <section className="block" aria-labelledby="semana">
         <div className="week-bar">
           <div className="block-head" style={{ marginBottom: 0 }}>
-            <h2 id="semana">La semana de 30X</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <h2 id="semana">La semana de 30X</h2>
+              <span className={`status-pill ${phase === 'antes' ? 'status-before' : 'status-after'}`}>
+                {phase === 'antes' ? 'Estado actual: Regla de puntos (sin Jev)' : phase === 'corriendo' ? 'Jev decidiendo en paralelo…' : 'Con Jev Lead Router activo'}
+              </span>
+            </div>
             <p className="muted">
               {moved
-                ? `Los ${m.n} leads de una semana, decididos por Jev en una sola llamada cada uno. Los puntos azules son personas que la regla descartaba y reciben un siguiente paso comercial.`
-                : `Así reparte hoy la regla de puntos a los ${m.n} leads: más de 6 de 10 pasa a entrevista; el resto ve "gracias" o abandonó el formulario.`}
+                ? `Los ${m.n} leads decididos por Jev en una sola llamada cada uno (~${m.msMean} ms). Los puntos lima son personas que la regla descartaba y ahora reciben un siguiente paso comercial.`
+                : `Así reparte hoy la regla de puntos a los ${m.n} leads: más de 6 de 10 pasa a entrevista; el resto (${m.discarded}) ve "gracias" o abandonó el formulario.`}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button className="btn-ghost" onClick={toggleBeforeAfter} disabled={phase === 'corriendo'}>
-              {phase === 'antes' ? 'Ver con Jev' : 'Ver antes (regla actual)'}
-            </button>
-            <button className="btn-ghost" onClick={replay} disabled={phase === 'corriendo'}>
-              {phase === 'corriendo' ? `Decidiendo ${m.n} leads…` : '↻ Repetir la semana'}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            {phase === 'antes' ? (
+              <button className="btn btn-cta-pulse" onClick={run}>
+                <CursorIcon /> Pasar los {m.n} leads por Jev
+              </button>
+            ) : (
+              <button className="btn-ghost" onClick={reset} disabled={phase === 'corriendo'}>
+                {phase === 'corriendo' ? `Decidiendo ${m.n} leads…` : '↺ Reiniciar'}
+              </button>
+            )}
+            <button className="btn-ghost" onClick={downloadSyntheticLeads} title={`Descargar los ${m.n} leads sintéticos en JSON`}>
+              ⬇ Datos sintéticos ({m.n})
             </button>
           </div>
         </div>
 
-        <div className="tiles counters big" aria-live="polite" style={{ marginTop: 16 }}>
-          <div className="tile"><span className="value">{live.b2b}</span><span className="label">oportunidades de empresa que la regla descartó</span></div>
-          <div className="tile"><span className="value">{live.offers}</span><span className="label">personas descartadas que reciben la oferta de un programa de 30X</span></div>
-          <div className="tile"><span className="value">{live.doubtfulInterviews}</span><span className="label">entrevistas protegidas: la regla las mandaba a un closer; Jev pide revisarlas antes</span></div>
+        <div className="tiles counters big" aria-live="polite" style={{ marginTop: 12 }}>
+          <div className={`tile ${moved ? 'tile-brand' : 'tile-zero'}`}>
+            <span className="value">{live.b2b}</span>
+            <span className="label">oportunidades de empresa rescatadas por Jev</span>
+          </div>
+          <div className={`tile ${moved ? 'tile-jev' : 'tile-zero'}`}>
+            <span className="value">{live.offers}</span>
+            <span className="label">personas descartadas que reciben oferta de otro programa</span>
+          </div>
+          <div className={`tile ${moved ? 'tile-good' : 'tile-zero'}`}>
+            <span className="value">{live.doubtfulInterviews}</span>
+            <span className="label">entrevistas dudosas filtradas antes de quitar tiempo a un closer</span>
+          </div>
         </div>
 
         <p className="ops-row">
-          <span><strong className="num">{Math.round(m.autoNextStep * 100)} %</strong> recibe su siguiente paso sin intervención humana</span>
-          <span><strong className="num">{m.abandonRescue}</strong> abandonos pasan a contacto ({m.abandonVoice} con llamada inmediata del agente de voz)</span>
-          <span><strong className="num">{m.nurturing}</strong> siguen en nurturing</span>
-          <span><strong className="num">{m.toPerson}</strong> revisa una persona</span>
+          <span><strong className="num">{moved ? Math.round(live.autoNextStep * 100) : 0} %</strong> recibe su siguiente paso sin intervención humana</span>
+          <span><strong className="num">{live.abandonRescue}</strong> abandonos pasan a contacto ({live.abandonVoice} con llamada inmediata del agente de voz)</span>
+          <span><strong className="num">{live.nurturing}</strong> siguen en nurturing</span>
+          <span><strong className="num">{live.toPerson}</strong> revisa una persona</span>
         </p>
 
-        <div className="card" style={{ marginTop: 12 }}>
-          <div ref={box} className="dots" style={{ height: current?.height ?? 320 }}>
+        <div className="card" style={{ marginTop: 10 }}>
+          <div ref={box} className="dots" style={{ height: current?.height ?? 260 }}>
             {current?.labels.map((l) => (
               <div key={l.label} className="dots-label" style={{ left: l.x, top: l.y, width: l.w }}>
                 <span>{l.label}</span> <strong className="num">{phase === 'corriendo' ? '' : l.count}</strong>
@@ -233,14 +303,18 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
                 />
               );
             })}
-            {current && featured >= 0 && current.pos[featured] && (
+            {phase === 'listo' && current && featured >= 0 && current.pos[featured] && (
               <button className="featured-tag" style={{ transform: `translate(${current.pos[featured].x + 12}px, ${current.pos[featured].y - 6}px)` }} onClick={() => onSelect(rows[featured].id)}>
                 mira este →
               </button>
             )}
           </div>
           <div className="dots-legend">
-            <span className="faint">Toca cualquier punto para inspeccionar ese lead abajo.</span>
+            <span className="faint">
+              {phase === 'antes'
+                ? '👆 Oprime «Pasar los 250 leads por Jev» arriba para ver cómo se reclasifica la semana en milisegundos, o toca cualquier punto.'
+                : 'Toca cualquier punto para inspeccionar ese lead de cerca.'}
+            </span>
             {moved && (
               <div className="legend-items">
                 <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--jev)' }} />Descartado que recibe siguiente paso ({m.rescued})</span>
@@ -251,13 +325,10 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
           </div>
         </div>
 
-        <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
-          <p className="result-line">
-            Decidir los {m.n} costó <strong>USD {fmt(m.costUsd, 2)}</strong> ({m.msMean} ms por lead). Pipeline de lista rescatado: del orden de <strong>USD {about(m.listPipelineWeek)}</strong> por semana, más {m.b2b} oportunidades de empresa.
-          </p>
+        <div className="week-bottom-grid" style={{ marginTop: 12 }}>
           <div className="card hero">
-            <span className="faint">Ingreso incremental por mes si el equipo cierra una fracción de lo rescatado (supuesto)</span>
-            <div className="scenario">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <span className="faint">Ingreso incremental por mes si el equipo cierra una fracción de lo rescatado (supuesto)</span>
               <div role="radiogroup" aria-label="Escenario de tasa de cierre" className="segmented">
                 {(Object.keys(SCENARIOS) as Scenario[]).map((k) => (
                   <button key={k} role="radio" aria-checked={scenario === k} className={scenario === k ? 'on' : ''} onClick={() => setScenario(k)}>
@@ -266,31 +337,22 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
                 ))}
               </div>
             </div>
-            <span className="value">del orden de USD {about(m.monthly[scenario])} / mes</span>
-            <p className="muted">
-              Cierre {SCENARIO_LABEL[scenario].toLowerCase()}: {pctTxt(SCENARIOS[scenario].otro_programa)} de las ofertas de otro programa y {pctTxt(SCENARIOS[scenario].empresas)} de las oportunidades de empresa.
-              Ticket realizado: {pctTxt(REALIZED_SHARE)} del precio público; plan corporativo USD {fmt(CORPORATE_TICKET_USD)}. Las {m.offersWithoutPrice} ofertas de programas sin precio publicado no suman dólares.
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' }}>
+              <span className="value">{moved ? `del orden de USD ${about(m.monthly[scenario])} / mes` : 'USD 0 / mes (sin Jev)'}</span>
+              <span className="muted" style={{ fontSize: 14 }}>
+                {moved
+                  ? `Decidir los ${m.n} costó USD ${fmt(m.costUsd, 2)} (${m.msMean} ms/lead) · Pipeline semanal rescatado: ~USD ${about(m.listPipelineWeek)} + ${m.b2b} empresas`
+                  : 'Oprime «Pasar los 250 leads por Jev» para calcular el pipeline rescatado.'}
+              </span>
+            </div>
+            <p className="faint">
+              Cierre {SCENARIO_LABEL[scenario].toLowerCase()}: {pctTxt(SCENARIOS[scenario].otro_programa)} en otro programa y {pctTxt(SCENARIOS[scenario].empresas)} en empresas (ticket realizado {pctTxt(REALIZED_SHARE)}; corporativo USD {fmt(CORPORATE_TICKET_USD)}).{' '}
+              <a href={SUPUESTOS_URL} onClick={() => document.querySelector<HTMLDetailsElement>('#supuestos details')?.setAttribute('open', '')}>Ver supuestos y desglose</a>.
             </p>
-            <details>
-              <summary>Desglose por programa</summary>
-              <table>
-                <thead><tr><th>Programa</th><th className="num">Personas</th><th className="num">Precio de lista</th><th className="num">Pipeline / semana</th></tr></thead>
-                <tbody>
-                  {m.byProgram.map((p) => (
-                    <tr key={p.program}>
-                      <td>{p.name}</td>
-                      <td className="num">{p.leads}</td>
-                      <td className="num">{p.priceUsd ? `USD ${fmt(p.priceUsd)}` : 'sin precio público'}</td>
-                      <td className="num">{p.priceUsd ? `USD ${fmt(p.pipelineWeek)}` : '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </details>
-            <p className="faint">Todo es supuesto, conservador a propósito: no tenemos datos internos de 30X. Mezcla sintética de {m.n} leads por semana; en el piloto se mide con los leads reales. <a href={SUPUESTOS_URL} onClick={() => document.querySelector<HTMLDetailsElement>('#supuestos details')?.setAttribute('open', '')}>Ver los supuestos</a>.</p>
           </div>
         </div>
       </section>
     </>
   );
 }
+

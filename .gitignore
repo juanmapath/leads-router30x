@@ -7,3 +7,5 @@ node_modules/
 next-env.d.ts
 .vercel
 .claude/
+# Guion del video: material de trabajo local, no es parte de la entrega
+docs/guion-pitch.md

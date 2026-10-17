@@ -14,7 +14,7 @@ export function Supuestos({ m, mix }: { m: WeekMetrics; mix: Array<{ nombre: str
       <details>
         <summary><h2 id="supuestos-h">Supuestos</h2> <span className="faint">sin datos internos de 30X · conservadores a propósito</span></summary>
         <div className="supuestos-body">
-          <p className="muted">No pudimos validar con 30X. Estos son nuestros supuestos; la página, el guion y el playbook usan estos números y ningún otro.</p>
+          <p className="muted">No pudimos validar con 30X. Estos son nuestros supuestos; la página y el playbook usan estos números y ningún otro.</p>
 
           <h3>Volumen y tamaño de 30X</h3>
           <table>

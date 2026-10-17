@@ -31,6 +31,7 @@ export function Trust() {
   return (
     <section className="block" aria-labelledby="confiar">
       <div className="block-head">
+        <span className="eyebrow"><span className="eyebrow-dot" />Evidencia y calibración</span>
         <h2 id="confiar">Por qué confiar</h2>
         <p className="thesis">
           Un LLM general elige casi el mismo programa que Jev. La diferencia es que Jev decide <strong>~{speedX}× más rápido</strong>, cuesta <strong>~{costX}× menos</strong> y <strong>sabe cuándo no sabe</strong>: sus probabilidades calibradas marcan exactamente cuándo pasarle el caso a una persona.
@@ -42,14 +43,17 @@ export function Trust() {
       </div>
 
       <div className="tiles">
-        <div className="tile"><span className="value">{pct(r.precision.accion)}</span><span className="label">acción correcta ({pct(r.porTipo.arquetipo.accion)} en perfiles típicos)</span></div>
-        <div className="tile"><span className="value">{r.errores.caros}</span><span className="label">entrevistas mal agendadas (errores caros) · la regla actual agenda a {r.regla.entrevistaIndebida} que no calificaban</span></div>
-        <div className="tile"><span className="value">{pct(r.errores.pctEnPersona)}</span><span className="label">de las dudas termina frente a una persona ({r.errores.terminanEnPersona} de {r.errores.total})</span></div>
-        <div className="tile"><span className="value">{r.latenciaMs.media} ms</span><span className="label">por decisión, en promedio · {usd(r.costo.por1000Usd)} por 1.000</span></div>
+        <div className="tile tile-brand"><span className="value">{pct(r.precision.accion)}</span><span className="label">acción correcta ({pct(r.porTipo.arquetipo.accion)} en perfiles típicos)</span></div>
+        <div className="tile tile-good"><span className="value">{r.errores.caros}</span><span className="label">entrevistas mal agendadas (errores caros) · la regla actual agenda a {r.regla.entrevistaIndebida} que no calificaban</span></div>
+        <div className="tile tile-human"><span className="value">{pct(r.errores.pctEnPersona)}</span><span className="label">de las dudas termina frente a una persona ({r.errores.terminanEnPersona} de {r.errores.total})</span></div>
+        <div className="tile tile-jev"><span className="value">{r.latenciaMs.media} ms</span><span className="label">por decisión, en promedio · {usd(r.costo.por1000Usd)} por 1.000</span></div>
       </div>
 
-      <div className="grid-2" style={{ marginTop: 16 }}>
-        <div className="card" style={{ display: 'grid', gap: 10, alignContent: 'start' }}>
+      <div className="grid-2" style={{ marginTop: 14 }}>
+        <div className="card card-jev" style={{ display: 'grid', gap: 10, alignContent: 'start' }}>
+          <div className="step-head">
+            <span className="step-badge step-jev">Calibración real en el set de prueba</span>
+          </div>
           <h3>Cuando duda, se equivoca — y por eso esos casos van a una persona</h3>
           <p className="muted" style={{ fontSize: 14 }}>
             Con 90 % o más de confianza en el programa acierta <strong>{pct(hi.acierto)}</strong> ({hi.n} leads); por debajo de 60 % acierta{' '}
@@ -59,18 +63,21 @@ export function Trust() {
           <p className="faint">Los tramos intermedios tienen pocos casos; lo que sostenemos es la diferencia entre los extremos.</p>
         </div>
 
-        <div className="card" style={{ display: 'grid', gap: 10, alignContent: 'start' }}>
+        <div className="card action-col-jev" style={{ display: 'grid', gap: 10, alignContent: 'start' }}>
+          <div className="step-head">
+            <span className="step-badge step-brand">Benchmark · {n} leads de prueba</span>
+          </div>
           <h3>Jev frente a un LLM general</h3>
           <p className="muted" style={{ fontSize: 14 }}>
-            Los mismos {n} leads de prueba, las mismas preguntas y los mismos umbrales, frente a Claude Sonnet 5.5 con salida estructurada.
+            Los mismos {n} leads, las mismas preguntas y los mismos umbrales, frente a Claude Sonnet 5.5 con salida estructurada.
           </p>
-          <table>
-            <thead><tr><th></th><th className="num">Jev</th><th className="num">LLM general</th></tr></thead>
+          <table className="bench-table">
+            <thead><tr><th>Métrica</th><th className="num col-jev">Jev</th><th className="num">LLM general</th></tr></thead>
             <tbody>
-              <tr><td>Acción correcta</td><td className="num">{jevOk} de {n}</td><td className="num">{llmOk} de {n}</td></tr>
-              <tr><td>Entrevistas mal agendadas</td><td className="num">{b.erroresCaros.jev}</td><td className="num">{b.erroresCaros.llm}</td></tr>
-              <tr><td>Latencia media / 5 % más lento</td><td className="num">{b.latenciaMs.jev.media} / {b.latenciaMs.jev.p95} ms</td><td className="num">{b.latenciaMs.llm.media.toLocaleString('es-CO')} / {(b.latenciaMs.llm.p95 ?? 0).toLocaleString('es-CO')} ms</td></tr>
-              <tr><td>Costo por 1.000 decisiones</td><td className="num">{usd(b.costoPor1000Usd.jev)}</td><td className="num">{usd(b.costoPor1000Usd.llm)}</td></tr>
+              <tr><td>Acción correcta</td><td className="num col-jev"><strong>{jevOk} de {n}</strong></td><td className="num">{llmOk} de {n}</td></tr>
+              <tr><td>Entrevistas mal agendadas</td><td className="num col-jev"><strong>{b.erroresCaros.jev}</strong></td><td className="num">{b.erroresCaros.llm}</td></tr>
+              <tr><td>Latencia media / 5 % más lento</td><td className="num col-jev"><strong>{b.latenciaMs.jev.media} / {b.latenciaMs.jev.p95} ms</strong></td><td className="num">{b.latenciaMs.llm.media.toLocaleString('es-CO')} / {(b.latenciaMs.llm.p95 ?? 0).toLocaleString('es-CO')} ms</td></tr>
+              <tr><td>Costo por 1.000 decisiones</td><td className="num col-jev"><strong>{usd(b.costoPor1000Usd.jev)}</strong></td><td className="num">{usd(b.costoPor1000Usd.llm)}</td></tr>
             </tbody>
           </table>
           <p className="muted" style={{ fontSize: 14 }}>
@@ -80,11 +87,12 @@ export function Trust() {
         </div>
       </div>
 
-      <p className="faint" style={{ marginTop: 16 }}>
+      <p className="faint" style={{ marginTop: 12 }}>
         Verificador en cada push: el <a href={CI_URL}>CI</a> falla si la acción baja de 76 % en el set de prueba o si aparece una sola entrevista mal agendada (error caro).
         Datos 100 % sintéticos; las tasas de cierre de la semana son supuestos.
       </p>
     </section>
   );
 }
+
 
