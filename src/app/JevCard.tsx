@@ -61,6 +61,10 @@ export function JevCard({ result, prev }: { result: JevResult; prev?: JevResult 
       </p>
 
       <div className="probs">
+        <div className="probs-legend">
+          <span>Probabilidades de Jev</span>
+          <span>Marca vertical │ = umbral del código</span>
+        </div>
         <ProbBar label="Listo para hablar con ventas" p={a.ready.p} prevP={pa?.ready.p} threshold={THRESHOLDS.readyHigh} note="Bajo esta línea no se agenda ya." />
         <ProbBar label="Es para un equipo (venta a empresa)" p={a.team.p} prevP={pa?.team.p} threshold={THRESHOLDS.team} note="Desde esta línea va al área de empresas." />
         {a.coherent && a.ready.p >= THRESHOLDS.readyHigh * 0.8 && <ProbBar label="Formulario coherente y creíble" p={a.coherent.p} threshold={THRESHOLDS.coherent} note="Bajo esta línea, agendar lo decide una persona." />}
@@ -80,3 +84,4 @@ export function JevCard({ result, prev }: { result: JevResult; prev?: JevResult 
     </div>
   );
 }
+

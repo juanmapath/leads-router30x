@@ -8,6 +8,13 @@ import { JevCard, type JevResult } from './JevCard.tsx';
 
 const ROUTE_LABEL: Record<string, string> = { entrevista: 'Entrevista', gracias: '"Gracias por tu aplicación"', abandono: 'Abandonó (sin acción)' };
 const POINTS_LABEL: Record<string, string> = { cargo: 'Cargo', facturacion: 'Facturación', inversion: 'Inversión USD 6.000', decisor: '¿Decide solo?' };
+const ARCHETYPE_LABEL: Record<string, string> = {
+  gerente_equipo_multinacional: 'Gerente en multinacional (5+ cupos)',
+  solo_luma: 'Solo dejó pregunta en Luma',
+  abandono_caliente: 'Abandonó a mitad del formulario',
+  gerente_comercial: 'Gerente comercial (otro programa)',
+  ceo_listo: 'CEO listo para Inmersión',
+};
 
 interface ZoomResult extends JevResult { legacy: { score: number; route: string; breakdown: Record<string, number> }; lead: { id: string; archetype?: string } }
 
@@ -54,11 +61,26 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
     <section className="block" aria-labelledby="zoom" id="zoom-section">
       <div className="block-head">
         <h2 id="zoom">Un lead de cerca</h2>
-        <p className="muted">La misma persona, dos decisiones: la suma de puntos de hoy y Jev.</p>
+        <p className="muted">La misma persona, dos decisiones: la suma fija de puntos de hoy frente a Jev.</p>
       </div>
-      <label className="faint" htmlFor="lead-select">Lead</label>
+
+      <span className="faint" style={{ display: 'block', marginBottom: 6 }}>Casos representativos de la semana (o elige cualquiera de los 300 abajo):</span>
+      <div className="archetypes" role="group" aria-label="Casos representativos">
+        {featured.map((l) => (
+          <button
+            key={l.id}
+            className={`chip-btn${l.id === id ? ' on' : ''}`}
+            aria-pressed={l.id === id}
+            onClick={() => load(l.id)}
+          >
+            {ARCHETYPE_LABEL[l.archetype ?? ''] ?? l.archetype?.replaceAll('_', ' ')}
+          </button>
+        ))}
+      </div>
+
+      <label className="faint" htmlFor="lead-select">Explorar los 300 leads de la semana</label>
       <select id="lead-select" className="select" value={id} onChange={(e) => load(e.target.value)}>
-        {all.map((l) => <option key={l.id} value={l.id}>{l.id} · {l.archetype?.replaceAll('_', ' ')} · {l.country}</option>)}
+        {all.map((l) => <option key={l.id} value={l.id}>{l.id} · {ARCHETYPE_LABEL[l.archetype ?? ''] ?? l.archetype?.replaceAll('_', ' ')} · {l.country}</option>)}
       </select>
 
       {error && <p className="card" style={{ marginTop: 12 }}>{error} En producción, este lead pasaría a una persona.</p>}
@@ -73,12 +95,14 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
                 ))}
               </tbody>
             </table>
-            <p className="legacy-score"><span className="num">{res.legacy.score}/10</span> → {ROUTE_LABEL[res.legacy.route]}</p>
-            <p className="faint">Más de 6 puntos pasa a entrevista; el resto ve &ldquo;gracias&rdquo;.</p>
+            <p className="legacy-score">
+              <span className="num">{res.legacy.score}/10</span> → <span className={res.legacy.route !== 'entrevista' ? 'legacy-discarded' : ''}>{ROUTE_LABEL[res.legacy.route]}</span>
+            </p>
+            <p className="faint">Más de 6 puntos pasa a entrevista; con 6 o menos ve &ldquo;gracias&rdquo; y no recibe agenda.</p>
           </div>
-          <div className="card" style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+          <div className="card card-jev" style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
             <div className="sim">
-              <span className="faint">Llega una señal nueva y Jev recalcula:</span>
+              <span className="faint">Simula qué pasa cuando llega una señal nueva (Jev recalcula al instante):</span>
               <div className="chips">
                 {SIM_KEYS.map((k) => (
                   <button key={k} className={`chip-btn${sim.includes(k) ? ' on' : ''}`} aria-pressed={sim.includes(k)} onClick={() => toggle(k)}>
@@ -95,3 +119,4 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
     </section>
   );
 }
+

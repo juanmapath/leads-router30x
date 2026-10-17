@@ -26,6 +26,12 @@ const FEATURED = 'gerente_equipo_multinacional';
 const RUN_MS = 3600;
 const MOVE_MS = 700;
 
+const SCENARIO_LABEL: Record<Scenario, string> = {
+  pesimista: 'Conservador',
+  viable: 'Base',
+  optimista: 'Optimista',
+};
+
 const fmt = (v: number, d = 0) => v.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
 
 type Pos = { x: number; y: number };
@@ -65,6 +71,7 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
   const [data, setData] = useState<WeekData | null>(null);
   const [error, setError] = useState(false);
   const [phase, setPhase] = useState<'antes' | 'corriendo' | 'listo'>('antes');
+  const [hasRun, setHasRun] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [scenario, setScenario] = useState<Scenario>('viable');
   const [width, setWidth] = useState(0);
@@ -94,9 +101,10 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
   const moved = phase !== 'antes';
   const current = moved ? after : before;
 
-  function run() {
-    document.getElementById('semana')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function startAnimation() {
+    setHasRun(true);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setElapsed(RUN_MS); setPhase('listo'); return; }
+    setElapsed(0);
     setPhase('corriendo');
     const t0 = performance.now();
     const tick = (t: number) => {
@@ -107,17 +115,35 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
     requestAnimationFrame(tick);
   }
 
+  function runFromCover() {
+    document.getElementById('semana')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Pausa breve mientras termina el scroll para que el ojo vea las 3 columnas grises antes del vuelo.
+    setTimeout(startAnimation, 320);
+  }
+
+  function toggleBeforeAfter() {
+    if (phase === 'corriendo') return;
+    if (phase === 'listo') {
+      setPhase('antes');
+      setElapsed(0);
+    } else {
+      startAnimation();
+    }
+  }
+
   // Contadores: lo decidido hasta ahora (puntos que ya salieron).
   const launched = rows.filter((_, i) => delays[i] <= elapsed - MOVE_MS / 2);
-  const decided = phase === 'listo' ? rows.length : launched.length;
-  const costSoFar = (phase === 'listo' ? rows : launched).reduce((a, r) => a + r.costUsd, 0);
-  const msSoFar = (phase === 'listo' ? rows : launched).reduce((a, r) => a + r.ms, 0) / Math.max(1, (phase === 'listo' ? rows : launched).length);
+  const decided = phase === 'listo' ? rows.length : phase === 'corriendo' ? launched.length : 0;
+  const activeRows = phase === 'listo' ? rows : phase === 'corriendo' ? launched : [];
+  const costSoFar = activeRows.reduce((a, r) => a + r.costUsd, 0);
+  const msSoFar = activeRows.reduce((a, r) => a + r.ms, 0) / Math.max(1, activeRows.length);
 
   const n = rows.length || 300;
   const gracias = rows.filter((r) => r.legacy === 'gracias').length;
   const abandono = rows.filter((r) => r.legacy === 'abandono').length;
   const discarded = rows.filter((r) => r.legacy !== 'entrevista');
   const rescued = discarded.filter((r) => WITH_PROGRAM.includes(r.action));
+  const humanCount = rows.filter((r) => r.action === 'cola_humana').length;
   // Pipeline semanal que la regla descarta: SOLO precios públicos (dato). Lo demás se cuenta aparte.
   const priced = rescued.filter((r) => TICKETS[r.program] && !TICKETS[r.program].supuesto);
   const pipeline = priced.reduce((a, r) => a + TICKETS[r.program].usd, 0);
@@ -128,30 +154,41 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
   return (
     <>
       <section className="block cover" aria-labelledby="portada">
-        <p className="faint">Jev Lead Router · para 30X</p>
+        <span className="eyebrow"><span className="eyebrow-dot" />Jev Lead Router · para 30X</span>
         <h1 id="portada">
-          Cada semana, la regla de puntos de 30X le dice &ldquo;gracias&rdquo; a <span className="num">{data ? gracias : '…'}</span> de <span className="num">{n}</span> personas.
+          Cada semana, la regla de puntos de 30X le dice &ldquo;gracias&rdquo; a <span className="num highlight">{data ? gracias : '…'}</span> de <span className="num">{n}</span> personas.
         </h1>
-        <p className="lead">Jev Lead Router decide en milisegundos qué hacer con cada una. Los casos dudosos siempre pasan a una persona.</p>
+        <p className="lead">
+          Su formulario mide quién puede pagar USD 6.000 hoy. Si alguien no suma 7 puntos, ve &ldquo;gracias&rdquo; — aunque venga a formar a su empresa o encaje en otro de los 17 programas de 30X. Jev decide qué hacer con cada lead en milisegundos; los casos dudosos siempre pasan a una persona.
+        </p>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button className="btn" onClick={run} disabled={!data || phase !== 'antes'}>
-            {data ? (phase === 'antes' ? 'Pasar la semana por Jev' : phase === 'corriendo' ? 'Decidiendo…' : 'Semana decidida') : error ? 'No se pudo cargar la semana' : 'Cargando la semana…'}
+          <button className="btn" onClick={runFromCover} disabled={!data || phase === 'corriendo'}>
+            {data ? (phase === 'corriendo' ? 'Decidiendo 300 leads…' : phase === 'listo' ? '↻ Volver a pasar la semana por Jev' : 'Pasar la semana por Jev →') : error ? 'No se pudo cargar la semana' : 'Cargando la semana…'}
           </button>
           <span className="faint">Datos sintéticos · decisiones de Jev grabadas de llamadas reales · prueba en vivo más abajo</span>
         </div>
       </section>
 
       <section className="block" aria-labelledby="semana">
-        <div className="block-head">
-          <h2 id="semana">La semana de 30X</h2>
-          <p className="muted">
-            {moved ? 'Jev decidió cada lead en una llamada. Los puntos azules son los que la regla había descartado.' : `Así reparte hoy la regla de puntos a los ${n} leads de una semana: más de 6 de 10 pasa a entrevista; el resto ve "gracias" (${abandono} abandonaron el formulario).`}
-          </p>
+        <div className="week-bar">
+          <div className="block-head" style={{ marginBottom: 0 }}>
+            <h2 id="semana">La semana de 30X</h2>
+            <p className="muted">
+              {moved
+                ? `Jev decidió cada lead en una sola llamada. Los ${rescued.length} puntos azules son compradores que la regla había descartado y sí tenían un programa.`
+                : `Así reparte hoy la regla de puntos a los ${n} leads de una semana: más de 6 de 10 pasa a entrevista; el resto ve "gracias" (${abandono} abandonaron el formulario).`}
+            </p>
+          </div>
+          {data && (hasRun || phase !== 'antes') && (
+            <button className="btn-ghost" onClick={toggleBeforeAfter} disabled={phase === 'corriendo'}>
+              {phase === 'listo' ? '↺ Ver antes (regla actual)' : '↻ Pasar por Jev'}
+            </button>
+          )}
         </div>
 
-        <div className="tiles counters" aria-live="polite">
+        <div className="tiles counters" aria-live="polite" style={{ marginTop: 16 }}>
           <div className="tile"><span className="value">{fmt(decided)}</span><span className="label">decisiones de Jev</span></div>
-          <div className="tile"><span className="value">USD {fmt(costSoFar, 4)}</span><span className="label">costo acumulado</span></div>
+          <div className="tile"><span className="value">USD {fmt(costSoFar, 4)}</span><span className="label">costo acumulado de la semana</span></div>
           <div className="tile"><span className="value">{decided ? fmt(msSoFar) : 0} ms</span><span className="label">por decisión, en promedio</span></div>
         </div>
 
@@ -165,11 +202,13 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
             {current && rows.map((r, i) => {
               const p = current.pos[i];
               if (!p) return null;
-              const rescuedDot = moved && r.legacy !== 'entrevista';
+              const rescuedWithProgram = moved && r.legacy !== 'entrevista' && WITH_PROGRAM.includes(r.action);
+              const goesToHuman = moved && r.action === 'cola_humana';
+              const dotClass = rescuedWithProgram ? ' dot-jev' : goesToHuman ? ' dot-human' : moved ? ' dot-kept' : '';
               return (
                 <span
                   key={r.id}
-                  className={`dot${rescuedDot ? ' dot-jev' : moved ? ' dot-kept' : ''}${i === featured ? ' dot-featured' : ''}`}
+                  className={`dot${dotClass}${i === featured ? ' dot-featured' : ''}`}
                   style={{ transform: `translate(${p.x}px, ${p.y}px)`, transitionDelay: moved && phase === 'corriendo' ? `${delays[i]}ms` : '0ms' }}
                   title={`${r.id}: ${moved ? JEV_COLS.find((c) => c.key === r.action)?.label : LEGACY_COLS.find((c) => c.key === r.legacy)?.label}`}
                   onClick={() => onSelect(r.id)}
@@ -182,31 +221,40 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
               </button>
             )}
           </div>
-          <p className="faint" style={{ marginTop: 8 }}>Toca cualquier punto para ver ese lead de cerca.</p>
+          <div className="dots-legend">
+            <span className="faint">Toca cualquier punto para inspeccionar ese lead abajo.</span>
+            {moved && (
+              <div className="legend-items">
+                <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--jev)' }} />Rescatado con programa ({rescued.length})</span>
+                <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--human)' }} />Pasa a una persona ({humanCount})</span>
+                <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--text-3)', opacity: 0.65 }} />Ya iba a entrevista o queda en nurturing</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {phase === 'listo' && (
+        {(phase === 'listo' || hasRun) && (
           <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
             <p className="result-line">
-              La regla le dijo &ldquo;gracias&rdquo; o dejó ir a <strong>{discarded.length}</strong>. <strong>{rescued.length}</strong> tenían un programa de 30X.
+              La regla le dijo &ldquo;gracias&rdquo; o dejó ir a <strong>{discarded.length}</strong> personas. <strong>{rescued.length}</strong> sí encajaban en un programa de 30X.
               Decidir toda la semana costó <strong>USD {fmt(data?.costUsd ?? 0, 3)}</strong> y cada decisión tardó <strong>{data?.msMean} ms</strong> en promedio.
             </p>
             <div className="card hero">
-              <span className="faint">Pipeline semanal que la regla descarta (precios públicos de los programas que Jev sugiere)</span>
+              <span className="faint">Pipeline semanal que la regla descarta (calculado solo con precios públicos de los programas que Jev sugiere)</span>
               <span className="value">USD {fmt(pipeline)}</span>
-              <p className="muted">{priced.length} leads con programa de precio público{sinPrecio ? `; otros ${sinPrecio} van a planes corporativos o programas sin precio publicado y no se suman` : ''}.</p>
+              <p className="muted">{priced.length} leads rescatados con programa de precio público{sinPrecio ? `; otros ${sinPrecio} van a planes corporativos o programas sin precio publicado y no se suman aquí` : ''}.</p>
               <div className="scenario">
-                <span className="faint">Ventas por mes si cierra (supuesto):</span>
+                <span className="faint">Si el equipo cierra apenas el (supuesto):</span>
                 <div role="radiogroup" aria-label="Escenario de tasa de cierre" className="segmented">
                   {(Object.keys(SCENARIOS) as Scenario[]).map((k) => (
                     <button key={k} role="radio" aria-checked={scenario === k} className={scenario === k ? 'on' : ''} onClick={() => setScenario(k)}>
-                      {k} · {Math.round(SCENARIOS[k] * 100)} %
+                      {SCENARIO_LABEL[k]} · {Math.round(SCENARIOS[k] * 100)} %
                     </button>
                   ))}
                 </div>
-                <strong className="num">USD {fmt(monthly)} / mes</strong>
+                <strong className="num">→ USD {fmt(monthly)} / mes recuperados</strong>
               </div>
-              <p className="faint">Tasa de cierre supuesta: no tenemos el dato de 30X. Semana sintética de {n} leads (30X reporta 200–300 por semana). &ldquo;Que la regla descarta&rdquo;: en el formulario de AI Sales los puntajes bajos van a revisión manual.</p>
+              <p className="faint">Tasa de cierre supuesta: no tenemos el dato interno de 30X. Semana sintética de {n} leads (30X reporta 200–300 por semana). &ldquo;Que la regla descarta&rdquo;: en el formulario del Inmersivo ven &ldquo;gracias&rdquo;; en el de AI Sales los puntajes bajos van a revisión manual.</p>
             </div>
           </div>
         )}
@@ -214,3 +262,4 @@ export function Week({ onSelect }: { onSelect: (id: string) => void }) {
     </>
   );
 }
+
