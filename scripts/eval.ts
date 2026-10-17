@@ -17,6 +17,12 @@ const arg = (name: string) => { const i = process.argv.indexOf(name); return i >
 const setName = arg('--set') ?? 'tuning';
 if (!['tuning', 'test', 'test-v1'].includes(setName)) throw new Error('--set debe ser tuning, test o test-v1');
 
+// --gate: puerta de CI. Solo grabaciones (nunca llama a Jev ni necesita clave); falla si la acción baja del piso
+// o si hay un solo error caro. Piso = acción medida en el set de prueba v2 (82 %) menos 5 puntos.
+const gate = process.argv.includes('--gate');
+const FLOOR = Number(arg('--floor') ?? 0.77);
+if (gate) process.env.JEV_MODE = 'replay-only';
+
 type Exp = Expected & { kind?: string; note?: string };
 let set: Lead[];
 let expected: Record<string, Exp>;
@@ -80,5 +86,14 @@ const report = {
   fuentes: { replay: rows.filter((r) => r.source === 'replay').length, live: rows.filter((r) => r.source === 'live').length },
   detalleErrores: errors.map((r) => ({ id: r.id, tipo: r.kind, arquetipo: r.archetype, nota: r.expected.note, esperado: r.expected.action, obtuvo: r.decision.action, listo: r.answers.ready.p, programa: r.answers.program, equipo: r.answers.team.p })),
 };
-writeFileSync(`data/eval-report-${setName}.json`, JSON.stringify(report, null, 2));
-console.log('\n' + JSON.stringify({ ...report, calibracion: undefined, detalleErrores: report.detalleErrores.length }, null, 2));
+if (gate) {
+  const accion = report.precision.accion ?? 0;
+  console.log(`\nPuerta (${setName}): acción ${(accion * 100).toFixed(1)} % (piso ${(FLOOR * 100).toFixed(0)} %), errores caros ${expensive.length} (máx. 0)`);
+  if (accion < FLOOR || expensive.length > 0) {
+    for (const r of expensive) console.error(`Error caro: ${r.id} (${r.expected.note ?? r.archetype}) esperado ${r.expected.action}, obtuvo agenda_ya`);
+    process.exit(1);
+  }
+} else {
+  writeFileSync(`data/eval-report-${setName}.json`, JSON.stringify(report, null, 2));
+  console.log('\n' + JSON.stringify({ ...report, calibracion: undefined, detalleErrores: report.detalleErrores.length }, null, 2));
+}
