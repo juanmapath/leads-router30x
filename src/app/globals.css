@@ -163,3 +163,6 @@ td.num, th.num { text-align: right; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip-btn { font: inherit; font-size: 13px; padding: 6px 10px; min-height: 36px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; }
 .chip-btn:hover { border-color: var(--jev); }
+.sim { display: grid; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.chip-btn.on { border-color: var(--jev); background: var(--surface-2); font-weight: 600; }
+.prob-head .was { color: var(--text-3); font-weight: 500; }

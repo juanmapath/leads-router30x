@@ -17,10 +17,11 @@ export interface JevResult { decision: Decision; jev: { answers: JevAnswers; ms:
 
 const pct = (p: number) => `${Math.round(p * 100)} %`;
 
-function ProbBar({ label, p, threshold, note }: { label: string; p: number; threshold: number; note: string }) {
+function ProbBar({ label, p, threshold, note, prevP }: { label: string; p: number; threshold: number; note: string; prevP?: number }) {
+  const moved = prevP !== undefined && Math.round(prevP * 100) !== Math.round(p * 100);
   return (
     <div className="prob">
-      <div className="prob-head"><span>{label}</span><strong className="num">{pct(p)}</strong></div>
+      <div className="prob-head"><span>{label}</span><strong className="num">{moved && <span className="was">{pct(prevP!)} → </span>}{pct(p)}</strong></div>
       <div className="prob-track" role="img" aria-label={`${label}: ${pct(p)}; umbral ${pct(threshold)}`}>
         <span className="prob-fill" style={{ width: `${Math.max(1, p * 100)}%` }} />
         <span className="prob-mark" style={{ left: `${threshold * 100}%` }} title={note} />
@@ -39,6 +40,8 @@ export function JevCard({ result, prev }: { result: JevResult; prev?: JevResult 
   const catId = a.category && a.category.value !== 'ninguna' ? (a.category.value as CategoryId) : null;
   const category = catId && (d.category === catId || programCategory(d.program as ProgramId) === catId) ? CATEGORIES[catId].name : null;
   const changed = prev && prev.decision.action !== d.action;
+  const pa = prev?.jev.answers;
+  const prevProg = (k: string) => (pa ? (pa.program.dist?.[k] ?? (pa.program.value === k ? pa.program.p : 0)) : undefined);
 
   return (
     <div className="jev-card">
@@ -58,12 +61,12 @@ export function JevCard({ result, prev }: { result: JevResult; prev?: JevResult 
       </p>
 
       <div className="probs">
-        <ProbBar label="Listo para hablar con ventas" p={a.ready.p} threshold={THRESHOLDS.readyHigh} note="Bajo esta línea no se agenda ya." />
-        <ProbBar label="Es para un equipo (venta a empresa)" p={a.team.p} threshold={THRESHOLDS.team} note="Desde esta línea va al área de empresas." />
+        <ProbBar label="Listo para hablar con ventas" p={a.ready.p} prevP={pa?.ready.p} threshold={THRESHOLDS.readyHigh} note="Bajo esta línea no se agenda ya." />
+        <ProbBar label="Es para un equipo (venta a empresa)" p={a.team.p} prevP={pa?.team.p} threshold={THRESHOLDS.team} note="Desde esta línea va al área de empresas." />
         {a.coherent && a.ready.p >= THRESHOLDS.readyHigh * 0.8 && <ProbBar label="Formulario coherente y creíble" p={a.coherent.p} threshold={THRESHOLDS.coherent} note="Bajo esta línea, agendar lo decide una persona." />}
         {a.manipulation && a.manipulation.p >= 0.4 && <ProbBar label="El texto intenta instruir al sistema" p={a.manipulation.p} threshold={THRESHOLDS.manipulation} note="Desde esta línea, decide una persona." />}
         {top.map(([k, p]) => (
-          <ProbBar key={k} label={`Programa: ${programName(k as ProgramId)}`} p={p} threshold={THRESHOLDS.programOther} note="Bajo esta línea, el programa lo confirma una persona." />
+          <ProbBar key={k} label={`Programa: ${programName(k as ProgramId)}`} p={p} prevP={prevProg(k)} threshold={THRESHOLDS.programOther} note="Bajo esta línea, el programa lo confirma una persona." />
         ))}
       </div>
 

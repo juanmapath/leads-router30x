@@ -2,6 +2,7 @@
 // Un lead de cerca (docs/ui-plan.md, sección 2): la regla de puntos de 30X frente a Jev para el mismo lead.
 import { useEffect, useState } from 'react';
 import leads from '../../data/leads.json';
+import { FEATURED_ARCHETYPES, SIM_KEYS, SIM_SIGNALS, type SimKey } from '../engine/simulator.ts';
 import type { Lead } from '../engine/types.ts';
 import { JevCard, type JevResult } from './JevCard.tsx';
 
@@ -16,15 +17,36 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
   const [id, setId] = useState(defaultId);
   const [res, setRes] = useState<ZoomResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sim, setSim] = useState<SimKey[]>([]);
+  const [base, setBase] = useState<ZoomResult | null>(null);
+
+  async function decide(leadId: string, simulate: SimKey[]) {
+    const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id: leadId, simulate }) }).catch(() => null);
+    const body = r ? await r.json().catch(() => ({})) : {};
+    if (!r || !r.ok) { setError(body.error ?? 'No se pudo decidir este lead.'); return null; }
+    return body as ZoomResult;
+  }
 
   async function load(leadId: string) {
     setId(leadId);
     setError(null);
-    const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id: leadId }) }).catch(() => null);
-    const body = r ? await r.json().catch(() => ({})) : {};
-    if (!r || !r.ok) { setError(body.error ?? 'No se pudo decidir este lead.'); setRes(null); return; }
+    setSim([]);
+    const body = await decide(leadId, []);
     setRes(body);
+    setBase(body);
   }
+
+  // Simulador de señales: misma persona, una señal nueva → Jev recalcula (antes → después).
+  async function toggle(k: SimKey) {
+    const next = sim.includes(k) ? sim.filter((x) => x !== k) : [...sim, k];
+    setSim(next);
+    setError(null);
+    const body = next.length ? await decide(id, next) : base;
+    if (body) setRes(body);
+  }
+
+  const featured = FEATURED_ARCHETYPES.map((a) => all.find((l) => l.archetype === a)).filter((l): l is Lead => !!l);
+  const isFeatured = featured.some((l) => l.id === id);
 
   useEffect(() => { load(selectedId ?? defaultId); }, [selectedId]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -54,7 +76,20 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
             <p className="legacy-score"><span className="num">{res.legacy.score}/10</span> → {ROUTE_LABEL[res.legacy.route]}</p>
             <p className="faint">Más de 6 puntos pasa a entrevista; el resto ve &ldquo;gracias&rdquo;.</p>
           </div>
-          <div className="card"><JevCard result={res} /></div>
+          <div className="card" style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+            <div className="sim">
+              <span className="faint">Llega una señal nueva y Jev recalcula:</span>
+              <div className="chips">
+                {SIM_KEYS.map((k) => (
+                  <button key={k} className={`chip-btn${sim.includes(k) ? ' on' : ''}`} aria-pressed={sim.includes(k)} onClick={() => toggle(k)}>
+                    {sim.includes(k) ? '✓ ' : '+ '}{SIM_SIGNALS[k].label}
+                  </button>
+                ))}
+              </div>
+              {!isFeatured && <span className="faint">En este lead la señal se decide en vivo. Pregrabados: {featured.map((l) => l.id).join(', ')}.</span>}
+            </div>
+            <JevCard result={res} prev={sim.length ? base : null} />
+          </div>
         </div>
       )}
     </section>
