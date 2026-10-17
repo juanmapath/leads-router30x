@@ -6,7 +6,7 @@ Equipo: Juan Manuel (producto, decisiones, pitch) + Claude (código, datos, test
 ## Qué estamos construyendo
 30X (escuela de negocios para founders y ejecutivos LatAm) califica sus leads con una **suma fija de puntos** en su formulario público: más de 6/10 pasa a entrevista; el resto ve "Gracias por tu aplicación" y sale del embudo. **Jev Lead Router** reemplaza esa suma por decisiones calibradas de **Jev** (modelo de clasificación de TypeSafe AI): en una sola llamada de milisegundos responde 6 preguntas tipadas por lead; umbrales en código eligen la acción (agenda ya, otro programa, área de empresas, nurturing, cola humana). Un LLM solo redactaría mensajes. Cada señal nueva recalcula.
 
-Detalle completo: `docs/contexto-reto.md`, `docs/hallazgos-30x.md`, `docs/plan.md`.
+Detalle completo: `docs/contexto-reto.md`, `docs/hallazgos-30x.md`, `docs/plan.md`, `docs/resultados-eval.md` (pruebas con Jev).
 PRD vivo (doc compartido): https://claude.ai/code/artifact/468f427f-eb6e-4ff5-8de1-06c213f70627
 
 ## Entregables (antes del domingo 18 a las 11:59 a. m. — apuntamos a 11:30)
