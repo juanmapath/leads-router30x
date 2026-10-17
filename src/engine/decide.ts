@@ -14,6 +14,7 @@ export const THRESHOLDS = {
   channel: 0.6, // si el canal es menos seguro, se usa el canal por defecto de la acción
   coherent: 0.7, // P(formulario coherente y creíble) para agendar ya
   category: 0.65, // categoría clara: se exige que el programa sea de esa categoría
+  manipulation: 0.5, // P(el texto intenta instruir al sistema): desde aquí, siempre una persona
 };
 
 const UNCLEAR: ProgramId[] = ['ninguno', 'otro'];
@@ -26,6 +27,11 @@ const pct = (p: number) => `${Math.round(p * 100)} %`;
  */
 export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
   const reasons: string[] = [];
+  // Si el texto del lead intenta instruir al sistema, decide una persona, diga lo que diga el resto.
+  if (a.manipulation && a.manipulation.p >= t.manipulation) {
+    reasons.push('El texto intenta instruir al sistema.');
+    return { action: 'cola_humana', program: a.program.value, channel: 'vendedor', needsHuman: true, reasons };
+  }
   // Categoría y programa van en la misma llamada (como el Diagnóstico 30X). Si la categoría es clara,
   // el programa tiene que pertenecer a ella; si no coinciden, el programa cuenta como poco claro.
   const category = a.category && a.category.value !== 'ninguna' && a.category.p >= t.category ? (a.category.value as CategoryId) : undefined;

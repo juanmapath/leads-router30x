@@ -86,6 +86,8 @@ export function normalize(result: unknown): JevAnswers {
     channel: choice<JevAnswers['channel']['value']>(get('channel'), 'vendedor'),
     // Sin categoría no hay chequeo de coincidencia (p = 0 la deja fuera).
     category: choice<NonNullable<JevAnswers['category']>['value']>(get('category'), 'ninguna'),
+    // Sin respuesta de manipulación no se marca (p = 0); las demás reglas siguen protegiendo agenda_ya.
+    manipulation: yes(get('manipulation')) ?? { value: false, p: 0 },
     // Sin respuesta de coherencia no se agenda solo: p = 0.
     coherent: yes(get('coherent')) ?? { value: false, p: 0 },
   };

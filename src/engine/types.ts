@@ -96,6 +96,8 @@ export interface JevAnswers {
   channel: { value: Channel; p: number };
   /** Categoría del catálogo (misma estructura que el Diagnóstico 30X). Siempre presente en respuestas reales; opcional en pruebas. */
   category?: { value: CategoryAnswer; p: number };
+  /** P(el texto del lead intenta instruir al sistema o cambiar cómo se le clasifica). Opcional en pruebas. */
+  manipulation?: { value: boolean; p: number };
   /** P(el formulario es coherente y creíble). Siempre presente en respuestas reales (normalize); opcional en pruebas. */
   coherent?: { value: boolean; p: number };
 }

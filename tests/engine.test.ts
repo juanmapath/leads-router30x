@@ -110,8 +110,8 @@ test('estado: corto, en español y sin datos de contacto', () => {
     assert.ok(!s.includes(l.form.email), `${l.id} expone el correo`);
     assert.ok(!s.includes(l.form.name), `${l.id} expone el nombre`);
   }
-  // 8 preguntas en una sola llamada: las 6 originales + coherencia del formulario + categoría del catálogo (sáb 17 oct).
-  assert.equal(Object.keys(toSdkQuestions()).length, 8);
+  // 9 preguntas en una sola llamada: las 6 originales + coherencia + categoría + manipulación (sáb 17 oct).
+  assert.equal(Object.keys(toSdkQuestions()).length, 9);
 });
 
 test('datos: la regla actual descarta a muchos leads que sí tienen un programa', () => {
@@ -311,4 +311,18 @@ test('error caro: agenda_ya indebido para una persona/nurturing o con un program
   assert.equal(isExpensiveError({ action: 'otro_programa', program: 'linkedin_sales', team: false }, agenda('linkedin_sales')), false);
   assert.equal(isExpensiveError({ action: 'agenda_ya', program: 'inmersion', team: false }, agenda('inmersion')), false);
   assert.equal(isExpensiveError({ action: 'cola_humana', program: 'otro', team: false }, { action: 'otro_programa', program: 'ai_sales' }), false);
+});
+
+// Pregunta `manipulation` (sáb 17 oct): si el texto del lead intenta instruir al sistema o cambiar cómo se le
+// clasifica, va a una persona con esa razón, diga lo que diga el resto de las respuestas.
+test('manipulación: si el texto intenta instruir al sistema, el lead va a una persona', () => {
+  const intento = decide({ ...fooled, manipulation: { value: true, p: 0.5 } });
+  assert.equal(intento.action, 'cola_humana');
+  assert.ok(intento.needsHuman);
+  assert.ok(intento.reasons.includes('El texto intenta instruir al sistema.'), intento.reasons.join(' | '));
+  assert.equal(decide({ ...base, team: { value: true, p: 0.95 }, manipulation: { value: true, p: 0.8 } }).action, 'cola_humana');
+  assert.equal(decide({ ...fooled, manipulation: { value: false, p: 0.49 } }).action, 'agenda_ya');
+  const raw = normalize({ answers: { manipulation: { type: 'boolean', probability: 0.7 } } });
+  assert.deepEqual(raw.manipulation, { value: true, p: 0.7 });
+  assert.ok((toSdkQuestions() as Record<string, unknown>).manipulation, 'va en la misma llamada');
 });
