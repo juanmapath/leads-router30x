@@ -1,4 +1,4 @@
-// Verificador determinístico. Corre sin red: node --experimental-strip-types --test tests/
+// Verificador determinístico. Corre sin red: npm test (tsx --test tests/engine.test.ts)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

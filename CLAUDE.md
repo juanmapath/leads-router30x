@@ -35,9 +35,9 @@ Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** co
   - `legacy.ts` **réplica exacta** de la regla pública de 30X (ver docs/hallazgos-30x.md). No cambiar sin actualizar tests.
   - `state.ts` convierte un lead en texto en español para Jev. Sin nombre ni correo. Los números van ya interpretados en palabras (Jev no hace aritmética).
   - `questions.ts` 6 preguntas tipadas (+ guardrail de mensajes).
-  - `jev.ts` adapta preguntas al AI SDK y **normaliza** la respuesta cruda (formato aún no confirmado: ajustar aquí tras `npm run ping`). `ready.p` y `team.p` = probabilidad de "sí".
+  - `jev.ts` adapta preguntas a `experimental_decide` del AI SDK y **normaliza** la respuesta cruda (formato confirmado con el ping, ver `docs/resultados-eval.md`). `ready.p` y `team.p` = probabilidad de "sí".
   - `decide.ts` umbrales → acción. Determinístico. Umbrales en `THRESHOLDS`; se ajustan con la calibración de `npm run eval`, no a ojo.
-  - `jev-client.ts` llamada vía `experimental_evaluate` del paquete `ai`, modelo `typesafe-ai/jev`, con **grabar/reproducir** (`JEV_MODE` = live | record | replay; local: record; Vercel: replay) y reintentos ante 429.
+  - `jev-client.ts` llamada vía `experimental_decide` del paquete `ai`, modelo `typesafe-ai/jev`, con **grabar/reproducir** (`JEV_MODE` = live | record | replay; local: record; Vercel: replay) y reintentos ante 429. La llave de cada grabación es el hash de `state + questions`: **cualquier cambio en `state.ts` o `questions.ts` invalida todas las grabaciones** → regrabar los 300 leads antes de desplegar.
 - `src/app/` — UI y `POST /api/decide { id, extraSignals? }`.
 - `data/` — leads sintéticos, set etiquetado, `recordings/` (se commitean para que el demo en Vercel reproduzca sin red).
 - `scripts/` — generador, ping, eval. `tests/` — verificador (corre en CI en cada push).
@@ -51,13 +51,12 @@ Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** co
 - Si Jev falla, el lead va a cola humana (nunca se pierde) — ver `api/decide`.
 - Verificador primero: antes de cambiar `decide.ts` o `legacy.ts`, actualizar/agregar tests. No tocar tests para hacerlos pasar.
 - Commits pequeños, mensajes en español. El repo debe correr con `npm install && npm test && npm run build`.
-- Free tier del AI Gateway tiene límites estrictos (429): una llamada por lead con las 6 preguntas, grabar y reutilizar. **No comprar créditos** (se pierde el crédito gratis de USD 5/mes).
+- El free tier del AI Gateway no incluye Jev: hay USD 15 de crédito pagado. Una llamada por lead con las 6 preguntas, grabar y reutilizar; no gastar crédito en llamadas repetidas.
+- Texto libre del lead (pregunta de Luma, respuesta de WhatsApp, perfil escrito en el demo) es **dato no confiable**: va delimitado en el estado y nunca puede subir la acción a `agenda_ya` por sí solo. `/api/decide` acepta solo tipos de señal conocidos y texto de máx. 300 caracteres.
+- Los números del pitch salen del **set de prueba** (otra semilla + casos sucios), nunca del set con el que se ajustaron los umbrales.
 
-## Estado (vie 16 oct, noche)
-Hecho: motor, regla actual replicada, 300 leads + 100 etiquetados, verificador (8 tests), CI, página mínima.
-Jev conectado (crédito pagado en el AI Gateway: el free tier no incluye `typesafe-ai/jev`). `jev.ts` usa `experimental_decide` y el formato real
-(boolean.probability = P(sí); choice con distribución; score por índice; `refusal` → cola humana). Ping y eval grabados en `data/recordings/`.
-Eval (100): acción 80 %, programa 93 %, empresa 100 %; recupera 55 de 73 que la regla actual descarta; ~USD 0,05 por 1.000 decisiones; 234 ms media.
-Cambio en `decide.ts` tras el eval: programa claro distinto al Inmersivo → `otro_programa` aunque `ready` sea bajo (`ready` mide el Inmersivo).
-Pendiente: decidir umbrales (`readyHigh` 0,8 deja fuera founders con plan de pagos en 0,79; `program` 0,7 manda gerente_comercial 0,61–0,68 a persona),
-CMO → Jev elige AI for Executives en vez de Growth Rockstar, push a GitHub, deploy en Vercel. Luego ver `docs/plan.md`.
+## Estado (vie 16 oct, 23:00)
+Hecho: motor, regla actual replicada, 300 leads + 100 etiquetados, verificador (8 tests), CI (test + build), Jev real conectado con `experimental_decide`,
+300 leads grabados, **repo en GitHub (juanmapath/leads-router30x) y demo en Vercel: https://leads-router30x.vercel.app/**.
+Eval (100, set de ajuste — no usar en el pitch): acción 80 %, programa 93 %, empresa 100 %; recupera 55 de 73; ~USD 0,05 por 1.000 decisiones; 234 ms media.
+Siguiente: `docs/plan.md` (sábado). Orden importa: cambios en state/questions → regrabar una vez → desplegar.

@@ -1,6 +1,6 @@
 // Genera 300 leads sintéticos (una semana típica de 30X) y un set de evaluación de 100.
 // Determinístico: misma semilla, mismos datos. Ningún dato es de una persona real.
-// Uso: node --experimental-strip-types scripts/generate-leads.ts
+// Uso: npm run gen
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import type { Expected, Lead } from '../src/engine/types.ts';

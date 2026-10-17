@@ -8,13 +8,30 @@ import type { Lead, Signal } from '../../../engine/types.ts';
 
 export const runtime = 'nodejs';
 
+// Señales que llegan del cliente: solo tipos conocidos, texto corto y como máximo 5.
+// Evita estados enormes (costo) y reduce la superficie de prompt injection.
+const SIGNAL_TYPES: Signal['type'][] = ['luma_event', 'whatsapp_reply', 'email_open', 'form_abandoned', 'video_watched'];
+const MAX_TEXT = 300;
+
+function sanitizeSignals(raw: unknown): Signal[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter((s): s is Signal => !!s && typeof s === 'object' && SIGNAL_TYPES.includes((s as Signal).type))
+    .slice(0, 5)
+    .map((s) => ({
+      type: s.type,
+      at: typeof s.at === 'string' ? s.at.slice(0, 40) : new Date().toISOString(),
+      ...(typeof s.text === 'string' ? { text: s.text.replace(/\s+/g, ' ').trim().slice(0, MAX_TEXT) } : {}),
+    }));
+}
+
 // POST { id, extraSignals? } → la regla actual y la decisión de Jev, lado a lado.
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { id?: string; extraSignals?: Signal[] };
   const base = (leads as Lead[]).find((l) => l.id === body.id);
   if (!base) return NextResponse.json({ error: 'Lead no encontrado' }, { status: 404 });
 
-  const extra = Array.isArray(body.extraSignals) ? body.extraSignals.slice(0, 5) : [];
+  const extra = sanitizeSignals(body.extraSignals);
   const lead: Lead = { ...base, signals: [...base.signals, ...extra] };
   const state = buildState(lead);
 
