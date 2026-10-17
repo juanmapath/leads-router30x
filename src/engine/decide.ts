@@ -72,7 +72,22 @@ export function decideForLead(lead: Lead, a: JevAnswers, t = THRESHOLDS): Decisi
       reasons: [...d.reasons, 'Jev lo ve listo, pero el formulario no lo respalda (cargo, inversión o envío incompleto): lo revisa una persona.'],
     };
   }
+
+  // Sin formulario y con una sola señal (p. ej. solo la pregunta de Luma), un texto escrito no basta
+  // para ofrecer un programa sin que lo mire una persona. Con una segunda señal, sí.
+  if (d.action === 'otro_programa' && !hasForm(lead) && lead.signals.length < 2) {
+    return {
+      ...d, action: 'cola_humana', channel: 'vendedor', needsHuman: true,
+      reasons: [...d.reasons, 'Solo tenemos un texto escrito por el lead, sin formulario: una persona confirma antes de ofrecer el programa.'],
+    };
+  }
   return d;
+}
+
+/** Respondió al menos una pregunta de calificación del formulario. */
+export function hasForm(lead: Lead): boolean {
+  const f = lead.form;
+  return Boolean(f.role || f.revenue || f.investment || f.decider);
 }
 
 /** Cargo de decisor elegido en el formulario, inversión posible y envío completo. */

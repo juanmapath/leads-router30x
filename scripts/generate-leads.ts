@@ -30,7 +30,7 @@ const LUMA = ['Live Mentoring: De crecer a escalar', 'Clase gratis: IA para tu e
 interface Archetype {
   id: string;
   weight: number;
-  build: () => { form: Partial<Lead['form']>; partial?: boolean; content: string; luma?: [string, string]; expected: Expected };
+  build: () => { form: Partial<Lead['form']>; partial?: boolean; noForm?: boolean; content: string; luma?: [string, string]; expected: Expected };
 }
 
 const ARCHETYPES: Archetype[] = [
@@ -78,6 +78,17 @@ const ARCHETYPES: Archetype[] = [
     form: { role: 'c_level', roleText: pick(['CMO', 'VP de Marketing', 'Head of Growth']), revenue: '500k_1m', investment: 'imposible', decider: 'compartido', seats: 'solo' },
     content: 'Growth con IA: cómo duplicar leads con el mismo presupuesto',
     expected: { action: 'otro_programa', program: 'growth_rockstar', team: false } }) },
+  // Solo Luma: se inscribió a una clase gratis (nombre, correo y pregunta opcional) y nunca llenó el formulario.
+  // Con una sola pregunta escrita no se actúa solo: si apunta a un programa lo confirma una persona; si es vaga, nurturing.
+  { id: 'solo_luma', weight: 8, build: () => {
+    const [event, question, expected] = pick<[string, string, Expected]>([
+      ['Clase gratis: cómo levantar tu primera ronda', 'Estamos por levantar nuestra pre-seed, ¿qué métricas piden los fondos?', { action: 'cola_humana', program: 'fundraising', team: false }],
+      ['Clase gratis: IA para tu equipo comercial', 'Tengo una agencia y quiero que la IA me ayude a hacer seguimiento a los prospectos, ¿por dónde empiezo?', { action: 'cola_humana', program: 'ai_sales', team: false }],
+      ['Live Mentoring: De crecer a escalar', '¿Cuándo es la próxima clase gratis?', { action: 'nurturing', program: 'ninguno', team: false }],
+      ['Masterclass: agentes de IA para tu operación', 'Me encantó, ¿dónde veo la grabación?', { action: 'nurturing', program: 'ninguno', team: false }],
+    ]);
+    return { form: {}, noForm: true, content: event, luma: [event, question], expected };
+  } },
 ];
 
 const leads: Lead[] = [];
@@ -87,7 +98,7 @@ for (let i = 0; i < 300; i++) {
   const a = weighted(ARCHETYPES.map((x) => [x, x.weight] as [Archetype, number]));
   const b = a.build();
   const country = weighted(COUNTRY);
-  const channel = b.luma && rand() < 0.4 ? 'luma' : weighted(CHANNEL);
+  const channel = b.noForm ? 'luma' : b.luma && rand() < 0.4 ? 'luma' : weighted(CHANNEL);
   const name = `${pick(FIRST)} ${pick(LAST)}`;
   const id = `L${String(i + 1).padStart(3, '0')}`;
   const company = `${pick(COMPANY_PREFIX)} ${pick(COMPANY_SUFFIX)}`;
@@ -101,7 +112,7 @@ for (let i = 0; i < 300; i++) {
       name,
       email: `${name.split(' ')[0].toLowerCase()}.${id.toLowerCase()}@ejemplo.test`,
       whatsappCountry: country,
-      ...(b.partial ? {} : { company, edition: EDITION[country] }),
+      ...(b.partial || b.noForm ? {} : { company, edition: EDITION[country] }),
       ...b.form,
     } as Lead['form'],
     partial: Boolean(b.partial),

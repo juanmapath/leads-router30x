@@ -149,3 +149,20 @@ test('estado: el texto del lead va delimitado como dato y no puede salirse del d
   assert.ok(inner, 'el delimitador debe abrir y cerrar una sola vez');
   assert.ok(inner[1].length <= 300, 'texto libre recortado a 300 caracteres');
 });
+
+// Arquetipo "solo Luma": solo nombre, correo y la pregunta libre del evento (sin formulario).
+// Una sola pregunta escrita no alcanza para actuar solo; con una segunda señal ya puede ofrecerse el programa.
+test('solo Luma: con una señal pasa a persona o nurturing; al sumar señales se mueve a un programa', () => {
+  const unaSenal = lumaLead('Clase gratis: cómo levantar tu primera ronda. Pregunta que dejó: ¿cómo armo el data room?');
+  const jevSeguro: JevAnswers = { ...base, ready: { value: false, p: 0.35 }, program: { value: 'fundraising', p: 0.9 } };
+  const antes = decideForLead(unaSenal, jevSeguro);
+  assert.ok(['cola_humana', 'nurturing'].includes(antes.action), `con una sola pregunta obtuvo ${antes.action}`);
+  assert.equal(decideForLead(unaSenal, { ...base, ready: { value: false, p: 0.1 }, program: { value: 'ninguno', p: 0.8 } }).action, 'nurturing');
+
+  const conWhatsapp = lumaLead(unaSenal.signals[0].text!, 'Sí, salimos a levantar 500k en enero y me interesa el programa.');
+  const despues = decideForLead(conWhatsapp, jevSeguro);
+  assert.equal(despues.action, 'otro_programa');
+  assert.equal(despues.program, 'fundraising');
+
+  assert.notEqual(decideForLead(lumaLead(INJECTION, INJECTION), fooled).action, 'agenda_ya');
+});
