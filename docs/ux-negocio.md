@@ -14,18 +14,18 @@ Origen: revisión externa del demo (sáb 17 oct, 10:00) y nuestra respuesta (10:
 - *"Los ms y el costo son métricas de vanidad."* Para este reto no: la pregunta del reto es literalmente "miles de veces al día, en milisegundos y por fracciones de centavo", y el jurado es el CTO evaluando viabilidad y costo de modelos. No se esconden: **se conectan con el negocio.** Los ~300 ms son lo que permite decidir *entre* el envío del formulario y la página final (un LLM de 1,7–3 s no cabe ahí). El costo se muestra como ROI: "USD 0,04 para decidir toda la semana" junto a lo que se rescata.
 - *"Máquina de imprimir ingresos" con dólares gigantes.* Con la semana sintética actual, el pipeline de lista da ~USD 500.000 por semana (viable ~USD 114.000/mes). El CTO conoce las ventas reales de 30X: si la cifra es inverosímil, perdemos todo lo honesto que construimos (set sucio, calibración, puerta del CI). **Primero personas, después dólares, y dólares conservadores.**
 
-## 0 · Antes de la UI: una semana realista (bloquea lo demás)
+## 0 · Antes de la UI: una semana realista (bloquea lo demás; mezcla y volumen en `docs/supuestos.md`)
 Hallazgos en `data/week.json` hoy:
 - 167 de 218 descartados (77 %) tienen programa: optimista.
 - **Cero leads en nurturing.** Los 16 estudiantes van a "Lo revisa una persona" (10) o a "Otro programa" (6), y los 16 "solo Luma" a una persona. Contradice nuestro propio dolor ("bajar la barra llena la agenda de curiosos") y le carga 73 casos por semana (24 %) al SDR.
 
 Trabajo:
 - [ ] **Archivo separado para la semana del demo:** `data/week-leads.json` (no tocar `data/leads.json`: sus primeros 100 son el set de ajuste y los sets de prueba lo usan para su chequeo de fugas). `scripts/build-week.ts` lee el archivo nuevo.
-- [ ] **Mezcla explícita y conservadora** en `data/week-mix.json` (supuesto, a validar con Sandra), p. ej.:
-  - ~40 % baja intención: estudiantes, curiosos de clase gratis, perfiles junior o independientes sin presupuesto, "solo Luma" vagos → esperado nurturing;
+- [ ] **Mezcla explícita y conservadora** en `data/week-mix.json` (de `docs/supuestos.md`, 250 leads), p. ej.:
+  - ~45 % baja intención: estudiantes, curiosos de clase gratis, perfiles junior o independientes sin presupuesto, "solo Luma" vagos → esperado nurturing;
   - ~20 % encaja en la Inmersión (CEO listo, founder con plan de pagos);
-  - ~6 % oportunidades de empresa;
-  - ~26 % otro programa (repartido entre los 17);
+  - ~4 % oportunidades de empresa;
+  - ~23 % otro programa (repartido entre los 17);
   - ~8 % abandonos.
   Arquetipos nuevos si hacen falta ("curioso de clase gratis", "junior sin presupuesto"), con otra semilla. Chequeo de fugas contra todos los sets de prueba.
 - [ ] **Diagnóstico, no ajuste:** explica por qué los estudiantes no llegan a nurturing con el catálogo de 17 (¿Jev ve un programa barato como Second Brain? ¿`ninguno` con baja confianza?). Repórtalo con 3 ejemplos y una propuesta. **No cambies umbrales ni preguntas sin aprobación**: si hay que tocar el motor, se mide en el set de prueba v3 y pasa por la puerta.
@@ -47,7 +47,7 @@ Trabajo:
 - **Bajada (dolor):** "Con un solo producto de USD 6.000, una barra de 7 puntos funcionaba. Con 17 programas y clientes corporativos, subirla quema oportunidades y bajarla llena la agenda de los closers de curiosos. Jev no pone una barra: decide qué hacer con cada lead."
 - **Franja "dónde vive Jev"** (4 nodos; vertical en móvil):
   1. El lead envía el formulario de siempre
-  2. **Jev decide en ~{msMean} ms**, antes de que cargue la página final (redirección al terminar el formulario → endpoint de Jev; a confirmar con 30X)
+  2. **Jev decide en ~{msMean} ms**, antes de que cargue la página final (redirección al terminar el formulario → endpoint de Jev; supuesto A de `docs/supuestos.md`, con respaldo por webhook)
   3. **Lo que ve el lead:** calendario, oferta de su programa o página de seguimiento, en vez de "gracias"
   4. **Lo que recibe el equipo:** propiedades en HubSpot, llamada del agente de voz (Dapta) o WhatsApp
   Nota: "En el piloto, Jev corre en modo sombra: decide y registra, pero no cambia lo que ve el lead."
@@ -94,10 +94,8 @@ Actualizar `docs/guion-pitch.md` y `docs/playbook.md` con el titular, las métri
 - **P1:** capa de acción (un caso) · franja "dónde vive Jev" · guion y playbook al día.
 - **P2:** capa de acción en zoom y "Pruébalo tú" · dos casos más.
 
-## Preguntas para Sandra (mentoría de hoy)
-- Mezcla aproximada de una semana real: ¿cuántos son curiosos/estudiantes, cuántos encajan en la Inmersión, cuántos vienen por su empresa?
-- Tasa de cierre aproximada y orden de magnitud de ventas mensuales (para que los escenarios sean creíbles).
-- ¿El formulario puede redirigir al terminar a una URL nuestra? ¿Qué pasa hoy con quien ve "gracias"?
+## Supuestos (sin mentoría)
+No hubo validación con 30X: todos los números de negocio salen de `docs/supuestos.md` (volumen, mezcla, tasas de cierre, ticket, prueba de cordura y dónde vive Jev) y se muestran como supuestos. La mezcla de la sección 0 es la de ese archivo (45 / 20 / 23 / 4 / 8 %) y la semana es de 250 leads.
 
 ## Cómo se verifica
 - [ ] `curl` de la página sin JS: titular y contadores con números; nada de "…" ni "0".

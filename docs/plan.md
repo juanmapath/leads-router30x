@@ -34,7 +34,7 @@ Revisión del viernes 23:00 contra el doc de preparación (charlas): el motor y 
 10. [x] **Límite de llamadas en vivo** en `/api/decide` (p. ej. 30 por IP por hora en memoria + tope global diario) para que la URL pública no queme crédito.
 11. [x] Revisar a mano 20 etiquetas al azar (15 revisadas por Juan Manuel en el set v1).
 
-## Mentoría con Sandra (supuesto crítico: importante + desconocido)
+## Mentoría con Sandra — NO disponible (enlaces rotos): todo queda como supuesto en `docs/supuestos.md` y se valida en la semana en modo sombra
 - **¿Qué pasa hoy con quien saca ≤ 6? ¿Alguien lo vuelve a contactar?** Si un SDR ya llama a todos, el argumento cambia de "recuperar descartados" a "priorizar el tiempo del SDR y ofrecer el programa correcto".
 - ¿Los 200–300 leads/semana del podcast son del Inmersivo o de otro programa (AI Sales)? No mezclar en el pitch sin confirmar.
 - Tasa de cierre aproximada por programa y ticket promedio → cifra de impacto.
