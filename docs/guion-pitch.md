@@ -1,6 +1,6 @@
 # Guion del video pitch (3:00 min · 1 voz) — Jev Lead Router para 30X
 
-> **Actualizado sáb 17 oct, 10:50.** Cifras de `weekMetrics` (`data/week.json`, semana del demo con mezcla realista), `data/eval-report-test.json` (set v3) y `data/baseline-llm.json` (línea base con catálogo de 17). Las cifras viejas (85 % vs 45 %, 167 rescatados, USD 211.000/semana, 76 %) **ya no valen**: no las digas.
+> **Actualizado sáb 17 oct (capa de acción en la sección 3).** Cifras de `weekMetrics` (`data/week.json`: semana de **250 leads** con la mezcla de `docs/supuestos.md`), `src/engine/impact.ts` (dólares con supuestos conservadores), `data/eval-report-test.json` (set v3) y `data/baseline-llm.json`. Ya **no valen**: 300 leads, 234 descartados, 18 empresas, 90 ofertas, USD 92.000 ni USD 8.000 al mes, ni 85 % vs 45 %, 167 rescatados o USD 211.000. Los dólares se dicen siempre como "del orden de" y como supuesto.
 
 ## Cómo encajan los entregables
 
@@ -17,13 +17,13 @@
 1. Demo en pantalla completa, zoom 100–110 %, tema oscuro, arriba del todo en la **portada**.
 2. Ensaya una vez "Pruébalo tú" para que no te toque un arranque en frío de la función en el video.
 3. Graba con Cap. Si algo falla en vivo, corta y retoma en la sección: se edita después.
-4. Pausa de 1 segundo antes de cada cifra clave. Ritmo ~135 palabras por minuto; el texto hablado suma ~385 palabras (~2:50).
+4. Pausa de 1 segundo antes de cada cifra clave. Ritmo ~135 palabras por minuto; el texto hablado suma ~390 palabras (~2:55).
 
 ---
 
 ## 1. Portada: el problema con cifra (`0:00 – 0:20`)
 
-**[En pantalla: portada con el titular de 234 de 300 y la franja "Dónde vive Jev".]**
+**[En pantalla: portada con el titular de 195 de 250 y la franja "Dónde vive Jev".]**
 
 > "Cada semana, entre 200 y 300 personas aplican a 30X, y el formulario descarta en automático a la mayoría con una suma fija de puntos.
 > Esa barra servía para un solo programa de 6.000 dólares. Hoy son diecisiete.
@@ -35,27 +35,30 @@
 
 ## 2. La semana de 30X: el impacto (`0:20 – 0:55`)
 
-**[0:20 · ACCIÓN: clic en `Ver antes (regla actual)`, luego en `↻ Repetir la semana`; deja viajar los puntos mientras hablas.]**
+**[0:20 · ACCIÓN: clic en `Ver antes (regla actual)`, luego en `↻ Repetir la semana`; deja viajar los puntos mientras hablas.]** *(La mezcla y los dólares son supuestos: el enlace "Ver los supuestos" queda en pantalla.)*
 
-> "En esta semana de 300 leads, la regla descarta 234.
-> Con Jev, **18** de esos descartados eran **empresas** que venían a formar a su equipo, y **90** reciben la oferta de otro programa que sí encaja.
-> El **79 %** recibe su siguiente paso sin intervención; los dudosos van a una persona.
-> Toda la semana costó **menos de 4 centavos**, a **231 milisegundos** por lead: unos **92.000 dólares** de pipeline semanal. Cerrando solo el 2 %, unos **8.000 al mes**."
+> "En una semana típica de 250 leads, la regla descarta 195.
+> Con Jev, **10** de esos descartados eran **empresas** que venían a formar a su equipo, y **66** reciben la oferta de otro programa que sí encaja.
+> El **76 %** recibe su siguiente paso sin intervención; los dudosos van a una persona.
+> Decidir toda la semana costó **3 centavos de dólar**. Con supuestos conservadores, eso es del orden de **13.000 dólares al mes** en ventas que hoy no ocurren."
 
-**[0:50 · ACCIÓN: señala el selector en "pesimista" y luego el punto `mira este →`.]**
+**[0:50 · ACCIÓN: señala el selector en "pesimista" (debe decir "del orden de USD 13.000 / mes").]**
 
 ---
 
-## 3. Un lead de cerca: el verificador a la vista (`0:55 – 1:20`)
+## 3. Lo que cambia para el lead y para el equipo (`0:55 – 1:20`)
 
-**[0:55 · ACCIÓN: clic en `mira este →`. Baja a "Un lead de cerca".]**
+**[0:55 · ACCIÓN: baja a "Lo que cambia para el lead y para el equipo". Las tres columnas dicen "maqueta".]**
 
-> "Un gerente de innovación de una multinacional quiere formar a su equipo. No es CEO, así que la regla le da 2 de 10 y le dice 'gracias'.
-> Jev responde nueve preguntas en una sola llamada y lo manda al **área de empresas**."
+> "Un gerente de innovación de una multinacional quiere formar a cinco o más personas. No es CEO, así que la regla le da **2 de 10** *(confirma el puntaje en pantalla)* y ve 'gracias'. Fin.
+> Con Jev, en unos 200 milisegundos, antes de que cargue la página final, ve un calendario con el **área de empresas**, y a los dos minutos le escribe el ejecutivo por WhatsApp.
+> Eso solo cabe porque la decisión llega antes que la página: un LLM general tarda de 1,7 a 3 segundos."
 
-**[1:10 · ACCIÓN: pasa el cursor por la marca vertical de una barra.]**
+**[1:12 · ACCIÓN: señala la ficha del CRM (propiedades `jev_*`, asignado a "AE de empresas").]**
 
-> "Esta línea es el umbral, y vive en código: por debajo, decide una persona."
+> "Y el equipo recibe la ficha en HubSpot con la acción, el programa y las probabilidades. Los mensajes son plantillas fijas, no texto inventado por un modelo."
+
+*(El zoom "Un lead de cerca", con la marca del umbral en cada barra, queda en la página para el jurado, fuera del guion.)*
 
 ---
 
@@ -98,14 +101,16 @@
 ## Respuestas rápidas para el jurado en vivo (domingo)
 
 1. **"En AI Sales los puntajes bajos ya los revisa un SDR a mano."**
-   *"Sí, lo documentamos en los hallazgos: en el Inmersivo dice 'gracias' y en AI Sales 'estamos analizando'. Ahí el dolor es el opuesto: alguien revisa a mano sin saber cuál de los cinco programas que comparten el formulario ofrecer. Jev ordena esa cola en ~230 ms y le deja al SDR solo los casos realmente dudosos."*
+   *"Sí, lo documentamos en los hallazgos: en el Inmersivo dice 'gracias' y en AI Sales 'estamos analizando'. Ahí el dolor es el opuesto: alguien revisa a mano sin saber cuál de los cinco programas que comparten el formulario ofrecer. Jev ordena esa cola en ~250 ms y le deja al SDR solo los casos realmente dudosos."*
 2. **"¿Cómo garantizan que no agende a alguien que mintió en el texto libre?"**
    *"En `decideForLead`, ningún texto libre agenda por sí solo. 'Agenda ya' exige tres candados: P(listo) ≥ 0,75 y programa ≥ 0,70 en Jev, coherencia ≥ 0,70, y `formSupportsAgenda` en TypeScript (cargo de decisión, inversión viable y envío completo). El CI falla si aparece una sola entrevista mal agendada."*
 3. **"Si Sonnet acierta casi igual, ¿por qué Jev?"**
-   *"Porque decide en ~230 ms frente a ~2 s, y eso cabe entre el envío del formulario y la página final. Cuesta ~100 veces menos, lo que permite recalcular con cada señal nueva, y sus probabilidades están medidas: con 90 % o más acierta 97 %. Las del LLM son valores redondos que no sirven como umbral. El LLM queda para redactar los mensajes."*
+   *"Porque decide en ~250 ms frente a ~2 s, y eso cabe entre el envío del formulario y la página final. Cuesta ~100 veces menos, lo que permite recalcular con cada señal nueva, y sus probabilidades están medidas: con 90 % o más acierta 97 %. Las del LLM son valores redondos que no sirven como umbral. El LLM queda para redactar los mensajes."*
 4. **"¿Qué pasa cuando 30X abre o cierra cohortes?"**
    *"Jev no compara fechas. El catálogo vive en un solo archivo (`programs.ts`) y un flag de cohorte abierta filtra las opciones en código."*
 5. **"¿Cómo funciona el modo sombra en HubSpot?"**
    *"Un workflow de HubSpot hace un POST a nuestro endpoint cuando entra o cambia un lead, sin nombre, correo ni teléfono. Respondemos en ~250 ms y escribimos propiedades `jev_shadow_*` para auditar al final de la semana."*
-6. **"¿De dónde salen los 92.000 dólares?"**
-   *"Es la suma de precios públicos de los programas que Jev ofrece a los descartados en una semana sintética con una mezcla conservadora (40 % baja intención). No cuenta corporativos. La tasa de cierre es un supuesto; en el piloto se mide con leads reales."*
+6. **"¿De dónde salen los 13.000 dólares al mes?"**
+   *"No tenemos datos internos de 30X, así que todo está en `docs/supuestos.md`, conservador a propósito: 250 leads por semana, 45 % de baja intención, ticket realizado del 85 % del precio público, USD 7.500 por plan corporativo, y cierre de 1,5 % en las ofertas y 3 % en empresas en el escenario pesimista. Un test exige que el pesimista no pase del 10 % de unas ventas estimadas de ~USD 150.000 al mes. En el piloto se reemplaza todo por datos reales."*
+7. **"¿Y si su formulario no puede redirigir a una URL suya?"**
+   *"Ese es nuestro supuesto B: Jev actúa por webhook en menos de un segundo. La página final no cambia, pero el primer contacto (agente de voz, WhatsApp o el ejecutivo de empresas) sale en el primer minuto."*
