@@ -23,7 +23,11 @@ URL: https://form.30x.com/to/inmersivo-presencial-30x (form builder propio, cone
 | Facturación anual | ≥ USD 200k = 2 (todos los rangos iguales) · < 200k = 0 |
 | Inversión USD 6.000 | Lista = 4 · Plan de pagos = 2 · Imposible = 0 |
 | ¿Decide solo? | Sí = 3 · Con alguien = 2 · Otra persona = 0 |
-Puntaje > 6 → agenda entrevista. ≤ 6 → "Gracias por tu aplicación" (fin). Etiquetas: High ≥ 7, Mid 5–6, Low ≤ 4. Pregunta de cupos: solo yo / 2–4 / 5+ (5+ → llamada con área de empresas).
+Puntaje > 6 → agenda entrevista. ≤ 6 → "Gracias por tu aplicación" (fin). Etiquetas: High ≥ 7, Mid 5–6, Low ≤ 4.
+
+**Ruta de empresas (revisado el 16 oct., 23:15):** el formulario tiene una pregunta de cupos (solo yo / 2–4 / 5+) y una agenda con el "área de empresas", pero están **después** de la pregunta del decisor, y la lógica publicada salta desde esa pregunta directo a la entrevista (> 6) o al "gracias" (todo lo demás). Según la configuración pública, nadie llega a la pregunta de cupos: la ruta de empresas parece desconectada. Puede haber lógica que no vemos; **confirmarlo con 30X antes de afirmarlo en el pitch**.
+
+**Límites de lo que sabemos:** es el formulario de **un** producto (Inmersivo); otros programas pueden tener otras reglas. Vemos lo que hace el formulario, no lo que hace ventas después en HubSpot con los leads "Mid" o "Low" (la etiqueta sí viaja al CRM). Decir en el pitch: "el formulario los despide con un 'gracias' y no les ofrece agenda", no "se pierden para siempre".
 
 **Por qué importa:** confirma las "reglas fijas" del brief. Quien saca ≤ 6 sale del embudo aunque encaje en un programa más barato o en un plan corporativo. La regla ignora señales disponibles (contenido de origen, país, empresa, envíos parciales, eventos de Luma, pregunta libre).
 
