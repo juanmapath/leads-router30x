@@ -3,7 +3,7 @@
 // cifras de weekMetrics (una sola fuente), nunca "…" ni ceros. "Repetir la semana" lleva los 300 puntos a las
 // columnas de la regla y los hace viajar a las de Jev, escalonados según la latencia grabada de cada llamada.
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { SCENARIOS, type Scenario } from '../engine/impact.ts';
+import { CORPORATE_TICKET_USD, REALIZED_SHARE, SCENARIOS, type Scenario } from '../engine/impact.ts';
 import type { Action } from '../engine/types.ts';
 import { weekMetrics, type WeekMetrics } from '../engine/week-metrics.ts';
 import type { WeekRow } from '../engine/week.ts';
@@ -30,19 +30,23 @@ const MOVE_MS = 700;
 
 const SCENARIO_LABEL: Record<Scenario, string> = {
   pesimista: 'Pesimista',
-  viable: 'Base',
+  viable: 'Viable',
   optimista: 'Optimista',
 };
 
 // Franja "dónde vive Jev" (4 nodos; vertical en móvil).
 const FLOW = (ms: number) => [
   { title: 'El lead envía el formulario de siempre', body: 'El mismo formulario de 30X; nada cambia para quien aplica.' },
-  { title: `Jev decide en ~${ms} ms`, body: 'Antes de que cargue la página final: al terminar el formulario, una redirección llama a Jev (a confirmar con 30X).', jev: true },
+  { title: `Jev decide en ~${ms} ms`, body: 'Antes de que cargue la página final: al terminar, el formulario redirige a una URL que llama a Jev (supuesto A). Un LLM general de 1,7–3 s no cabe ahí.', jev: true },
   { title: 'Lo que ve el lead', body: 'Calendario, la oferta de su programa o una página de seguimiento, en vez de "gracias".' },
   { title: 'Lo que recibe el equipo', body: 'Propiedades en HubSpot, llamada del agente de voz (Dapta) o WhatsApp.' },
 ];
 
 const fmt = (v: number, d = 0) => v.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
+/** Dólares de negocio: orden de magnitud (2 cifras significativas), nunca decimales. */
+const about = (v: number) => { const step = 10 ** Math.max(0, Math.floor(Math.log10(Math.max(1, v))) - 1); return fmt(Math.round(v / step) * step); };
+const pctTxt = (r: number) => `${fmt(r * 100, r * 100 % 1 ? 1 : 0)} %`;
+export const SUPUESTOS_URL = 'https://github.com/juanmapath/leads-router30x/blob/master/docs/supuestos.md';
 
 type Pos = { x: number; y: number };
 interface Layout { pos: Pos[]; labels: Array<{ x: number; y: number; w: number; label: string; count: number }>; height: number }
@@ -163,7 +167,8 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
             </li>
           ))}
         </ol>
-        <p className="faint">En el piloto, Jev corre en modo sombra: decide y registra, pero no cambia lo que ve el lead.</p>
+        <p className="faint">Respaldo (supuesto B): si el formulario no puede redirigir, Jev actúa por webhook en menos de 1 s; la página final no cambia, pero el primer contacto (agente de voz, WhatsApp o AE de empresas) sale en el primer minuto.</p>
+        <p className="faint">En el piloto, Jev corre en modo sombra: decide y registra en HubSpot, pero no cambia lo que ve el lead.</p>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           <a className="btn" href="#semana">Ver la semana de 30X →</a>
           <span className="faint">Datos sintéticos · decisiones de Jev grabadas de llamadas reales · prueba en vivo más abajo</span>
@@ -246,10 +251,10 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
 
         <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
           <p className="result-line">
-            Decidir los {m.n} costó <strong>USD {fmt(m.costUsd, 2)}</strong> ({m.msMean} ms por lead). Pipeline de lista rescatado: <strong>USD {fmt(m.listPipelineWeek)}</strong> por semana.
+            Decidir los {m.n} costó <strong>USD {fmt(m.costUsd, 2)}</strong> ({m.msMean} ms por lead). Pipeline de lista rescatado: del orden de <strong>USD {about(m.listPipelineWeek)}</strong> por semana, más {m.b2b} oportunidades de empresa.
           </p>
           <div className="card hero">
-            <span className="faint">Ventas por mes si el equipo cierra (supuesto) una fracción del pipeline de lista rescatado</span>
+            <span className="faint">Ingreso incremental por mes si el equipo cierra una fracción de lo rescatado (supuesto)</span>
             <div className="scenario">
               <div role="radiogroup" aria-label="Escenario de tasa de cierre" className="segmented">
                 {(Object.keys(SCENARIOS) as Scenario[]).map((k) => (
@@ -259,9 +264,10 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
                 ))}
               </div>
             </div>
-            <span className="value">USD {fmt(m.monthly[scenario])} / mes</span>
+            <span className="value">del orden de USD {about(m.monthly[scenario])} / mes</span>
             <p className="muted">
-              Solo precios públicos de los programas que Jev ofrece. Las {m.b2b} oportunidades de empresa (ticket a medida) y {m.offersWithoutPrice} ofertas de programas sin precio publicado no suman dólares.
+              Cierre {SCENARIO_LABEL[scenario].toLowerCase()}: {pctTxt(SCENARIOS[scenario].otro_programa)} de las ofertas de otro programa y {pctTxt(SCENARIOS[scenario].empresas)} de las oportunidades de empresa.
+              Ticket realizado: {pctTxt(REALIZED_SHARE)} del precio público; plan corporativo USD {fmt(CORPORATE_TICKET_USD)}. Las {m.offersWithoutPrice} ofertas de programas sin precio publicado no suman dólares.
             </p>
             <details>
               <summary>Desglose por programa</summary>
@@ -279,7 +285,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
                 </tbody>
               </table>
             </details>
-            <p className="faint">Supuestos: la tasa de cierre (no tenemos el dato de 30X) y la mezcla sintética de la semana (data/week-mix.json). En el piloto se mide con los leads reales.</p>
+            <p className="faint">Todo es supuesto, conservador a propósito: no tenemos datos internos de 30X. Mezcla sintética de {m.n} leads por semana; en el piloto se mide con los leads reales. <a href={SUPUESTOS_URL} target="_blank" rel="noreferrer">Ver los supuestos</a>.</p>
           </div>
         </div>
       </section>

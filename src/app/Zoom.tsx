@@ -67,7 +67,7 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
         <p className="muted">La misma persona, dos decisiones: la suma fija de puntos de hoy frente a Jev.</p>
       </div>
 
-      <span className="faint" style={{ display: 'block', marginBottom: 6 }}>Casos representativos de la semana (o elige cualquiera de los 300 abajo):</span>
+      <span className="faint" style={{ display: 'block', marginBottom: 6 }}>Casos representativos de la semana (o elige cualquiera de los {week.length} abajo):</span>
       <div className="archetypes" role="group" aria-label="Casos representativos">
         {featured.map((l) => (
           <button
@@ -81,7 +81,7 @@ export function Zoom({ selectedId }: { selectedId?: string | null }) {
         ))}
       </div>
 
-      <label className="faint" htmlFor="lead-select">Explorar los 300 leads de la semana</label>
+      <label className="faint" htmlFor="lead-select">Explorar los {week.length} leads de la semana</label>
       <select id="lead-select" className="select" value={id} onChange={(e) => load(e.target.value)}>
         {[...featured, ...week].map((l) => <option key={l.id} value={l.id}>{l.id} · {ARCHETYPE_LABEL[l.archetype ?? ''] ?? l.archetype?.replaceAll('_', ' ')} · {l.country}</option>)}
       </select>
