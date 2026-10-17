@@ -1,6 +1,6 @@
 'use client';
 // Zoom a un lead: la regla actual frente a Jev para el mismo lead. (Rediseño pendiente: paso siguiente de la UI.)
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import leads from '../../data/leads.json';
 import type { Lead } from '../engine/types.ts';
 
@@ -12,16 +12,20 @@ const ACTION_LABEL: Record<string, string> = {
   cola_humana: 'Cola humana',
 };
 
-export function Zoom() {
+export function Zoom({ selectedId }: { selectedId?: string | null }) {
   const all = leads as Lead[];
   const [id, setId] = useState(all.find((l) => l.archetype === 'gerente_equipo_multinacional')?.id ?? all[0].id);
   const [res, setRes] = useState<any>(null);
   const [busy, setBusy] = useState(false);
 
-  async function run() {
+  useEffect(() => {
+    if (selectedId) { setId(selectedId); run(selectedId); }
+  }, [selectedId]);
+
+  async function run(leadId = id) {
     setBusy(true);
     setRes(null);
-    const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id }) });
+    const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id: leadId }) });
     setRes(await r.json());
     setBusy(false);
   }
@@ -40,7 +44,7 @@ export function Zoom() {
             </option>
           ))}
         </select>
-        <button onClick={run} disabled={busy} className="btn">
+        <button onClick={() => run()} disabled={busy} className="btn">
           {busy ? 'Decidiendo…' : 'Decidir'}
         </button>
       </div>

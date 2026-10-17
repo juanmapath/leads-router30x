@@ -1,37 +1,10 @@
-/* Tokens: claro por defecto, oscuro seleccionado (no invertido). Paleta de referencia de dataviz. */
+/* Tokens: oscuro por defecto (docs/ui-plan.md), claro con data-theme="light". Paleta de referencia de dataviz.
+   Gris para la regla actual, un solo acento para Jev y un color de alerta solo para "en vivo". */
 :root {
-  color-scheme: light;
-  --bg: #f6f6f4;
-  --surface: #fcfcfb;
-  --border: #e3e2de;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --text-3: #75746f;
-  --jev: #2a78d6;        /* serie única de Jev */
-  --jev-soft: #cde2fb;
-  --legacy: #8f8e89;     /* regla actual: gris, recesivo */
-  --good: #0ca30c;
-  --critical: #d03b3b;
-  --radius: 10px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme='light'])) {
-    color-scheme: dark;
-    --bg: #111110;
-    --surface: #1a1a19;
-    --border: #2e2e2b;
-    --text: #f0efec;
-    --text-2: #c3c2b7;
-    --text-3: #9a998f;
-    --jev: #3987e5;
-    --jev-soft: #184f95;
-    --legacy: #6f6e69;
-  }
-}
-:root[data-theme='dark'] {
   color-scheme: dark;
   --bg: #111110;
   --surface: #1a1a19;
+  --surface-2: #232321;
   --border: #2e2e2b;
   --text: #f0efec;
   --text-2: #c3c2b7;
@@ -39,6 +12,24 @@
   --jev: #3987e5;
   --jev-soft: #184f95;
   --legacy: #6f6e69;
+  --live: #d95926;
+  --good: #0ca30c;
+  --critical: #d03b3b;
+  --radius: 10px;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f6f4;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --border: #e3e2de;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --text-3: #75746f;
+  --jev: #2a78d6;
+  --jev-soft: #cde2fb;
+  --legacy: #8f8e89;
+  --live: #eb6834;
 }
 
 * { box-sizing: border-box; }
@@ -102,3 +93,45 @@ td.num, th.num { text-align: right; }
   padding: 6px 8px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -100%);
 }
 .status { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+
+/* Portada y semana */
+.cover { min-height: 52vh; display: grid; align-content: center; gap: 16px; margin-top: 0; }
+.cover h1 { font-size: clamp(28px, 5.2vw, 52px); letter-spacing: -0.02em; max-width: 22ch; }
+.cover .lead { font-size: clamp(16px, 2.2vw, 20px); color: var(--text-2); max-width: 52ch; }
+.counters .value { font-size: 24px; }
+.dots { position: relative; width: 100%; transition: height 400ms ease; }
+.dots-label { position: absolute; font-size: 13px; color: var(--text-2); line-height: 1.25; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.dots-label strong { color: var(--text); font-size: 15px; }
+.dot {
+  position: absolute; left: 0; top: 0; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--legacy); cursor: pointer;
+  transition: transform 700ms cubic-bezier(.2,.7,.2,1), background-color 300ms ease;
+}
+@media (max-width: 639px) { .dot { width: 7px; height: 7px; } }
+.dot:hover { outline: 2px solid var(--text); outline-offset: 1px; }
+.dot-jev { background: var(--jev); }
+.dot-kept { background: var(--text-3); }
+.dot-featured { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--text); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 3px var(--bg), 0 0 0 8px transparent; } }
+.featured-tag {
+  position: absolute; left: 0; top: 0; z-index: 2; white-space: nowrap; cursor: pointer;
+  font: inherit; font-size: 12px; font-weight: 600; color: var(--bg); background: var(--text);
+  border: 0; border-radius: 999px; padding: 2px 8px; transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+}
+.result-line { font-size: clamp(17px, 2.4vw, 21px); max-width: 60ch; }
+.scenario { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 4px; }
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.segmented button { font: inherit; font-size: 13px; padding: 6px 10px; min-height: 36px; background: transparent; color: var(--text-2); border: 0; cursor: pointer; }
+.segmented button + button { border-left: 1px solid var(--border); }
+.segmented button.on { background: var(--surface-2); color: var(--text); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .dot, .featured-tag, .dots { transition: none; }
+  .dot-featured { animation: none; }
+}
+.tiles.counters { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 639px) {
+  .tiles.counters { gap: 8px; }
+  .tiles.counters .tile { padding: 10px; }
+  .tiles.counters .value { font-size: 17px; }
+  .tiles.counters .label { font-size: 12px; }
+}
