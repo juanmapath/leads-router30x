@@ -166,3 +166,17 @@ test('solo Luma: con una señal pasa a persona o nurturing; al sumar señales se
 
   assert.notEqual(decideForLead(lumaLead(INJECTION, INJECTION), fooled).action, 'agenda_ya');
 });
+
+// Un envío parcial es la señal más caliente que tenemos: quien empezó a aplicar no se nutre en silencio.
+test('abandonos: un envío parcial nunca va a nurturing en silencio, va a contacto rápido', () => {
+  const tibio: JevAnswers = { ...base, ready: { value: false, p: 0.47 }, program: { value: 'inmersivo', p: 0.98 } };
+  const parcial: Lead = { ...ceoLead, partial: true, form: { name: 'Prueba', email: 'parcial@ejemplo.test', whatsappCountry: 'Colombia' } };
+  assert.equal(decide(tibio).action, 'nurturing'); // lo que haría la regla de umbrales sola
+  const d = decideForLead(parcial, tibio);
+  assert.equal(d.action, 'cola_humana');
+  assert.equal(d.channel, 'llamada_ia');
+  assert.ok(d.needsHuman);
+  const abandono: Lead = { ...ceoLead, signals: [{ type: 'form_abandoned', at: '2026-10-17T10:00:00-05:00' }] };
+  assert.notEqual(decideForLead(abandono, tibio).action, 'nurturing');
+  assert.notEqual(decideForLead(parcial, { ...tibio, program: { value: 'ninguno', p: 0.9 }, ready: { value: false, p: 0.05 } }).action, 'nurturing');
+});

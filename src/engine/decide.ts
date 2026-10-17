@@ -73,6 +73,16 @@ export function decideForLead(lead: Lead, a: JevAnswers, t = THRESHOLDS): Decisi
     };
   }
 
+  // Abandonó el formulario: es la señal más caliente que tenemos. Nunca se nutre en silencio:
+  // contacto rápido (llamada con agente de voz) y lo sigue una persona.
+  const abandoned = lead.partial || lead.signals.some((s) => s.type === 'form_abandoned');
+  if (d.action === 'nurturing' && abandoned) {
+    return {
+      ...d, action: 'cola_humana', channel: 'llamada_ia', needsHuman: true,
+      reasons: [...d.reasons, 'Empezó a aplicar y abandonó el formulario: contacto rápido, no nurturing.'],
+    };
+  }
+
   // Sin formulario y con una sola señal (p. ej. solo la pregunta de Luma), un texto escrito no basta
   // para ofrecer un programa sin que lo mire una persona. Con una segunda señal, sí.
   if (d.action === 'otro_programa' && !hasForm(lead) && lead.signals.length < 2) {
