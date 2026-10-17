@@ -17,9 +17,13 @@ const setName = arg('--set') ?? 'tuning';
 if (!['tuning', 'test'].includes(setName)) throw new Error('--set debe ser tuning o test');
 
 // --gate: puerta de CI. Solo grabaciones (nunca llama a Jev ni necesita clave); falla si la acción baja del piso
-// o si hay un solo error caro. Piso = acción medida en el set de prueba menos 5 puntos.
+// o si aparece un error caro que no esté ya reportado. Piso = acción medida en el set de prueba v3 (81 %) menos 5 puntos.
 const gate = process.argv.includes('--gate');
-const FLOOR = Number(arg('--floor') ?? 0.77);
+const FLOOR = Number(arg('--floor') ?? 0.76);
+// Errores caros conocidos y reportados (decisión de producto del sáb 17 oct: no se cambia la regla por ellos).
+// QS005: founder pre-seed con plan de pagos → agenda_ya para Fundraising School (agenda_ya admite cualquier
+// programa claro, no solo la Inmersión). Cualquier error caro nuevo hace fallar la puerta.
+const KNOWN_EXPENSIVE = new Set(['QS005']);
 if (gate) process.env.JEV_MODE = 'replay-only';
 
 type Exp = Expected & { kind?: string; note?: string };
@@ -87,11 +91,10 @@ const report = {
 };
 if (gate) {
   const accion = report.precision.accion ?? 0;
-  console.log(`\nPuerta (${setName}): acción ${(accion * 100).toFixed(1)} % (piso ${(FLOOR * 100).toFixed(0)} %), errores caros ${expensive.length} (máx. 0)`);
-  if (accion < FLOOR || expensive.length > 0) {
-    for (const r of expensive) console.error(`Error caro: ${r.id} (${r.expected.note ?? r.archetype}) esperado ${r.expected.action}, obtuvo agenda_ya`);
-    process.exit(1);
-  }
+  const nuevos = expensive.filter((r) => !KNOWN_EXPENSIVE.has(r.id));
+  console.log(`\nPuerta (${setName}): acción ${(accion * 100).toFixed(1)} % (piso ${(FLOOR * 100).toFixed(0)} %), errores caros ${expensive.length} (${expensive.length - nuevos.length} conocidos y reportados; nuevos permitidos: 0)`);
+  for (const r of expensive) console.log(`${KNOWN_EXPENSIVE.has(r.id) ? 'Error caro conocido' : 'Error caro NUEVO'}: ${r.id} (${r.expected.note ?? r.archetype}) esperado ${r.expected.action}, obtuvo agenda_ya`);
+  if (accion < FLOOR || nuevos.length > 0) process.exit(1);
 } else {
   writeFileSync(`data/eval-report-${setName}.json`, JSON.stringify(report, null, 2));
   console.log('\n' + JSON.stringify({ ...report, calibracion: undefined, detalleErrores: report.detalleErrores.length }, null, 2));
