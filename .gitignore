@@ -9,3 +9,4 @@ next-env.d.ts
 .claude/
 # Guion del video: material de trabajo local, no es parte de la entrega
 docs/guion-pitch.md
+docs/guion-pitch.pdf

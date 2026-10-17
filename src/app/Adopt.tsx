@@ -3,7 +3,7 @@ import baseline from '../../data/baseline-llm.json';
 import { monthlyRunCost } from '../engine/impact.ts';
 
 const REPO = 'https://github.com/juanmapath/leads-router30x';
-const PLAYBOOK_URL = `${REPO}/blob/master/docs/playbook.md`;
+const PLAYBOOK_URL = `${REPO}/blob/master/docs/playbook.pdf`;
 const DATASET_URL = `${REPO}/blob/master/data/week-leads.json`;
 const usd = (v: number, d = 2) => `USD ${v.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
 
