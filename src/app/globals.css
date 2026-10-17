@@ -168,3 +168,10 @@ td.num, th.num { text-align: right; }
 .prob-head .was { color: var(--text-3); font-weight: 500; }
 .thesis { font-size: clamp(17px, 2.3vw, 21px); line-height: 1.4; max-width: 70ch; }
 a { color: var(--jev); }
+
+/* Adopción */
+.adopt { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.adopt .card { display: grid; gap: 8px; align-content: start; }
+.adopt-num { font-size: 28px; font-weight: 700; }
+.ask { margin-top: 16px; display: grid; gap: 8px; border-color: var(--jev); }
+.ask-text { font-size: clamp(17px, 2.3vw, 21px); }
