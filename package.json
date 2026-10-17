@@ -10,6 +10,7 @@
     "start": "next start",
     "test": "tsx --test tests/engine.test.ts",
     "gen": "tsx scripts/generate-leads.ts",
+    "gen:test": "tsx scripts/generate-test-set.ts",
     "ping": "tsx --env-file=.env.local scripts/jev-ping.ts",
     "eval": "tsx --env-file=.env.local scripts/eval.ts",
     "record": "tsx --env-file=.env.local scripts/record-all.ts"

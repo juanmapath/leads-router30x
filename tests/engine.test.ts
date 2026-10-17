@@ -180,3 +180,19 @@ test('abandonos: un envío parcial nunca va a nurturing en silencio, va a contac
   assert.notEqual(decideForLead(abandono, tibio).action, 'nurturing');
   assert.notEqual(decideForLead(parcial, { ...tibio, program: { value: 'ninguno', p: 0.9 }, ready: { value: false, p: 0.05 } }).action, 'nurturing');
 });
+
+// El set de prueba nunca se usa para ajustar: ni un solo lead puede ser idéntico (mismo estado para Jev)
+// a uno del set de ajuste o del demo; si no, el número del pitch estaría medido sobre datos vistos.
+test('set de prueba: separado del de ajuste, sintético y sin datos de contacto en el estado', () => {
+  const testSet: { leads: Lead[]; expected: Record<string, { action: string }> } = JSON.parse(readFileSync('data/test-set.json', 'utf8'));
+  const seen = new Set(leads.map(buildState));
+  const leaked = testSet.leads.filter((l) => seen.has(buildState(l))).map((l) => l.id);
+  assert.deepEqual(leaked, [], 'leads de prueba idénticos a leads de ajuste/demo');
+  assert.ok(testSet.leads.length >= 100);
+  for (const l of testSet.leads) {
+    assert.ok(testSet.expected[l.id], `${l.id} sin etiqueta`);
+    assert.ok(l.form.email.endsWith('@ejemplo.test'), `${l.id} correo no sintético`);
+    const s = buildState(l);
+    assert.ok(!s.includes(l.form.email) && !s.includes(l.form.name), `${l.id} expone contacto`);
+  }
+});
