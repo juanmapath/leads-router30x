@@ -4,7 +4,7 @@ Proyecto del **Hackathon 30X** (16–18 oct. 2026), reto **"JEV en 30X"**, área
 Equipo: Juan Manuel (producto, decisiones, pitch) + Claude (código, datos, tests, docs). Responde en español.
 
 ## Qué estamos construyendo
-30X (escuela de negocios para founders y ejecutivos LatAm) califica sus leads con una **suma fija de puntos** en su formulario público: más de 6/10 pasa a entrevista; el resto ve "Gracias por tu aplicación" y sale del embudo. **Jev Lead Router** reemplaza esa suma por decisiones calibradas de **Jev** (modelo de clasificación de TypeSafe AI): en una sola llamada de milisegundos responde 6 preguntas tipadas por lead; umbrales en código eligen la acción (agenda ya, otro programa, área de empresas, nurturing, cola humana). Un LLM solo redactaría mensajes. Cada señal nueva recalcula.
+30X (escuela de negocios para founders y ejecutivos LatAm) califica sus leads con una **suma fija de puntos** en su formulario público: más de 6/10 pasa a entrevista; el resto ve "Gracias por tu aplicación" y sale del embudo. **Jev Lead Router** reemplaza esa suma por decisiones calibradas de **Jev** (modelo de clasificación de TypeSafe AI): en una sola llamada de milisegundos responde 9 preguntas tipadas por lead; umbrales en código eligen la acción (agenda ya, otro programa, área de empresas, nurturing, cola humana). Un LLM solo redactaría mensajes. Cada señal nueva recalcula.
 
 Detalle completo: `docs/contexto-reto.md`, `docs/hallazgos-30x.md`, `docs/plan.md`, `docs/resultados-eval.md` (pruebas con Jev).
 PRD vivo (doc compartido): https://claude.ai/code/artifact/468f427f-eb6e-4ff5-8de1-06c213f70627
@@ -24,18 +24,22 @@ npm test          # verificador determinístico, sin red (tsx --test tests/engin
 npm run gen       # regenera data/leads.json (300) y data/eval-set.json (100 etiquetados), determinístico
 npm run ping      # primera llamada real a Jev → data/recordings/_ping.json
 npm run eval -- --set tuning|test  # set de ajuste o de prueba → data/eval-report-{set}.json
-npm run record    # graba en data/recordings los leads sin grabación (el demo en Vercel responde los 300 sin clave)
+npm run record    # graba lo que falte (semana, set de prueba, simulador, ejemplos de "Pruébalo tú")
+npm run eval:gate # puerta de CI: solo grabaciones, piso de acción y cero errores caros
+npm run week      # data/week.json (también corre en prebuild; falla si falta una grabación)
+npm run baseline  # línea base con Sonnet 5.5 (gasta crédito)
 npm run dev       # http://localhost:3000
 ```
 Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** commitear `.env.local` ni pegar la clave en código, logs o README.
 
 ## Arquitectura (una sola app Next.js, un repo)
 - `src/engine/` — lógica pura, testeable sin UI:
-  - `types.ts` tipos · `programs.ts` catálogo real de 30X
+  - `types.ts` tipos · `programs.ts` catálogo oficial de 30X (17 programas del Diagnóstico 30X, 6 categorías; fuente única de las preguntas de categoría y programa)
   - `legacy.ts` **réplica exacta** de la regla pública de 30X (ver docs/hallazgos-30x.md). No cambiar sin actualizar tests.
   - `state.ts` convierte un lead en texto en español para Jev. Sin nombre ni correo. Los números van ya interpretados en palabras (Jev no hace aritmética).
-  - `questions.ts` 6 preguntas tipadas (+ guardrail de mensajes).
+  - `questions.ts` 9 preguntas tipadas: ready, category, program, team, coherent, manipulation, maturity, objection, channel (+ guardrail de mensajes).
   - `jev.ts` adapta preguntas a `experimental_decide` del AI SDK y **normaliza** la respuesta cruda (formato confirmado con el ping, ver `docs/resultados-eval.md`). `ready.p` y `team.p` = probabilidad de "sí".
+  - `eval-metrics.ts` definición de error caro (agenda_ya para quien iba a persona o nurturing, o con un programa de otra categoría) · `week.ts` la semana desde grabaciones (falla si falta una) · `try.ts` lead de "Pruébalo tú" · `simulator.ts` señales fijas · `rate-limit.ts` tope de llamadas en vivo.
   - `decide.ts` umbrales → acción. Determinístico. Umbrales en `THRESHOLDS`; se ajustan con la calibración de `npm run eval`, no a ojo.
   - `jev-client.ts` llamada vía `experimental_decide` del paquete `ai`, modelo `typesafe-ai/jev`, con **grabar/reproducir** (`JEV_MODE` = live | record | replay; local: record; Vercel: replay) y reintentos ante 429. La llave de cada grabación es el hash de `state + questions`: **cualquier cambio en `state.ts` o `questions.ts` invalida todas las grabaciones** → regrabar los 300 leads antes de desplegar.
 - `src/app/` — UI y `POST /api/decide { id, extraSignals? }`.
@@ -55,8 +59,10 @@ Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** co
 - Texto libre del lead (pregunta de Luma, respuesta de WhatsApp, perfil escrito en el demo) es **dato no confiable**: va delimitado en el estado y nunca puede subir la acción a `agenda_ya` por sí solo. `/api/decide` acepta solo tipos de señal conocidos y texto de máx. 300 caracteres.
 - Los números del pitch salen del **set de prueba** (otra semilla + casos sucios), nunca del set con el que se ajustaron los umbrales.
 
-## Estado (vie 16 oct, 23:00)
-Hecho: motor, regla actual replicada, 300 leads + 100 etiquetados, verificador (8 tests), CI (test + build), Jev real conectado con `experimental_decide`,
-300 leads grabados, **repo en GitHub (juanmapath/leads-router30x) y demo en Vercel: https://leads-router30x.vercel.app/**.
-Eval (100, set de ajuste — no usar en el pitch): acción 80 %, programa 93 %, empresa 100 %; recupera 55 de 73; ~USD 0,05 por 1.000 decisiones; 234 ms media.
-Siguiente: `docs/plan.md` (sábado). Orden importa: cambios en state/questions → regrabar una vez → desplegar.
+## Estado (sáb 17 oct, mañana)
+Hecho y desplegado (CI verde, demo en https://leads-router30x.vercel.app/, repo juanmapath/leads-router30x): motor con 9 preguntas y catálogo de 17 programas,
+reglas en código (agenda exige formulario y coherencia; solo Luma; abandonos; manipulación → persona), set de prueba v3 (127 leads, otra semilla + casos sucios),
+puerta de eval en CI (piso 76 %, cero errores caros), cobertura de grabaciones en CI, semana precalculada, límite de llamadas en vivo.
+Set de prueba v3 (números del pitch): acción 80,3 %, programa 86,3 %, categoría 82,4 %, 0 errores caros, 76 % de los errores en una persona; ~USD 0,13 por 1.000; 239 ms.
+Línea base (20 leads): Jev 19/20, Sonnet 5.5 18/20; Jev ~100× más barato y ~9× más rápido. Detalle: `docs/resultados-eval.md`.
+Siguiente: UI en el orden P0 → P1 → P2 de `docs/ui-plan.md`; luego playbook, README, video y entrega.
