@@ -1,12 +1,16 @@
 import { programName } from './programs.ts';
 import type { Decision, JevAnswers, Lead, ProgramId } from './types.ts';
 
-// Umbrales. Se ajustan con la gráfica de calibración (scripts/eval.ts), no a ojo.
+// Umbrales por costo del error (decisión de producto, ver docs/playbook.md), no ajustados al set de prueba.
+// Agendar a quien no debe es el error caro (tiempo de vendedor); ofrecer un programa online por WhatsApp
+// es barato. Con programa < 0,6 nunca se actúa solo. La calibración del eval confirma que hay margen.
 export const THRESHOLDS = {
   team: 0.75, // P(sí es venta a empresa) para ir al área de empresas
-  readyHigh: 0.8, // P(listo) para agendar ya
+  readyHigh: 0.75, // P(listo) para agendar ya
   readyLow: 0.5, // por debajo: nurturing
-  program: 0.7, // confianza mínima en el programa sugerido
+  programAgenda: 0.7, // confianza mínima en el programa para agendar ya (error caro)
+  programOther: 0.65, // confianza mínima para ofrecer otro programa (error barato)
+  programMin: 0.6, // por debajo, siempre una persona (también para nurturing)
   channel: 0.6, // si el canal es menos seguro, se usa el canal por defecto de la acción
 };
 
@@ -20,7 +24,8 @@ const pct = (p: number) => `${Math.round(p * 100)} %`;
  */
 export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
   const reasons: string[] = [];
-  const programClear = a.program.p >= t.program && !UNCLEAR.includes(a.program.value);
+  const unclear = UNCLEAR.includes(a.program.value);
+  const programClear = a.program.p >= t.programOther && !unclear;
 
   if (a.team.value && a.team.p >= t.team) {
     reasons.push(`Oportunidad de equipo con ${pct(a.team.p)} de probabilidad.`);
@@ -37,7 +42,7 @@ export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
 
   const channelFor = (fallback: Decision['channel']) => (a.channel.p >= t.channel ? a.channel.value : fallback);
 
-  if (readyYes >= t.readyHigh && programClear) {
+  if (readyYes >= t.readyHigh && a.program.p >= t.programAgenda && !unclear) {
     return { action: 'agenda_ya', program: a.program.value, channel: channelFor('llamada_ia'), needsHuman: false, reasons };
   }
 
@@ -48,7 +53,8 @@ export function decide(a: JevAnswers, t = THRESHOLDS): Decision {
     return { action: 'otro_programa', program: a.program.value, channel: channelFor('whatsapp'), needsHuman: false, reasons };
   }
 
-  if (readyYes < t.readyLow && (programClear || a.program.value === 'ninguno')) {
+  const sinPrograma = a.program.value === 'ninguno' && a.program.p >= t.programMin;
+  if (readyYes < t.readyLow && (programClear || sinPrograma)) {
     reasons.push('No está listo hoy: se nutre con contenido del programa que le encaja.');
     return { action: 'nurturing', program: a.program.value, channel: 'contenido', needsHuman: false, reasons };
   }

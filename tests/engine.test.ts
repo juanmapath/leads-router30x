@@ -196,3 +196,23 @@ test('set de prueba: separado del de ajuste, sintético y sin datos de contacto 
     assert.ok(!s.includes(l.form.email) && !s.includes(l.form.name), `${l.id} expone contacto`);
   }
 });
+
+// Umbrales por costo del error (decisión de producto, no ajuste al set):
+// - agenda_ya es el error caro (le quita tiempo a un vendedor): programa ≥ 0,70 y P(listo) ≥ 0,75.
+// - otro_programa es un error barato (un WhatsApp con un programa online): programa ≥ 0,65.
+// - con programa < 0,60 nunca se actúa solo, tampoco para nurturing.
+test('umbrales por costo del error: bordes de agenda, otro programa y nurturing', () => {
+  const listo = (p: number) => ({ ...base, ready: { value: true, p } });
+  assert.equal(decide(listo(0.75)).action, 'agenda_ya');
+  assert.notEqual(decide(listo(0.74)).action, 'agenda_ya');
+  assert.equal(decide({ ...base, program: { value: 'inmersivo', p: 0.7 } }).action, 'agenda_ya');
+  assert.notEqual(decide({ ...base, program: { value: 'inmersivo', p: 0.69 } }).action, 'agenda_ya');
+
+  const noListo = { ...base, ready: { value: false, p: 0.35 } };
+  assert.equal(decide({ ...noListo, program: { value: 'ai_sales', p: 0.65 } }).action, 'otro_programa');
+  assert.equal(decide({ ...noListo, program: { value: 'ai_sales', p: 0.64 } }).action, 'cola_humana');
+
+  const frio = { ...base, ready: { value: false, p: 0.1 } };
+  assert.equal(decide({ ...frio, program: { value: 'ninguno', p: 0.6 } }).action, 'nurturing');
+  assert.equal(decide({ ...frio, program: { value: 'ninguno', p: 0.55 } }).action, 'cola_humana');
+});
