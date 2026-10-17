@@ -46,7 +46,7 @@ const fmt = (v: number, d = 0) => v.toLocaleString('es-CO', { minimumFractionDig
 /** Dólares de negocio: orden de magnitud (2 cifras significativas), nunca decimales. */
 const about = (v: number) => { const step = 10 ** Math.max(0, Math.floor(Math.log10(Math.max(1, v))) - 1); return fmt(Math.round(v / step) * step); };
 const pctTxt = (r: number) => `${fmt(r * 100, r * 100 % 1 ? 1 : 0)} %`;
-export const SUPUESTOS_URL = 'https://github.com/juanmapath/leads-router30x/blob/master/docs/supuestos.md';
+const SUPUESTOS_URL = '#supuestos';
 
 type Pos = { x: number; y: number };
 interface Layout { pos: Pos[]; labels: Array<{ x: number; y: number; w: number; label: string; count: number }>; height: number }
@@ -285,7 +285,7 @@ export function Week({ data, metrics: m, onSelect }: { data: WeekData; metrics: 
                 </tbody>
               </table>
             </details>
-            <p className="faint">Todo es supuesto, conservador a propósito: no tenemos datos internos de 30X. Mezcla sintética de {m.n} leads por semana; en el piloto se mide con los leads reales. <a href={SUPUESTOS_URL} target="_blank" rel="noreferrer">Ver los supuestos</a>.</p>
+            <p className="faint">Todo es supuesto, conservador a propósito: no tenemos datos internos de 30X. Mezcla sintética de {m.n} leads por semana; en el piloto se mide con los leads reales. <a href={SUPUESTOS_URL} onClick={() => document.querySelector<HTMLDetailsElement>('#supuestos details')?.setAttribute('open', '')}>Ver los supuestos</a>.</p>
           </div>
         </div>
       </section>

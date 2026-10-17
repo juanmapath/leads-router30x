@@ -239,3 +239,34 @@ a { color: var(--jev); }
 @media (min-width: 900px) { section.block { min-height: 92vh; } section.block.cover { min-height: 70vh; } }
 section.block { scroll-margin-top: 16px; }
 
+
+/* Capa de acción: maquetas genéricas (sin identidad visual de 30X) */
+.action-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); align-items: start; }
+@media (max-width: 899px) { .action-grid { grid-template-columns: 1fr; } }
+.action-col { display: grid; gap: 10px; align-content: start; }
+.phone { position: relative; margin: 0; width: 100%; max-width: 280px; border: 1px solid var(--border); border-radius: 28px; padding: 26px 12px 18px; background: var(--surface-2); }
+.phone::before { content: ''; position: absolute; top: 10px; left: 50%; width: 54px; height: 5px; border-radius: 3px; background: var(--border); transform: translateX(-50%); }
+.phone-screen { display: grid; gap: 10px; background: var(--surface); border-radius: 18px; padding: 16px 14px; min-height: 300px; align-content: start; font-size: 14px; }
+.mock-badge { position: absolute; top: -9px; right: 12px; z-index: 1; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); background: var(--bg); border: 1px dashed var(--text-3); border-radius: 999px; padding: 1px 8px; }
+.mock-page { display: grid; gap: 8px; }
+.mock-page strong { font-size: 16px; line-height: 1.25; }
+.mock-page span { color: var(--text-2); }
+.mock-thanks { min-height: 240px; align-content: center; text-align: center; }
+.mock-slots { display: flex; flex-wrap: wrap; gap: 6px; }
+.mock-slot { font-size: 12px; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; color: var(--text) !important; }
+.mock-cta { justify-self: start; font-size: 13px; font-weight: 700; border-radius: 999px; padding: 6px 12px; background: var(--text); color: var(--surface) !important; }
+.mock-chat { display: grid; gap: 4px; border-top: 1px solid var(--border); padding-top: 10px; }
+.mock-bubble { background: var(--surface-2); border-radius: 12px 12px 12px 4px; padding: 8px 10px; font-size: 13px; }
+.crm { position: relative; display: grid; gap: 10px; }
+.crm-head { display: grid; gap: 2px; }
+.crm-props { margin: 0; display: grid; gap: 0; }
+.crm-props div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.crm-props dt { color: var(--text-2); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+.crm-props dd { margin: 0; font-weight: 600; text-align: right; }
+
+/* Supuestos (plegado) */
+.supuestos { min-height: 0 !important; }
+.supuestos summary { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.supuestos summary h2 { display: inline; }
+.supuestos-body { display: grid; gap: 12px; margin-top: 12px; }
+.supuestos-body ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }

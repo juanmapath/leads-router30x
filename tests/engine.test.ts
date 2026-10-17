@@ -453,3 +453,28 @@ test('cordura: pesimista ≤ 10 % y viable ≤ 25 % de USD 150.000 al mes', asyn
   assert.ok(m.monthly.pesimista <= SANITY_MAX.pesimista * MONTHLY_SALES_30X_USD, `pesimista USD ${Math.round(m.monthly.pesimista)}`);
   assert.ok(m.monthly.viable <= SANITY_MAX.viable * MONTHLY_SALES_30X_USD, `viable USD ${Math.round(m.monthly.viable)}`);
 });
+
+// Capa de acción: plantillas fijas. Toda combinación posible de acción × programa × canal tiene una, sin huecos,
+// y "Lo revisa una persona" nunca muestra una oferta.
+test('acciones: toda combinación de acción, programa y canal tiene plantilla; a persona nunca hay oferta', async () => {
+  const { actionPlan } = await import('../src/engine/actions.ts');
+  const actions = ['agenda_ya', 'otro_programa', 'empresas', 'nurturing', 'cola_humana'] as const;
+  const channels = ['llamada_ia', 'whatsapp', 'vendedor', 'contenido'] as const;
+  const programs: ProgramId[] = [...PROGRAM_IDS, 'ninguno', 'otro'];
+  let n = 0;
+  for (const action of actions) for (const program of programs) for (const channel of channels) for (const needsHuman of [false, true]) {
+    const p = actionPlan({ action, program, channel, needsHuman }, base);
+    const texts = [p.lead.title, p.lead.body, p.lead.cta ?? 'x', p.followUp.from, p.followUp.when, p.followUp.text, p.team.assignee, ...p.team.properties.flat()];
+    for (const t of texts) assert.ok(t.trim().length > 0 && !/[{}]|undefined|NaN/.test(t), `${action}/${program}/${channel}: "${t}"`);
+    if (action === 'cola_humana') {
+      assert.equal(p.lead.kind, 'asesor');
+      assert.match(p.lead.body, /un asesor te escribe hoy/i);
+      assert.ok(!/USD|encaja|Agenda/.test(p.lead.title + p.lead.body), 'sin oferta');
+      assert.equal(p.team.review, true);
+    }
+    if (p.lead.kind === 'oferta') assert.ok(PROGRAM_IDS.includes(program as never), 'solo se ofrece un programa del catálogo');
+    if (action === 'empresas') { assert.equal(p.lead.kind, 'calendario'); assert.equal(p.team.assignee, 'AE de empresas'); }
+    n++;
+  }
+  assert.equal(n, 5 * (PROGRAM_IDS.length + 2) * 4 * 2);
+});
