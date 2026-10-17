@@ -1,0 +1,30 @@
+{
+  "name": "leadsrouter30x",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Jev Lead Router: decisiones calibradas con Jev para enrutar los leads de 30X (Hackathon 30X, oct. 2026).",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "tsx --test tests/engine.test.ts",
+    "gen": "tsx scripts/generate-leads.ts",
+    "ping": "tsx --env-file=.env.local scripts/jev-ping.ts",
+    "eval": "tsx --env-file=.env.local scripts/eval.ts"
+  },
+  "dependencies": {
+    "ai": "latest",
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  },
+  "engines": { "node": ">=20.6" }
+}
