@@ -14,6 +14,7 @@
     "ping": "tsx --env-file=.env.local scripts/jev-ping.ts",
     "eval": "tsx --env-file=.env.local scripts/eval.ts",
     "eval:gate": "tsx scripts/eval.ts --set test --gate",
+    "baseline": "tsx --env-file=.env.local scripts/baseline-llm.ts",
     "record": "tsx --env-file=.env.local scripts/record-all.ts"
   },
   "dependencies": {
