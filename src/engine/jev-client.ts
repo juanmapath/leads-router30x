@@ -2,6 +2,7 @@
 // JEV_MODE=live   → siempre llama a Jev.
 // JEV_MODE=record → llama a Jev y guarda la respuesta en data/recordings (default en local).
 // JEV_MODE=replay → usa la grabación si existe; si no, llama en vivo (default en Vercel).
+// JEV_MODE=replay-only → solo grabaciones; si falta una, falla (CI: nunca gasta crédito ni necesita clave).
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -27,9 +28,9 @@ function keyFor(state: string, questions: QuestionDef[]) {
   return createHash('sha256').update(JSON.stringify({ state, questions })).digest('hex').slice(0, 16);
 }
 
-function mode(): 'live' | 'record' | 'replay' {
+function mode(): 'live' | 'record' | 'replay' | 'replay-only' {
   const m = process.env.JEV_MODE;
-  if (m === 'live' || m === 'record' || m === 'replay') return m;
+  if (m === 'live' || m === 'record' || m === 'replay' || m === 'replay-only') return m;
   return process.env.VERCEL ? 'replay' : 'record';
 }
 
@@ -42,10 +43,12 @@ export async function askJev(state: string, questions: QuestionDef[] = QUESTIONS
   const file = recordingPath(state, questions);
   const m = mode();
 
-  if (m === 'replay' && existsSync(file)) {
+  if ((m === 'replay' || m === 'replay-only') && existsSync(file)) {
     const rec = JSON.parse(readFileSync(file, 'utf8'));
     return { ...rec, answers: normalize(rec.raw), source: 'replay' };
   }
+
+  if (m === 'replay-only') throw new Error(`Sin grabación para este estado (${path.basename(file)}) y JEV_MODE=replay-only.`);
 
   const t0 = Date.now();
   const raw = await withRetry(() =>

@@ -1,0 +1,427 @@
+{
+  "set": "tuning",
+  "n": 100,
+  "precision": {
+    "accion": 0.86,
+    "programa": 0.96,
+    "programaEvaluables": 100,
+    "empresa": 0.98
+  },
+  "errores": {
+    "total": 14,
+    "terminanEnPersona": 14,
+    "pctEnPersona": 1,
+    "caros": 0
+  },
+  "porTipo": {
+    "arquetipo": {
+      "n": 100,
+      "accion": 0.86,
+      "caros": 0
+    }
+  },
+  "calibracion": [
+    {
+      "tramo": "0–50 %",
+      "n": 0,
+      "acierto": null
+    },
+    {
+      "tramo": "50–60 %",
+      "n": 4,
+      "acierto": 1
+    },
+    {
+      "tramo": "60–70 %",
+      "n": 11,
+      "acierto": 1
+    },
+    {
+      "tramo": "70–80 %",
+      "n": 12,
+      "acierto": 0.6666666666666666
+    },
+    {
+      "tramo": "80–90 %",
+      "n": 20,
+      "acierto": 1
+    },
+    {
+      "tramo": "90–100 %",
+      "n": 53,
+      "acierto": 1
+    }
+  ],
+  "recuperados": {
+    "recuperados": 61,
+    "descartadosPorLaRegla": 72
+  },
+  "regla": {
+    "entrevista": 18,
+    "entrevistaIndebida": 0
+  },
+  "costo": {
+    "porDecisionUsd": 0.00005280996,
+    "por1000Usd": 0.05280996
+  },
+  "latenciaMs": {
+    "media": 221,
+    "p95": 290
+  },
+  "fuentes": {
+    "replay": 100,
+    "live": 0
+  },
+  "detalleErrores": [
+    {
+      "id": "L008",
+      "tipo": "arquetipo",
+      "arquetipo": "solo_luma",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.29,
+      "programa": {
+        "value": "ai_executives",
+        "p": 0.74,
+        "dist": {
+          "inmersivo": 0.21,
+          "ai_executives": 0.74,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0.04
+        }
+      },
+      "equipo": 0.32
+    },
+    {
+      "id": "L016",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.42,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.61,
+        "dist": {
+          "inmersivo": 0.28,
+          "ai_executives": 0.04,
+          "ai_developers": 0,
+          "ai_sales": 0.61,
+          "sales_machine": 0.05,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.33
+    },
+    {
+      "id": "L039",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.44,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.55,
+        "dist": {
+          "inmersivo": 0.31,
+          "ai_executives": 0.02,
+          "ai_developers": 0,
+          "ai_sales": 0.55,
+          "sales_machine": 0.11,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.27
+    },
+    {
+      "id": "L049",
+      "tipo": "arquetipo",
+      "arquetipo": "solo_luma",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.29,
+      "programa": {
+        "value": "ai_executives",
+        "p": 0.74,
+        "dist": {
+          "inmersivo": 0.22,
+          "ai_executives": 0.74,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0.03
+        }
+      },
+      "equipo": 0.31
+    },
+    {
+      "id": "L054",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.4,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.6,
+        "dist": {
+          "inmersivo": 0.26,
+          "ai_executives": 0.03,
+          "ai_developers": 0,
+          "ai_sales": 0.6,
+          "sales_machine": 0.09,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.37
+    },
+    {
+      "id": "L057",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.4,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.62,
+        "dist": {
+          "inmersivo": 0.27,
+          "ai_executives": 0.02,
+          "ai_developers": 0,
+          "ai_sales": 0.62,
+          "sales_machine": 0.08,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.26
+    },
+    {
+      "id": "L064",
+      "tipo": "arquetipo",
+      "arquetipo": "solo_luma",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.27,
+      "programa": {
+        "value": "ai_executives",
+        "p": 0.71,
+        "dist": {
+          "inmersivo": 0.23,
+          "ai_executives": 0.71,
+          "ai_developers": 0,
+          "ai_sales": 0,
+          "sales_machine": 0,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.02,
+          "otro": 0.04
+        }
+      },
+      "equipo": 0.29
+    },
+    {
+      "id": "L065",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.38,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.55,
+        "dist": {
+          "inmersivo": 0.27,
+          "ai_executives": 0.06,
+          "ai_developers": 0,
+          "ai_sales": 0.55,
+          "sales_machine": 0.1,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.31
+    },
+    {
+      "id": "L067",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.39,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.64,
+        "dist": {
+          "inmersivo": 0.23,
+          "ai_executives": 0.03,
+          "ai_developers": 0,
+          "ai_sales": 0.64,
+          "sales_machine": 0.09,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.31
+    },
+    {
+      "id": "L068",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.41,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.61,
+        "dist": {
+          "inmersivo": 0.29,
+          "ai_executives": 0.03,
+          "ai_developers": 0,
+          "ai_sales": 0.61,
+          "sales_machine": 0.06,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.27
+    },
+    {
+      "id": "L076",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.41,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.63,
+        "dist": {
+          "inmersivo": 0.28,
+          "ai_executives": 0.02,
+          "ai_developers": 0,
+          "ai_sales": 0.63,
+          "sales_machine": 0.07,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.32
+    },
+    {
+      "id": "L086",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.45,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.55,
+        "dist": {
+          "inmersivo": 0.33,
+          "ai_executives": 0.04,
+          "ai_developers": 0,
+          "ai_sales": 0.55,
+          "sales_machine": 0.06,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.25
+    },
+    {
+      "id": "L098",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.43,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.57,
+        "dist": {
+          "inmersivo": 0.3,
+          "ai_executives": 0.05,
+          "ai_developers": 0,
+          "ai_sales": 0.57,
+          "sales_machine": 0.06,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0.01,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.37
+    },
+    {
+      "id": "L099",
+      "tipo": "arquetipo",
+      "arquetipo": "gerente_comercial",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.4,
+      "programa": {
+        "value": "ai_sales",
+        "p": 0.6,
+        "dist": {
+          "inmersivo": 0.27,
+          "ai_executives": 0.06,
+          "ai_developers": 0,
+          "ai_sales": 0.6,
+          "sales_machine": 0.06,
+          "growth_rockstar": 0,
+          "fundraising": 0,
+          "corporativo": 0,
+          "ninguno": 0.01,
+          "otro": 0
+        }
+      },
+      "equipo": 0.28
+    }
+  ]
+}
