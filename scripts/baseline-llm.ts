@@ -1,5 +1,5 @@
-// Línea base con un LLM general: 20 leads del set de prueba v2 con Claude Sonnet 5.5 vía AI Gateway,
-// salida estructurada con las MISMAS 7 preguntas y la MISMA decideForLead. Mide costo, latencia y
+// Línea base con un LLM general: 20 leads del set de prueba (v3) con Claude Sonnet 5.5 vía AI Gateway,
+// salida estructurada con las MISMAS preguntas (las 9 de questions.ts) y la MISMA decideForLead. Mide costo, latencia y
 // acuerdo con Jev (cuyas respuestas salen de las grabaciones, sin gastar crédito).
 // Uso: npm run baseline   → data/baseline-llm.json
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -57,7 +57,7 @@ for (const [i, lead] of sample.entries()) {
     const yes = (p: number) => ({ value: p >= 0.5, p });
     const answers: JevAnswers = {
       ready: yes(o.ready.p), program: o.program, team: yes(o.team.p), maturity: o.maturity,
-      objection: o.objection, channel: o.channel, coherent: yes(o.coherent.p),
+      objection: o.objection, channel: o.channel, coherent: yes(o.coherent.p), category: o.category, manipulation: yes(o.manipulation.p),
     };
     const d = decideForLead(lead, answers);
     const inTok = res.usage.inputTokens ?? 0;

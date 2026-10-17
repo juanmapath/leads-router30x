@@ -1,6 +1,6 @@
 // Graba la respuesta de Jev para todo lo que el demo y los evals necesitan y aún no tiene grabación:
 // los 300 leads del demo (incluye los 100 de ajuste), el set de prueba (v3; v1 y v2 quedan como histórico) y las combinaciones del simulador
-// para los leads destacados. Así el demo en Vercel (modo replay) responde sin red.
+// para los leads destacados, y los ejemplos de "Pruébalo tú". Así el demo en Vercel (modo replay) responde sin red.
 // Uso: npm run record            (solo graba lo que falta)
 //      npm run record -- --dry   (cuenta lo que falta y estima el costo, sin llamar a Jev)
 //      npm run record -- --prune (además borra grabaciones que ya no corresponden a ningún estado)
@@ -10,6 +10,7 @@ import leads from '../data/leads.json' with { type: 'json' };
 import { askJev, recordingPath } from '../src/engine/jev-client.ts';
 import { featuredLeads, simCombos, simSignals } from '../src/engine/simulator.ts';
 import { buildState } from '../src/engine/state.ts';
+import { TRY_EXAMPLES, buildTryLead } from '../src/engine/try.ts';
 import type { Lead } from '../src/engine/types.ts';
 
 process.env.JEV_MODE = 'record';
@@ -22,8 +23,10 @@ for (const l of featuredLeads(leads as Lead[])) {
   for (const combo of simCombos()) states.add(buildState({ ...l, signals: [...l.signals, ...simSignals(combo)] }));
 }
 
+for (const e of TRY_EXAMPLES) states.add(buildState(buildTryLead({ reason: e.reason })!));
+
 const missing = [...states].filter((s) => !existsSync(recordingPath(s)));
-const estTokens = missing.reduce((a, s) => a + Math.ceil(s.length / 4) + 900, 0); // ~900 tokens de preguntas
+const estTokens = missing.reduce((a, s) => a + Math.ceil(s.length / 4) + 2900, 0); // ~2.900 tokens de preguntas (catálogo de 17)
 console.log(`${states.size} estados, ${missing.length} sin grabación (~${estTokens.toLocaleString('es')} tokens, ~USD ${((estTokens / 1e6) * 0.042).toFixed(4)})`);
 
 if (!process.argv.includes('--dry')) {

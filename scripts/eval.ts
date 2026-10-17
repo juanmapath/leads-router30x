@@ -9,7 +9,7 @@ import evalSet from '../data/eval-set.json' with { type: 'json' };
 import { askJev } from '../src/engine/jev-client.ts';
 import { buildState } from '../src/engine/state.ts';
 import { decideForLead } from '../src/engine/decide.ts';
-import { isExpensiveError } from '../src/engine/eval-metrics.ts';
+import { expectedCategory, isExpensiveError } from '../src/engine/eval-metrics.ts';
 import { legacyRoute } from '../src/engine/legacy.ts';
 import type { Expected, Lead } from '../src/engine/types.ts';
 
@@ -48,6 +48,8 @@ for (const [i, lead] of set.entries()) {
     // program 'otro' en lo esperado = caso ambiguo, no evaluable para el programa.
     programOk: exp.program === 'otro' ? null : call.answers.program.value === exp.program,
     teamOk: call.answers.team.value === exp.team,
+    // Categoría (pregunta propia de Jev) y programa dentro de la categoría acertada; 'otro' esperado no es evaluable.
+    categoryOk: expectedCategory(exp.program) === null ? null : call.answers.category?.value === expectedCategory(exp.program),
   });
   process.stdout.write(`\r${i + 1}/${set.length} ${call.source}   `);
 }
@@ -74,7 +76,11 @@ const totalCost = rows.reduce((a, r) => a + r.costUsd, 0);
 const report = {
   set: setName,
   n,
-  precision: { accion: share(rows, (r) => r.actionOk), programa: share(programRows, (r) => r.programOk), programaEvaluables: programRows.length, empresa: share(rows, (r) => r.teamOk) },
+  precision: {
+    accion: share(rows, (r) => r.actionOk), programa: share(programRows, (r) => r.programOk), programaEvaluables: programRows.length,
+    categoria: share(programRows, (r) => r.categoryOk), programaDentroDeCategoria: share(programRows.filter((r) => r.categoryOk), (r) => r.programOk),
+    empresa: share(rows, (r) => r.teamOk),
+  },
   errores: { total: errors.length, terminanEnPersona: toPerson.length, pctEnPersona: share(errors, (r) => toPerson.includes(r)), caros: expensive.length },
   porTipo: Object.fromEntries(kinds.map((k) => { const xs = rows.filter((r) => r.kind === k); return [k, { n: xs.length, accion: share(xs, (r) => r.actionOk), caros: xs.filter((r) => expensive.includes(r)).length }]; })),
   calibracion: buckets,

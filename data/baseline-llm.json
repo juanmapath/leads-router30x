@@ -2,770 +2,990 @@
   "modelo": "anthropic/claude-sonnet-5.5",
   "n": 20,
   "fallidas": 0,
-  "acuerdoAccion": 0.45,
-  "acuerdoPrograma": 0.95,
+  "acuerdoAccion": 0.85,
+  "acuerdoPrograma": 1,
   "aciertoAccion": {
-    "jev": 0.85,
-    "llm": 0.45
+    "jev": 0.95,
+    "llm": 0.9
   },
   "erroresCaros": {
     "jev": 0,
-    "llm": 1
+    "llm": 0
   },
   "latenciaMs": {
     "jev": {
-      "media": 201,
-      "p95": 255
+      "media": 236,
+      "p95": 433
     },
     "llm": {
-      "media": 1685,
-      "p95": 3178
+      "media": 2111,
+      "p95": 5370
     }
   },
   "costoPor1000Usd": {
-    "jev": 0.05545050000000001,
-    "llm": 6.9511
+    "jev": 0.1260819,
+    "llm": 13.342999999999998
   },
-  "costoTotalCorridaUsd": 0.139022,
+  "costoTotalCorridaUsd": 0.26686,
   "filas": [
     {
-      "id": "PA001",
+      "id": "QA001",
       "kind": "arquetipo",
       "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
       "jev": {
         "action": "otro_programa",
         "program": {
-          "value": "fundraising",
+          "value": "ai_sales",
           "p": 0.99,
           "dist": {
-            "inmersivo": 0,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
+            "inmersion": 0.01,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
             "sales_machine": 0,
+            "ai_sales": 0.99,
+            "linkedin_sales": 0,
             "growth_rockstar": 0,
-            "fundraising": 0.99,
-            "corporativo": 0,
-            "ninguno": 0.01,
-            "otro": 0
-          }
-        },
-        "ms": 185,
-        "costUsd": 0.00005817
-      },
-      "llm": {
-        "action": "otro_programa",
-        "program": {
-          "value": "fundraising",
-          "p": 0.7
-        },
-        "ms": 3178,
-        "inputTokens": 2989,
-        "outputTokens": 117,
-        "costUsd": 0.007148
-      }
-    },
-    {
-      "id": "PA007",
-      "kind": "arquetipo",
-      "expected": "empresas",
-      "jev": {
-        "action": "empresas",
-        "program": {
-          "value": "corporativo",
-          "p": 0.77,
-          "dist": {
-            "inmersivo": 0,
-            "ai_executives": 0.23,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
             "fundraising": 0,
-            "corporativo": 0.77,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
             "ninguno": 0,
             "otro": 0
           }
         },
-        "ms": 172,
-        "costUsd": 0.000057918000000000003
+        "ms": 296,
+        "costUsd": 0.000128772
       },
       "llm": {
-        "action": "empresas",
-        "program": {
-          "value": "corporativo",
-          "p": 0.6
-        },
-        "ms": 1821,
-        "inputTokens": 2968,
-        "outputTokens": 116,
-        "costUsd": 0.007096
-      }
-    },
-    {
-      "id": "PA013",
-      "kind": "arquetipo",
-      "expected": "nurturing",
-      "jev": {
-        "action": "nurturing",
-        "program": {
-          "value": "ninguno",
-          "p": 0.85,
-          "dist": {
-            "inmersivo": 0,
-            "ai_executives": 0.05,
-            "ai_developers": 0.01,
-            "ai_sales": 0.02,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0.01,
-            "ninguno": 0.85,
-            "otro": 0.06
-          }
-        },
-        "ms": 196,
-        "costUsd": 0.00005489400000000001
-      },
-      "llm": {
-        "action": "nurturing",
-        "program": {
-          "value": "ninguno",
-          "p": 0.6
-        },
-        "ms": 1368,
-        "inputTokens": 2866,
-        "outputTokens": 115,
-        "costUsd": 0.006882
-      }
-    },
-    {
-      "id": "PA019",
-      "kind": "arquetipo",
-      "expected": "otro_programa",
-      "jev": {
         "action": "otro_programa",
         "program": {
           "value": "ai_sales",
-          "p": 0.67,
-          "dist": {
-            "inmersivo": 0.23,
-            "ai_executives": 0.01,
-            "ai_developers": 0,
-            "ai_sales": 0.67,
-            "sales_machine": 0.07,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.01,
-            "otro": 0
-          }
-        },
-        "ms": 255,
-        "costUsd": 0.000057708000000000004
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "ai_sales",
-          "p": 0.4
-        },
-        "ms": 1542,
-        "inputTokens": 2970,
-        "outputTokens": 117,
-        "costUsd": 0.00711
-      }
-    },
-    {
-      "id": "PA025",
-      "kind": "arquetipo",
-      "expected": "agenda_ya",
-      "jev": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 1,
-          "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0,
-            "otro": 0
-          }
-        },
-        "ms": 237,
-        "costUsd": 0.000055524000000000006
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.72
-        },
-        "ms": 1605,
-        "inputTokens": 2894,
-        "outputTokens": 119,
-        "costUsd": 0.006978
-      }
-    },
-    {
-      "id": "PA031",
-      "kind": "arquetipo",
-      "expected": "agenda_ya",
-      "jev": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 1,
-          "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0,
-            "otro": 0
-          }
-        },
-        "ms": 226,
-        "costUsd": 0.000055440000000000005
-      },
-      "llm": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.93
-        },
-        "ms": 1491,
-        "inputTokens": 2888,
-        "outputTokens": 120,
-        "costUsd": 0.0069759999999999996
-      }
-    },
-    {
-      "id": "PA037",
-      "kind": "arquetipo",
-      "expected": "otro_programa",
-      "jev": {
-        "action": "otro_programa",
-        "program": {
-          "value": "growth_rockstar",
-          "p": 0.9,
-          "dist": {
-            "inmersivo": 0.01,
-            "ai_executives": 0.04,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0.9,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.05,
-            "otro": 0
-          }
-        },
-        "ms": 184,
-        "costUsd": 0.00005518800000000001
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "growth_rockstar",
-          "p": 0.6
-        },
-        "ms": 1881,
-        "inputTokens": 2882,
-        "outputTokens": 119,
-        "costUsd": 0.006954
-      }
-    },
-    {
-      "id": "PA043",
-      "kind": "arquetipo",
-      "expected": "otro_programa",
-      "jev": {
-        "action": "otro_programa",
-        "program": {
-          "value": "fundraising",
-          "p": 0.97,
-          "dist": {
-            "inmersivo": 0.01,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0.97,
-            "corporativo": 0,
-            "ninguno": 0.02,
-            "otro": 0
-          }
-        },
-        "ms": 217,
-        "costUsd": 0.000058128
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "fundraising",
-          "p": 0.6
-        },
-        "ms": 1471,
-        "inputTokens": 2986,
-        "outputTokens": 117,
-        "costUsd": 0.007142
-      }
-    },
-    {
-      "id": "PA049",
-      "kind": "arquetipo",
-      "expected": "otro_programa",
-      "jev": {
-        "action": "otro_programa",
-        "program": {
-          "value": "ai_sales",
-          "p": 0.68,
-          "dist": {
-            "inmersivo": 0.2,
-            "ai_executives": 0.02,
-            "ai_developers": 0,
-            "ai_sales": 0.68,
-            "sales_machine": 0.09,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.01,
-            "otro": 0
-          }
-        },
-        "ms": 171,
-        "costUsd": 0.00005745600000000001
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "ai_sales",
-          "p": 0.4
-        },
-        "ms": 1447,
-        "inputTokens": 2969,
-        "outputTokens": 118,
-        "costUsd": 0.007117999999999999
-      }
-    },
-    {
-      "id": "PA055",
-      "kind": "arquetipo",
-      "expected": "agenda_ya",
-      "jev": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 1,
-          "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0,
-            "otro": 0
-          }
-        },
-        "ms": 168,
-        "costUsd": 0.000055566
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.72
-        },
-        "ms": 1860,
-        "inputTokens": 2895,
-        "outputTokens": 118,
-        "costUsd": 0.0069700000000000005
-      }
-    },
-    {
-      "id": "PA061",
-      "kind": "arquetipo",
-      "expected": "otro_programa",
-      "jev": {
-        "action": "otro_programa",
-        "program": {
-          "value": "growth_rockstar",
-          "p": 0.89,
-          "dist": {
-            "inmersivo": 0.01,
-            "ai_executives": 0.04,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0.89,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.06,
-            "otro": 0
-          }
-        },
-        "ms": 204,
-        "costUsd": 0.00005518800000000001
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "growth_rockstar",
-          "p": 0.6
-        },
-        "ms": 1805,
-        "inputTokens": 2879,
-        "outputTokens": 119,
-        "costUsd": 0.006948
-      }
-    },
-    {
-      "id": "PS002",
-      "kind": "contradiccion",
-      "expected": "agenda_ya",
-      "jev": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
-          "p": 1,
-          "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0,
-            "otro": 0
-          }
-        },
-        "ms": 208,
-        "costUsd": 0.000055482
-      },
-      "llm": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.82
-        },
-        "ms": 1434,
-        "inputTokens": 2881,
-        "outputTokens": 119,
-        "costUsd": 0.006952
-      }
-    },
-    {
-      "id": "PS008",
-      "kind": "contradiccion",
-      "expected": "cola_humana",
-      "jev": {
-        "action": "empresas",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.99,
-          "dist": {
-            "inmersivo": 0.99,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0.01,
-            "ninguno": 0,
-            "otro": 0
-          }
-        },
-        "ms": 232,
-        "costUsd": 0.000055776
-      },
-      "llm": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.9
-        },
-        "ms": 1466,
-        "inputTokens": 2904,
-        "outputTokens": 120,
-        "costUsd": 0.007008
-      }
-    },
-    {
-      "id": "PS014",
-      "kind": "contradiccion",
-      "expected": "cola_humana",
-      "jev": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.67,
-          "dist": {
-            "inmersivo": 0.67,
-            "ai_executives": 0.01,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0.02,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.27,
-            "otro": 0.02
-          }
-        },
-        "ms": 226,
-        "costUsd": 0.000055692
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.4
-        },
-        "ms": 1525,
-        "inputTokens": 2895,
-        "outputTokens": 118,
-        "costUsd": 0.0069700000000000005
-      }
-    },
-    {
-      "id": "PS020",
-      "kind": "basura",
-      "expected": "cola_humana",
-      "jev": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
-          "p": 1,
-          "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0,
-            "otro": 0
-          }
-        },
-        "ms": 188,
-        "costUsd": 0.000055482
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "inmersivo",
           "p": 0.8
         },
-        "ms": 1558,
-        "inputTokens": 2888,
-        "outputTokens": 118,
-        "costUsd": 0.006956
+        "ms": 3335,
+        "inputTokens": 5911,
+        "outputTokens": 149,
+        "costUsd": 0.013312
       }
     },
     {
-      "id": "PS026",
-      "kind": "basura",
-      "expected": "nurturing",
+      "id": "QA007",
+      "kind": "arquetipo",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
       "jev": {
-        "action": "nurturing",
+        "action": "otro_programa",
         "program": {
-          "value": "ninguno",
-          "p": 0.73,
+          "value": "ai_sales",
+          "p": 0.99,
           "dist": {
-            "inmersivo": 0.01,
-            "ai_executives": 0.1,
-            "ai_developers": 0.01,
-            "ai_sales": 0.06,
-            "sales_machine": 0.01,
-            "growth_rockstar": 0.01,
-            "fundraising": 0,
-            "corporativo": 0.01,
-            "ninguno": 0.73,
-            "otro": 0.06
-          }
-        },
-        "ms": 199,
-        "costUsd": 0.00005485200000000001
-      },
-      "llm": {
-        "action": "nurturing",
-        "program": {
-          "value": "ninguno",
-          "p": 0.7
-        },
-        "ms": 1585,
-        "inputTokens": 2867,
-        "outputTokens": 115,
-        "costUsd": 0.0068839999999999995
-      }
-    },
-    {
-      "id": "PS032",
-      "kind": "origen",
-      "expected": "agenda_ya",
-      "jev": {
-        "action": "agenda_ya",
-        "program": {
-          "value": "inmersivo",
-          "p": 1,
-          "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
+            "inmersion": 0.01,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
             "sales_machine": 0,
+            "ai_sales": 0.99,
+            "linkedin_sales": 0,
             "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
             "fundraising": 0,
-            "corporativo": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
             "ninguno": 0,
             "otro": 0
           }
         },
-        "ms": 193,
-        "costUsd": 0.000055314000000000006
+        "ms": 164,
+        "costUsd": 0.000128982
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ai_sales",
+          "p": 0.8
+        },
+        "ms": 2318,
+        "inputTokens": 5921,
+        "outputTokens": 150,
+        "costUsd": 0.013342
+      }
+    },
+    {
+      "id": "QA013",
+      "kind": "arquetipo",
+      "expected": "agenda_ya",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 0.99,
+          "dist": {
+            "inmersion": 0.99,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0.01,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 278,
+        "costUsd": 0.00012705
+      },
+      "llm": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 0.75
+        },
+        "ms": 1839,
+        "inputTokens": 5841,
+        "outputTokens": 150,
+        "costUsd": 0.013182
+      }
+    },
+    {
+      "id": "QA020",
+      "kind": "arquetipo",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "sales_machine",
+          "p": 1,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 1,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 242,
+        "costUsd": 0.00012671400000000002
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "sales_machine",
+          "p": 0.8
+        },
+        "ms": 2252,
+        "inputTokens": 5825,
+        "outputTokens": 150,
+        "costUsd": 0.013149999999999998
+      }
+    },
+    {
+      "id": "QA026",
+      "kind": "arquetipo",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ai_sales",
+          "p": 0.99,
+          "dist": {
+            "inmersion": 0.01,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0.99,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 266,
+        "costUsd": 0.000128982
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ai_sales",
+          "p": 0.8
+        },
+        "ms": 1857,
+        "inputTokens": 5924,
+        "outputTokens": 150,
+        "costUsd": 0.013347999999999999
+      }
+    },
+    {
+      "id": "QA032",
+      "kind": "arquetipo",
+      "expected": "agenda_ya",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 0.99,
+          "dist": {
+            "inmersion": 0.99,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0.01,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 176,
+        "costUsd": 0.00012700800000000001
+      },
+      "llm": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 0.75
+        },
+        "ms": 1818,
+        "inputTokens": 5842,
+        "outputTokens": 150,
+        "costUsd": 0.013184
+      }
+    },
+    {
+      "id": "QA039",
+      "kind": "arquetipo",
+      "expected": "empresas",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "empresas",
+        "program": {
+          "value": "corporativos",
+          "p": 0.93,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0.02,
+            "ai_dev": 0,
+            "ops_ai": 0.05,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0.93,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 211,
+        "costUsd": 0.000129528
+      },
+      "llm": {
+        "action": "empresas",
+        "program": {
+          "value": "corporativos",
+          "p": 0.82
+        },
+        "ms": 1739,
+        "inputTokens": 5919,
+        "outputTokens": 148,
+        "costUsd": 0.013318
+      }
+    },
+    {
+      "id": "QA045",
+      "kind": "arquetipo",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ig_tiktok",
+          "p": 1,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 1,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 225,
+        "costUsd": 0.000126882
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ig_tiktok",
+          "p": 0.85
+        },
+        "ms": 1743,
+        "inputTokens": 5840,
+        "outputTokens": 151,
+        "costUsd": 0.01319
+      }
+    },
+    {
+      "id": "QA051",
+      "kind": "arquetipo",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "growth_rockstar",
+          "p": 0.99,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0.99,
+            "advanced_strategy": 0.01,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 247,
+        "costUsd": 0.000126462
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "growth_rockstar",
+          "p": 0.65
+        },
+        "ms": 1743,
+        "inputTokens": 5826,
+        "outputTokens": 150,
+        "costUsd": 0.013151999999999999
+      }
+    },
+    {
+      "id": "QA058",
+      "kind": "arquetipo",
+      "expected": "cola_humana",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "cola_humana",
+        "program": {
+          "value": "fundraising",
+          "p": 1,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 1,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 242,
+        "costUsd": 0.000121044
       },
       "llm": {
         "action": "cola_humana",
         "program": {
-          "value": "inmersivo",
-          "p": 0.72
+          "value": "fundraising",
+          "p": 0.8
         },
-        "ms": 1579,
-        "inputTokens": 2876,
-        "outputTokens": 118,
-        "costUsd": 0.006932000000000001
+        "ms": 1803,
+        "inputTokens": 5634,
+        "outputTokens": 148,
+        "costUsd": 0.012748
       }
     },
     {
-      "id": "PS038",
-      "kind": "origen",
+      "id": "QA064",
+      "kind": "arquetipo",
+      "expected": "agenda_ya",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 1,
+          "dist": {
+            "inmersion": 1,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 224,
+        "costUsd": 0.000126756
+      },
+      "llm": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 0.96
+        },
+        "ms": 1666,
+        "inputTokens": 5833,
+        "outputTokens": 149,
+        "costUsd": 0.013156
+      }
+    },
+    {
+      "id": "QS005",
+      "kind": "contradiccion",
       "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "fundraising",
+          "p": 0.8,
+          "dist": {
+            "inmersion": 0.2,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0.8,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 433,
+        "costUsd": 0.000127806
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "fundraising",
+          "p": 0.8
+        },
+        "ms": 1836,
+        "inputTokens": 5879,
+        "outputTokens": 148,
+        "costUsd": 0.013238
+      }
+    },
+    {
+      "id": "QS012",
+      "kind": "contradiccion",
+      "expected": "cola_humana",
+      "jevCaro": false,
+      "llmCaro": false,
       "jev": {
         "action": "cola_humana",
         "program": {
-          "value": "inmersivo",
-          "p": 0.55,
+          "value": "inmersion",
+          "p": 0.42,
           "dist": {
-            "inmersivo": 0.55,
-            "ai_executives": 0.05,
-            "ai_developers": 0.05,
-            "ai_sales": 0.19,
-            "sales_machine": 0.12,
+            "inmersion": 0.42,
+            "ai_exec": 0.31,
+            "ai_dev": 0.27,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
             "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
             "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.03,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 192,
+        "costUsd": 0.000124698
+      },
+      "llm": {
+        "action": "cola_humana",
+        "program": {
+          "value": "inmersion",
+          "p": 0.4
+        },
+        "ms": 1749,
+        "inputTokens": 5753,
+        "outputTokens": 149,
+        "costUsd": 0.012995999999999999
+      }
+    },
+    {
+      "id": "QS018",
+      "kind": "contradiccion",
+      "expected": "cola_humana",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "cola_humana",
+        "program": {
+          "value": "inmersion",
+          "p": 0.77,
+          "dist": {
+            "inmersion": 0.77,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0.06,
+            "ig_tiktok": 0,
+            "fundraising": 0.07,
+            "raise_your_round": 0.07,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0.01,
+            "ninguno": 0.01,
             "otro": 0.01
           }
         },
-        "ms": 168,
-        "costUsd": 0.00005497800000000001
+        "ms": 183,
+        "costUsd": 0.000126966
       },
       "llm": {
         "action": "cola_humana",
         "program": {
-          "value": "inmersivo",
-          "p": 0.4
+          "value": "inmersion",
+          "p": 0.58
         },
-        "ms": 1643,
-        "inputTokens": 2869,
-        "outputTokens": 117,
-        "costUsd": 0.006908
+        "ms": 5370,
+        "inputTokens": 5847,
+        "outputTokens": 617,
+        "costUsd": 0.017863999999999998
       }
     },
     {
-      "id": "PS044",
-      "kind": "solo_luma",
-      "expected": "nurturing",
-      "jev": {
-        "action": "nurturing",
-        "program": {
-          "value": "inmersivo",
-          "p": 0.89,
-          "dist": {
-            "inmersivo": 0.89,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
-            "sales_machine": 0,
-            "growth_rockstar": 0,
-            "fundraising": 0,
-            "corporativo": 0,
-            "ninguno": 0.07,
-            "otro": 0.04
-          }
-        },
-        "ms": 181,
-        "costUsd": 0.000049770000000000006
-      },
-      "llm": {
-        "action": "cola_humana",
-        "program": {
-          "value": "otro",
-          "p": 0.4
-        },
-        "ms": 1584,
-        "inputTokens": 2678,
-        "outputTokens": 115,
-        "costUsd": 0.006506
-      }
-    },
-    {
-      "id": "PS050",
-      "kind": "solo_luma",
+      "id": "QS024",
+      "kind": "basura",
       "expected": "cola_humana",
+      "jevCaro": false,
+      "llmCaro": false,
       "jev": {
         "action": "cola_humana",
         "program": {
-          "value": "inmersivo",
+          "value": "inmersion",
           "p": 1,
           "dist": {
-            "inmersivo": 1,
-            "ai_executives": 0,
-            "ai_developers": 0,
-            "ai_sales": 0,
+            "inmersion": 1,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
             "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
             "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
             "fundraising": 0,
-            "corporativo": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
             "ninguno": 0,
             "otro": 0
           }
         },
         "ms": 214,
-        "costUsd": 0.000050484
+        "costUsd": 0.000125286
       },
       "llm": {
         "action": "cola_humana",
         "program": {
-          "value": "inmersivo",
-          "p": 0.55
+          "value": "inmersion",
+          "p": 0.8
         },
-        "ms": 1848,
-        "inputTokens": 2702,
-        "outputTokens": 118,
-        "costUsd": 0.006584
+        "ms": 1742,
+        "inputTokens": 5779,
+        "outputTokens": 147,
+        "costUsd": 0.013028
+      }
+    },
+    {
+      "id": "QS031",
+      "kind": "origen",
+      "expected": "agenda_ya",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "agenda_ya",
+        "program": {
+          "value": "inmersion",
+          "p": 0.89,
+          "dist": {
+            "inmersion": 0.89,
+            "ai_exec": 0.01,
+            "ai_dev": 0.09,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0.01,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 302,
+        "costUsd": 0.000125076
+      },
+      "llm": {
+        "action": "cola_humana",
+        "program": {
+          "value": "inmersion",
+          "p": 0.68
+        },
+        "ms": 1732,
+        "inputTokens": 5765,
+        "outputTokens": 150,
+        "costUsd": 0.01303
+      }
+    },
+    {
+      "id": "QS037",
+      "kind": "origen",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ai_sales",
+          "p": 0.71,
+          "dist": {
+            "inmersion": 0.16,
+            "ai_exec": 0.04,
+            "ai_dev": 0.06,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0.02,
+            "ai_sales": 0.71,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0.01
+          }
+        },
+        "ms": 178,
+        "costUsd": 0.00012474
+      },
+      "llm": {
+        "action": "cola_humana",
+        "program": {
+          "value": "ai_sales",
+          "p": 0.25
+        },
+        "ms": 1978,
+        "inputTokens": 5756,
+        "outputTokens": 150,
+        "costUsd": 0.013012
+      }
+    },
+    {
+      "id": "QS043",
+      "kind": "solo_luma",
+      "expected": "empresas",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "empresas",
+        "program": {
+          "value": "corporativos",
+          "p": 1,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 1,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 186,
+        "costUsd": 0.000120456
+      },
+      "llm": {
+        "action": "empresas",
+        "program": {
+          "value": "corporativos",
+          "p": 0.85
+        },
+        "ms": 1853,
+        "inputTokens": 5597,
+        "outputTokens": 148,
+        "costUsd": 0.012674
+      }
+    },
+    {
+      "id": "QS050",
+      "kind": "solo_luma",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ai_dev",
+          "p": 1,
+          "dist": {
+            "inmersion": 0,
+            "ai_exec": 0,
+            "ai_dev": 1,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0,
+            "raise_your_round": 0,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0,
+            "otro": 0
+          }
+        },
+        "ms": 202,
+        "costUsd": 0.00012159
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "ai_dev",
+          "p": 0.9
+        },
+        "ms": 2094,
+        "inputTokens": 5639,
+        "outputTokens": 148,
+        "costUsd": 0.012758
+      }
+    },
+    {
+      "id": "QS056",
+      "kind": "razon",
+      "expected": "otro_programa",
+      "jevCaro": false,
+      "llmCaro": false,
+      "jev": {
+        "action": "otro_programa",
+        "program": {
+          "value": "raise_your_round",
+          "p": 0.95,
+          "dist": {
+            "inmersion": 0.01,
+            "ai_exec": 0,
+            "ai_dev": 0,
+            "ops_ai": 0,
+            "second_brain": 0,
+            "sales_machine": 0,
+            "ai_sales": 0,
+            "linkedin_sales": 0,
+            "growth_rockstar": 0,
+            "advanced_strategy": 0,
+            "xtreme_growth": 0,
+            "ig_tiktok": 0,
+            "fundraising": 0.03,
+            "raise_your_round": 0.95,
+            "product_rockstar": 0,
+            "corporativos": 0,
+            "multipliers": 0,
+            "ninguno": 0.01,
+            "otro": 0
+          }
+        },
+        "ms": 265,
+        "costUsd": 0.00012684000000000003
+      },
+      "llm": {
+        "action": "otro_programa",
+        "program": {
+          "value": "raise_your_round",
+          "p": 0.75
+        },
+        "ms": 1761,
+        "inputTokens": 5844,
+        "outputTokens": 149,
+        "costUsd": 0.013177999999999999
       }
     }
   ]

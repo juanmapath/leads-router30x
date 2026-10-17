@@ -3,8 +3,10 @@
   "n": 100,
   "precision": {
     "accion": 0.83,
-    "programa": 0.89,
+    "programa": 0.9,
     "programaEvaluables": 100,
+    "categoria": 0.87,
+    "programaDentroDeCategoria": 0.9425287356321839,
     "empresa": 0.99
   },
   "errores": {
@@ -24,12 +26,12 @@
     {
       "tramo": "0–50 %",
       "n": 1,
-      "acierto": 1
+      "acierto": 0
     },
     {
       "tramo": "50–60 %",
-      "n": 6,
-      "acierto": 0.3333333333333333
+      "n": 7,
+      "acierto": 0.5714285714285714
     },
     {
       "tramo": "60–70 %",
@@ -38,18 +40,18 @@
     },
     {
       "tramo": "70–80 %",
-      "n": 3,
+      "n": 2,
       "acierto": 0
     },
     {
       "tramo": "80–90 %",
-      "n": 0,
-      "acierto": null
+      "n": 2,
+      "acierto": 0.5
     },
     {
       "tramo": "90–100 %",
-      "n": 88,
-      "acierto": 0.9772727272727273
+      "n": 86,
+      "acierto": 0.9883720930232558
     }
   ],
   "recuperados": {
@@ -61,12 +63,12 @@
     "entrevistaIndebida": 5
   },
   "costo": {
-    "porDecisionUsd": 0.0001257165,
-    "por1000Usd": 0.1257165
+    "porDecisionUsd": 0.00012685050000000003,
+    "por1000Usd": 0.12685050000000003
   },
   "latenciaMs": {
-    "media": 290,
-    "p95": 365
+    "media": 257,
+    "p95": 417
   },
   "fuentes": {
     "replay": 100,
@@ -79,381 +81,7 @@
       "arquetipo": "director_growth",
       "esperado": "otro_programa",
       "obtuvo": "cola_humana",
-      "listo": 0.55,
-      "programa": {
-        "value": "inmersion",
-        "p": 0.56,
-        "dist": {
-          "inmersion": 0.56,
-          "ai_exec": 0,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0.01,
-          "advanced_strategy": 0.43,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0,
-          "otro": 0
-        }
-      },
-      "equipo": 0.23
-    },
-    {
-      "id": "L023",
-      "tipo": "arquetipo",
-      "arquetipo": "solo_luma",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.29,
-      "programa": {
-        "value": "ops_ai",
-        "p": 0.9,
-        "dist": {
-          "inmersion": 0.01,
-          "ai_exec": 0.06999999999999999,
-          "ai_dev": 0.01,
-          "ops_ai": 0.9,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0,
-          "otro": 0.01
-        }
-      },
-      "equipo": 0.31
-    },
-    {
-      "id": "L025",
-      "tipo": "arquetipo",
-      "arquetipo": "consultor_linkedin",
-      "esperado": "otro_programa",
-      "obtuvo": "cola_humana",
-      "listo": 0.84,
-      "programa": {
-        "value": "linkedin_sales",
-        "p": 0.9400000000000001,
-        "dist": {
-          "inmersion": 0.06,
-          "ai_exec": 0,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0.9400000000000001,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0,
-          "otro": 0
-        }
-      },
-      "equipo": 0.06
-    },
-    {
-      "id": "L029",
-      "tipo": "arquetipo",
-      "arquetipo": "estudiante",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.07,
-      "programa": {
-        "value": "ninguno",
-        "p": 0.47000000000000003,
-        "dist": {
-          "inmersion": 0,
-          "ai_exec": 0.02,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.45,
-          "sales_machine": 0.01,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0.01,
-          "ninguno": 0.47000000000000003,
-          "otro": 0.04
-        }
-      },
-      "equipo": 0.09
-    },
-    {
-      "id": "L030",
-      "tipo": "arquetipo",
-      "arquetipo": "director_growth",
-      "esperado": "otro_programa",
-      "obtuvo": "cola_humana",
       "listo": 0.52,
-      "programa": {
-        "value": "inmersion",
-        "p": 0.54,
-        "dist": {
-          "inmersion": 0.54,
-          "ai_exec": 0,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0.01,
-          "advanced_strategy": 0.45,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0,
-          "otro": 0
-        }
-      },
-      "equipo": 0.14
-    },
-    {
-      "id": "L032",
-      "tipo": "arquetipo",
-      "arquetipo": "solo_luma",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.29,
-      "programa": {
-        "value": "inmersion",
-        "p": 0.63,
-        "dist": {
-          "inmersion": 0.63,
-          "ai_exec": 0,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0.01,
-          "advanced_strategy": 0.01,
-          "xtreme_growth": 0.14,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0.01,
-          "ninguno": 0.05,
-          "otro": 0.15
-        }
-      },
-      "equipo": 0.28
-    },
-    {
-      "id": "L033",
-      "tipo": "arquetipo",
-      "arquetipo": "estudiante",
-      "esperado": "nurturing",
-      "obtuvo": "otro_programa",
-      "listo": 0.07,
-      "programa": {
-        "value": "second_brain",
-        "p": 0.71,
-        "dist": {
-          "inmersion": 0,
-          "ai_exec": 0.04,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.71,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0.21,
-          "otro": 0.04
-        }
-      },
-      "equipo": 0.1
-    },
-    {
-      "id": "L035",
-      "tipo": "arquetipo",
-      "arquetipo": "director_growth",
-      "esperado": "otro_programa",
-      "obtuvo": "cola_humana",
-      "listo": 0.54,
-      "programa": {
-        "value": "advanced_strategy",
-        "p": 0.56,
-        "dist": {
-          "inmersion": 0.43,
-          "ai_exec": 0,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0.01,
-          "advanced_strategy": 0.56,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0,
-          "otro": 0
-        }
-      },
-      "equipo": 0.24
-    },
-    {
-      "id": "L049",
-      "tipo": "arquetipo",
-      "arquetipo": "estudiante",
-      "esperado": "nurturing",
-      "obtuvo": "otro_programa",
-      "listo": 0.07,
-      "programa": {
-        "value": "second_brain",
-        "p": 0.78,
-        "dist": {
-          "inmersion": 0,
-          "ai_exec": 0.04,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.78,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0.14,
-          "otro": 0.04
-        }
-      },
-      "equipo": 0.1
-    },
-    {
-      "id": "L059",
-      "tipo": "arquetipo",
-      "arquetipo": "director_growth",
-      "esperado": "otro_programa",
-      "obtuvo": "cola_humana",
-      "listo": 0.54,
-      "programa": {
-        "value": "inmersion",
-        "p": 0.52,
-        "dist": {
-          "inmersion": 0.52,
-          "ai_exec": 0,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0.01,
-          "advanced_strategy": 0.47,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0,
-          "otro": 0
-        }
-      },
-      "equipo": 0.14
-    },
-    {
-      "id": "L060",
-      "tipo": "arquetipo",
-      "arquetipo": "solo_luma",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.28,
-      "programa": {
-        "value": "ops_ai",
-        "p": 0.91,
-        "dist": {
-          "inmersion": 0.01,
-          "ai_exec": 0.04,
-          "ai_dev": 0.02,
-          "ops_ai": 0.91,
-          "second_brain": 0,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0.01,
-          "otro": 0.01
-        }
-      },
-      "equipo": 0.3
-    },
-    {
-      "id": "L062",
-      "tipo": "arquetipo",
-      "arquetipo": "director_growth",
-      "esperado": "otro_programa",
-      "obtuvo": "cola_humana",
-      "listo": 0.53,
       "programa": {
         "value": "inmersion",
         "p": 0.53,
@@ -479,24 +107,24 @@
           "otro": 0
         }
       },
-      "equipo": 0.15
+      "equipo": 0.27
     },
     {
-      "id": "L069",
+      "id": "L023",
       "tipo": "arquetipo",
-      "arquetipo": "estudiante",
+      "arquetipo": "solo_luma",
       "esperado": "nurturing",
-      "obtuvo": "otro_programa",
-      "listo": 0.07,
+      "obtuvo": "cola_humana",
+      "listo": 0.28,
       "programa": {
-        "value": "second_brain",
-        "p": 0.7,
+        "value": "ops_ai",
+        "p": 0.89,
         "dist": {
-          "inmersion": 0,
-          "ai_exec": 0.03,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.7,
+          "inmersion": 0.02,
+          "ai_exec": 0.06,
+          "ai_dev": 0.02,
+          "ops_ai": 0.89,
+          "second_brain": 0,
           "sales_machine": 0,
           "ai_sales": 0,
           "linkedin_sales": 0,
@@ -509,31 +137,31 @@
           "product_rockstar": 0,
           "corporativos": 0,
           "multipliers": 0,
-          "ninguno": 0.21,
-          "otro": 0.06
+          "ninguno": 0,
+          "otro": 0.01
         }
       },
-      "equipo": 0.1
+      "equipo": 0.32
     },
     {
-      "id": "L072",
+      "id": "L025",
       "tipo": "arquetipo",
       "arquetipo": "consultor_linkedin",
       "esperado": "otro_programa",
-      "obtuvo": "agenda_ya",
+      "obtuvo": "cola_humana",
       "listo": 0.84,
       "programa": {
         "value": "linkedin_sales",
-        "p": 0.93,
+        "p": 0.95,
         "dist": {
-          "inmersion": 0.07,
+          "inmersion": 0.05,
           "ai_exec": 0,
           "ai_dev": 0,
           "ops_ai": 0,
           "second_brain": 0,
           "sales_machine": 0,
           "ai_sales": 0,
-          "linkedin_sales": 0.93,
+          "linkedin_sales": 0.95,
           "growth_rockstar": 0,
           "advanced_strategy": 0,
           "xtreme_growth": 0,
@@ -550,12 +178,386 @@
       "equipo": 0.07
     },
     {
+      "id": "L029",
+      "tipo": "arquetipo",
+      "arquetipo": "estudiante",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.07,
+      "programa": {
+        "value": "second_brain",
+        "p": 0.48,
+        "dist": {
+          "inmersion": 0,
+          "ai_exec": 0.02,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0.48,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0,
+          "advanced_strategy": 0,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0.01,
+          "ninguno": 0.44,
+          "otro": 0.05
+        }
+      },
+      "equipo": 0.09
+    },
+    {
+      "id": "L030",
+      "tipo": "arquetipo",
+      "arquetipo": "director_growth",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.52,
+      "programa": {
+        "value": "inmersion",
+        "p": 0.5700000000000001,
+        "dist": {
+          "inmersion": 0.5700000000000001,
+          "ai_exec": 0,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0.01,
+          "advanced_strategy": 0.42,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.15
+    },
+    {
+      "id": "L032",
+      "tipo": "arquetipo",
+      "arquetipo": "solo_luma",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.27,
+      "programa": {
+        "value": "inmersion",
+        "p": 0.61,
+        "dist": {
+          "inmersion": 0.61,
+          "ai_exec": 0,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0.01,
+          "advanced_strategy": 0.01,
+          "xtreme_growth": 0.12,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0.01,
+          "ninguno": 0.06,
+          "otro": 0.18
+        }
+      },
+      "equipo": 0.28
+    },
+    {
+      "id": "L033",
+      "tipo": "arquetipo",
+      "arquetipo": "estudiante",
+      "esperado": "nurturing",
+      "obtuvo": "otro_programa",
+      "listo": 0.07,
+      "programa": {
+        "value": "second_brain",
+        "p": 0.71,
+        "dist": {
+          "inmersion": 0,
+          "ai_exec": 0.05,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0.71,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0,
+          "advanced_strategy": 0,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0.21000000000000002,
+          "otro": 0.03
+        }
+      },
+      "equipo": 0.11
+    },
+    {
+      "id": "L035",
+      "tipo": "arquetipo",
+      "arquetipo": "director_growth",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.51,
+      "programa": {
+        "value": "advanced_strategy",
+        "p": 0.54,
+        "dist": {
+          "inmersion": 0.45,
+          "ai_exec": 0,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0.01,
+          "advanced_strategy": 0.54,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.25
+    },
+    {
+      "id": "L049",
+      "tipo": "arquetipo",
+      "arquetipo": "estudiante",
+      "esperado": "nurturing",
+      "obtuvo": "otro_programa",
+      "listo": 0.08,
+      "programa": {
+        "value": "second_brain",
+        "p": 0.78,
+        "dist": {
+          "inmersion": 0,
+          "ai_exec": 0.04,
+          "ai_dev": 0.01,
+          "ops_ai": 0,
+          "second_brain": 0.78,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0,
+          "advanced_strategy": 0,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0.13,
+          "otro": 0.04
+        }
+      },
+      "equipo": 0.09
+    },
+    {
+      "id": "L059",
+      "tipo": "arquetipo",
+      "arquetipo": "director_growth",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.53,
+      "programa": {
+        "value": "advanced_strategy",
+        "p": 0.51,
+        "dist": {
+          "inmersion": 0.48,
+          "ai_exec": 0,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0.01,
+          "advanced_strategy": 0.51,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.14
+    },
+    {
+      "id": "L060",
+      "tipo": "arquetipo",
+      "arquetipo": "solo_luma",
+      "esperado": "nurturing",
+      "obtuvo": "cola_humana",
+      "listo": 0.28,
+      "programa": {
+        "value": "ops_ai",
+        "p": 0.9,
+        "dist": {
+          "inmersion": 0.01,
+          "ai_exec": 0.06999999999999999,
+          "ai_dev": 0.01,
+          "ops_ai": 0.9,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0,
+          "advanced_strategy": 0,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0,
+          "otro": 0.01
+        }
+      },
+      "equipo": 0.29
+    },
+    {
+      "id": "L062",
+      "tipo": "arquetipo",
+      "arquetipo": "director_growth",
+      "esperado": "otro_programa",
+      "obtuvo": "cola_humana",
+      "listo": 0.52,
+      "programa": {
+        "value": "advanced_strategy",
+        "p": 0.51,
+        "dist": {
+          "inmersion": 0.48,
+          "ai_exec": 0,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0.01,
+          "advanced_strategy": 0.51,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.15
+    },
+    {
+      "id": "L069",
+      "tipo": "arquetipo",
+      "arquetipo": "estudiante",
+      "esperado": "nurturing",
+      "obtuvo": "otro_programa",
+      "listo": 0.07,
+      "programa": {
+        "value": "second_brain",
+        "p": 0.68,
+        "dist": {
+          "inmersion": 0,
+          "ai_exec": 0.04,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0.68,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0,
+          "growth_rockstar": 0,
+          "advanced_strategy": 0,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0.23,
+          "otro": 0.04
+        }
+      },
+      "equipo": 0.11
+    },
+    {
+      "id": "L072",
+      "tipo": "arquetipo",
+      "arquetipo": "consultor_linkedin",
+      "esperado": "otro_programa",
+      "obtuvo": "agenda_ya",
+      "listo": 0.85,
+      "programa": {
+        "value": "linkedin_sales",
+        "p": 0.92,
+        "dist": {
+          "inmersion": 0.08,
+          "ai_exec": 0,
+          "ai_dev": 0,
+          "ops_ai": 0,
+          "second_brain": 0,
+          "sales_machine": 0,
+          "ai_sales": 0,
+          "linkedin_sales": 0.92,
+          "growth_rockstar": 0,
+          "advanced_strategy": 0,
+          "xtreme_growth": 0,
+          "ig_tiktok": 0,
+          "fundraising": 0,
+          "raise_your_round": 0,
+          "product_rockstar": 0,
+          "corporativos": 0,
+          "multipliers": 0,
+          "ninguno": 0,
+          "otro": 0
+        }
+      },
+      "equipo": 0.08
+    },
+    {
       "id": "L079",
       "tipo": "arquetipo",
       "arquetipo": "consultor_linkedin",
       "esperado": "otro_programa",
       "obtuvo": "cola_humana",
-      "listo": 0.82,
+      "listo": 0.84,
       "programa": {
         "value": "linkedin_sales",
         "p": 0.97,
@@ -592,10 +594,10 @@
       "listo": 0.06,
       "programa": {
         "value": "ninguno",
-        "p": 0.52,
+        "p": 0.54,
         "dist": {
           "inmersion": 0,
-          "ai_exec": 0.03,
+          "ai_exec": 0.02,
           "ai_dev": 0,
           "ops_ai": 0,
           "second_brain": 0.39,
@@ -611,11 +613,11 @@
           "product_rockstar": 0,
           "corporativos": 0,
           "multipliers": 0.01,
-          "ninguno": 0.52,
-          "otro": 0.05
+          "ninguno": 0.54,
+          "otro": 0.03
         }
       },
-      "equipo": 0.11
+      "equipo": 0.1
     },
     {
       "id": "L093",
@@ -623,12 +625,12 @@
       "arquetipo": "solo_luma",
       "esperado": "nurturing",
       "obtuvo": "cola_humana",
-      "listo": 0.28,
+      "listo": 0.29,
       "programa": {
         "value": "inmersion",
-        "p": 0.61,
+        "p": 0.59,
         "dist": {
-          "inmersion": 0.61,
+          "inmersion": 0.59,
           "ai_exec": 0,
           "ai_dev": 0,
           "ops_ai": 0,
@@ -636,20 +638,20 @@
           "sales_machine": 0,
           "ai_sales": 0,
           "linkedin_sales": 0,
-          "growth_rockstar": 0.01,
+          "growth_rockstar": 0,
           "advanced_strategy": 0.01,
-          "xtreme_growth": 0.1,
+          "xtreme_growth": 0.14,
           "ig_tiktok": 0,
           "fundraising": 0,
           "raise_your_round": 0,
           "product_rockstar": 0,
           "corporativos": 0,
-          "multipliers": 0,
-          "ninguno": 0.07,
-          "otro": 0.2
+          "multipliers": 0.01,
+          "ninguno": 0.06,
+          "otro": 0.19
         }
       },
-      "equipo": 0.29
+      "equipo": 0.3
     }
   ]
 }

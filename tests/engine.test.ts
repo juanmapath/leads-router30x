@@ -326,3 +326,31 @@ test('manipulación: si el texto intenta instruir al sistema, el lead va a una p
   assert.deepEqual(raw.manipulation, { value: true, p: 0.7 });
   assert.ok((toSdkQuestions() as Record<string, unknown>).manipulation, 'va en la misma llamada');
 });
+
+// Cobertura de grabaciones (CI): el demo en Vercel solo reproduce. Si falta una grabación de la semana, del
+// simulador o de los ejemplos de "Pruébalo tú", el demo mostraría casos falsos "a persona" o pantallas rotas.
+test('cobertura: la semana, el simulador y los ejemplos de "Pruébalo tú" tienen grabación', async () => {
+  const { hasRecording } = await import('../src/engine/jev-client.ts');
+  const { featuredLeads, simCombos, simSignals } = await import('../src/engine/simulator.ts');
+  const { TRY_EXAMPLES, buildTryLead } = await import('../src/engine/try.ts');
+  const states = [
+    ...leads.map((l) => [l.id, buildState(l)]),
+    ...featuredLeads(leads).flatMap((l) => simCombos().map((c) => [`${l.id}+${c.join('+')}`, buildState({ ...l, signals: [...l.signals, ...simSignals(c)] })])),
+    ...TRY_EXAMPLES.map((e) => [`try:${e.label}`, buildState(buildTryLead({ reason: e.reason })!)]),
+  ];
+  const missing = states.filter(([, s]) => !hasRecording(s)).map(([id]) => id);
+  assert.deepEqual(missing.slice(0, 5), [], `${missing.length} estados sin grabación: corre npm run record`);
+});
+
+test('semana: si falta una grabación falla, nunca la convierte en cola humana', async () => {
+  const { buildWeek } = await import('../src/engine/week.ts');
+  assert.throws(() => buildWeek(leads.slice(0, 3), () => null), /Faltan 3 grabaciones/);
+});
+
+test('eval: categoría esperada sale del programa esperado ("ninguno" → ninguna; "otro" no es evaluable)', async () => {
+  const { expectedCategory } = await import('../src/engine/eval-metrics.ts');
+  assert.equal(expectedCategory('ops_ai'), 'ia');
+  assert.equal(expectedCategory('raise_your_round'), 'startups');
+  assert.equal(expectedCategory('ninguno'), 'ninguna');
+  assert.equal(expectedCategory('otro'), null);
+});

@@ -6,11 +6,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "tsx scripts/build-week.ts",
     "build": "next build",
     "start": "next start",
     "test": "tsx --test tests/engine.test.ts",
     "gen": "tsx scripts/generate-leads.ts",
     "gen:test": "tsx scripts/generate-test-set.ts",
+    "week": "tsx scripts/build-week.ts",
     "ping": "tsx --env-file=.env.local scripts/jev-ping.ts",
     "eval": "tsx --env-file=.env.local scripts/eval.ts",
     "eval:gate": "tsx scripts/eval.ts --set test --gate",
