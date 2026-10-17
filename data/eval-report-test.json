@@ -11,7 +11,7 @@
     "total": 24,
     "terminanEnPersona": 20,
     "pctEnPersona": 0.8333333333333334,
-    "caros": 1
+    "caros": 0
   },
   "porTipo": {
     "arquetipo": {
@@ -22,7 +22,7 @@
     "contradiccion": {
       "n": 18,
       "accion": 0.8333333333333334,
-      "caros": 1
+      "caros": 0
     },
     "basura": {
       "n": 11,

@@ -7,6 +7,7 @@ import { Output, generateText } from 'ai';
 import { z } from 'zod';
 import { askJev } from '../src/engine/jev-client.ts';
 import { decideForLead } from '../src/engine/decide.ts';
+import { isExpensiveError } from '../src/engine/eval-metrics.ts';
 import { QUESTIONS } from '../src/engine/questions.ts';
 import { buildState } from '../src/engine/state.ts';
 import type { Expected, JevAnswers, Lead } from '../src/engine/types.ts';
@@ -63,6 +64,7 @@ for (const [i, lead] of sample.entries()) {
     const outTok = res.usage.outputTokens ?? 0;
     rows.push({
       id: lead.id, kind: t.expected[lead.id].kind, expected: t.expected[lead.id].action,
+      jevCaro: isExpensiveError(t.expected[lead.id], jevDecision), llmCaro: isExpensiveError(t.expected[lead.id], d),
       jev: { action: jevDecision.action, program: jev.answers.program, ms: jev.ms, costUsd: jev.costUsd },
       llm: { action: d.action, program: answers.program, ms, inputTokens: inTok, outputTokens: outTok, costUsd: inTok * PRICE.input + outTok * PRICE.output },
     });
@@ -82,7 +84,7 @@ const report = {
   acuerdoAccion: ok.filter((r) => r.jev.action === r.llm.action).length / (ok.length || 1),
   acuerdoPrograma: ok.filter((r) => r.jev.program.value === r.llm.program.value).length / (ok.length || 1),
   aciertoAccion: { jev: ok.filter((r) => r.jev.action === r.expected).length / (ok.length || 1), llm: ok.filter((r) => r.llm.action === r.expected).length / (ok.length || 1) },
-  erroresCaros: { jev: ok.filter((r) => r.jev.action === 'agenda_ya' && r.expected !== 'agenda_ya').length, llm: ok.filter((r) => r.llm.action === 'agenda_ya' && r.expected !== 'agenda_ya').length },
+  erroresCaros: { jev: ok.filter((r) => r.jevCaro).length, llm: ok.filter((r) => r.llmCaro).length },
   latenciaMs: { jev: { media: Math.round(mean(ok.map((r) => r.jev.ms))), p95: p95(ok.map((r) => r.jev.ms)) }, llm: { media: Math.round(mean(ok.map((r) => r.llm.ms))), p95: p95(ok.map((r) => r.llm.ms)) } },
   costoPor1000Usd: { jev: mean(ok.map((r) => r.jev.costUsd)) * 1000, llm: mean(ok.map((r) => r.llm.costUsd)) * 1000 },
   costoTotalCorridaUsd: ok.reduce((a, r) => a + r.llm.costUsd, 0),

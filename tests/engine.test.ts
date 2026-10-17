@@ -7,7 +7,7 @@ import { decide, decideForLead } from '../src/engine/decide.ts';
 import { normalize, toSdkQuestions } from '../src/engine/jev.ts';
 import { buildState } from '../src/engine/state.ts';
 import { CATEGORY_IDS, PROGRAM_IDS } from '../src/engine/programs.ts';
-import type { JevAnswers, Lead } from '../src/engine/types.ts';
+import type { JevAnswers, Lead, ProgramId } from '../src/engine/types.ts';
 
 const leads: Lead[] = JSON.parse(readFileSync('data/leads.json', 'utf8'));
 
@@ -295,4 +295,20 @@ test('set de prueba v3: ningún lead idéntico al v1 ni al v2', () => {
   const seen = new Set(['data/test-set-v1.json', 'data/test-set-v2.json'].flatMap((f) => (JSON.parse(readFileSync(f, 'utf8')) as { leads: Lead[] }).leads.map(buildState)));
   const v3: { leads: Lead[] } = JSON.parse(readFileSync('data/test-set.json', 'utf8'));
   assert.deepEqual(v3.leads.filter((l) => seen.has(buildState(l))).map((l) => l.id), []);
+});
+
+// Definición acordada (sáb 17 oct): error caro = agenda_ya cuando lo esperado era cola_humana o nurturing,
+// o agenda_ya con un programa de otra categoría que el esperado. Aplica a todos los sets y a la puerta de CI.
+test('error caro: agenda_ya indebido para una persona/nurturing o con un programa de otra categoría', async () => {
+  const { isExpensiveError } = await import('../src/engine/eval-metrics.ts');
+  const agenda = (program: ProgramId) => ({ action: 'agenda_ya' as const, program });
+  assert.equal(isExpensiveError({ action: 'cola_humana', program: 'otro', team: false }, agenda('inmersion')), true);
+  assert.equal(isExpensiveError({ action: 'nurturing', program: 'ninguno', team: false }, agenda('inmersion')), true);
+  assert.equal(isExpensiveError({ action: 'otro_programa', program: 'ai_sales', team: false }, agenda('inmersion')), true);
+  assert.equal(isExpensiveError({ action: 'empresas', program: 'corporativos', team: true }, agenda('inmersion')), true);
+  // Mismo programa (o misma categoría) por otro canal: error de canal, no caro (p. ej. QS005, L072).
+  assert.equal(isExpensiveError({ action: 'otro_programa', program: 'fundraising', team: false }, agenda('fundraising')), false);
+  assert.equal(isExpensiveError({ action: 'otro_programa', program: 'linkedin_sales', team: false }, agenda('linkedin_sales')), false);
+  assert.equal(isExpensiveError({ action: 'agenda_ya', program: 'inmersion', team: false }, agenda('inmersion')), false);
+  assert.equal(isExpensiveError({ action: 'cola_humana', program: 'otro', team: false }, { action: 'otro_programa', program: 'ai_sales' }), false);
 });

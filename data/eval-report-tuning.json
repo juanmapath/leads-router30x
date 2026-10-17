@@ -11,13 +11,13 @@
     "total": 17,
     "terminanEnPersona": 13,
     "pctEnPersona": 0.7647058823529411,
-    "caros": 1
+    "caros": 0
   },
   "porTipo": {
     "arquetipo": {
       "n": 100,
       "accion": 0.83,
-      "caros": 1
+      "caros": 0
     }
   },
   "calibracion": [

@@ -9,6 +9,7 @@ import evalSet from '../data/eval-set.json' with { type: 'json' };
 import { askJev } from '../src/engine/jev-client.ts';
 import { buildState } from '../src/engine/state.ts';
 import { decideForLead } from '../src/engine/decide.ts';
+import { isExpensiveError } from '../src/engine/eval-metrics.ts';
 import { legacyRoute } from '../src/engine/legacy.ts';
 import type { Expected, Lead } from '../src/engine/types.ts';
 
@@ -55,8 +56,8 @@ const n = rows.length;
 const share = (xs: any[], f: (r: any) => boolean) => (xs.length ? xs.filter(f).length / xs.length : null);
 const programRows = rows.filter((r) => r.programOk !== null);
 const errors = rows.filter((r) => !r.actionOk);
-// Error caro: Jev manda a agendar ya a alguien que no debía (le quita tiempo a un vendedor).
-const expensive = errors.filter((r) => r.decision.action === 'agenda_ya');
+// Error caro (definición acordada, ver isExpensiveError): agenda_ya para quien debía ir a una persona o a nurturing, o con un programa de otra categoría.
+const expensive = errors.filter((r) => isExpensiveError(r.expected, r.decision));
 // Error seguro: el lead termina frente a una persona (cola humana o área de empresas, que es un vendedor).
 const toPerson = errors.filter((r) => r.decision.needsHuman || r.decision.action === 'empresas');
 
@@ -89,7 +90,7 @@ if (gate) {
   const accion = report.precision.accion ?? 0;
   console.log(`\nPuerta (${setName}): acción ${(accion * 100).toFixed(1)} % (piso ${(FLOOR * 100).toFixed(0)} %), errores caros ${expensive.length} (máx. 0)`);
   if (accion < FLOOR || expensive.length > 0) {
-    for (const r of expensive) console.error(`Error caro: ${r.id} (${r.expected.note ?? r.archetype}) esperado ${r.expected.action}, obtuvo agenda_ya`);
+    for (const r of expensive) console.error(`Error caro: ${r.id} (${r.expected.note ?? r.archetype}) esperado ${r.expected.action}, obtuvo agenda_ya ${r.decision.program}`);
     process.exit(1);
   }
 } else {

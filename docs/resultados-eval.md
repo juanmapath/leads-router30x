@@ -1,5 +1,7 @@
 # Resultados de las pruebas con Jev (vie 16 oct. 2026)
 
+> **Definición de "error caro" (acordada el sáb 17 oct., aplica a todos los sets y a la puerta de CI):** `agenda_ya` cuando lo esperado era `cola_humana` o `nurturing`, o `agenda_ya` con un programa de **otra categoría** que el esperado. Agendar el programa correcto (o uno de su misma categoría) cuando se esperaba ofrecerlo por WhatsApp (`otro_programa`) es un error de canal, no caro. Código: `src/engine/eval-metrics.ts` (`isExpensiveError`). Con esta definición, QS005 (prueba v3) y L072 (ajuste), que agendaban el programa correcto, dejan de contar como caros; ambos sets quedan en 0. Antes, todo `agenda_ya` indebido contaba como caro. La reescritura completa de este documento llega con la regrabación del sábado.
+
 Primera conexión real a Jev (`typesafe-ai/jev` vía Vercel AI Gateway) y primera evaluación sobre los 100 leads sintéticos etiquetados. Commit: `0ac4652`. Fuente de los números: `data/eval-report.json` y las grabaciones de `data/recordings/`.
 
 ## Resumen
