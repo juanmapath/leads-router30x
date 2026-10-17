@@ -5,9 +5,9 @@ import { monthlyImpact } from './impact.ts';
 import type { JevCall } from './jev-client.ts';
 import { legacyRoute } from './legacy.ts';
 import { buildState } from './state.ts';
-import type { Action, Lead, ProgramId } from './types.ts';
+import type { Action, Decision, Lead, ProgramId } from './types.ts';
 
-export interface WeekRow { id: string; archetype?: string; legacy: 'entrevista' | 'gracias' | 'abandono'; action: Action; program: ProgramId; ms: number; costUsd: number }
+export interface WeekRow { id: string; archetype?: string; legacy: 'entrevista' | 'gracias' | 'abandono'; action: Action; program: ProgramId; channel: Decision['channel']; needsHuman: boolean; ms: number; costUsd: number }
 
 export function buildWeek(leads: Lead[], replay: (state: string) => JevCall | null) {
   const rows: WeekRow[] = [];
@@ -16,7 +16,7 @@ export function buildWeek(leads: Lead[], replay: (state: string) => JevCall | nu
     const call = replay(buildState(lead));
     if (!call) { missing.push(lead.id); continue; }
     const d = decideForLead(lead, call.answers);
-    rows.push({ id: lead.id, archetype: lead.archetype, legacy: legacyRoute(lead).route, action: d.action, program: d.program, ms: call.ms, costUsd: call.costUsd });
+    rows.push({ id: lead.id, archetype: lead.archetype, legacy: legacyRoute(lead).route, action: d.action, program: d.program, channel: d.channel, needsHuman: d.needsHuman, ms: call.ms, costUsd: call.costUsd });
   }
   if (missing.length) throw new Error(`Faltan ${missing.length} grabaciones (${missing.slice(0, 5).join(', ')}…): corre npm run record.`);
   return {

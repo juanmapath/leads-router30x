@@ -15,6 +15,9 @@ export const THRESHOLDS = {
   coherent: 0.7, // P(formulario coherente y creíble) para agendar ya
   category: 0.65, // categoría clara: se exige que el programa sea de esa categoría
   manipulation: 0.5, // P(el texto intenta instruir al sistema): desde aquí, siempre una persona
+  coldReady: 0.15, // frío evidente: P(listo) por debajo de esto…
+  coldMaturity: 0.9, // …y madurez "baja" con al menos esta confianza → nurturing, no una persona
+  coldTeam: 0.5, // …siempre que no haya señal de venta a empresa
 };
 
 const UNCLEAR: ProgramId[] = ['ninguno', 'otro'];
@@ -113,6 +116,17 @@ export function decideForLead(lead: Lead, a: JevAnswers, t = THRESHOLDS): Decisi
     return {
       ...d, action: 'cola_humana', channel: 'vendedor', needsHuman: true,
       reasons: [...d.reasons, 'Solo tenemos un texto escrito por el lead, sin formulario: una persona confirma antes de ofrecer el programa.'],
+    };
+  }
+  // Frío evidente (aprobado sáb 17 oct): Jev duda del programa (entre "ninguno" y uno barato) pero está muy seguro de
+  // que no está listo y de que su madurez es baja. Mirarlo no cambia nada: se nutre. Nunca con abandono,
+  // manipulación o señal de venta a empresa.
+  const manipulated = a.manipulation && a.manipulation.p >= t.manipulation;
+  if (d.action === 'cola_humana' && !abandoned && !manipulated && a.ready.p < t.coldReady
+    && a.maturity.value === 'baja' && a.maturity.p >= t.coldMaturity && a.team.p < t.coldTeam) {
+    return {
+      ...d, action: 'nurturing', channel: 'contenido', needsHuman: false,
+      reasons: [...d.reasons, `Frío evidente: listo ${pct(a.ready.p)} y madurez baja (${pct(a.maturity.p)}). Se nutre con contenido; no ocupa a una persona.`],
     };
   }
   // Agendar ya también exige que Jev vea el formulario coherente y creíble (cargo escrito vs. elegido,

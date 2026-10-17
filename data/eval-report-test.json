@@ -2,7 +2,7 @@
   "set": "test",
   "n": 127,
   "precision": {
-    "accion": 0.8031496062992126,
+    "accion": 0.8346456692913385,
     "programa": 0.8627450980392157,
     "programaEvaluables": 102,
     "categoria": 0.8235294117647058,
@@ -10,15 +10,15 @@
     "empresa": 0.968503937007874
   },
   "errores": {
-    "total": 25,
-    "terminanEnPersona": 19,
-    "pctEnPersona": 0.76,
+    "total": 21,
+    "terminanEnPersona": 15,
+    "pctEnPersona": 0.7142857142857143,
     "caros": 0
   },
   "porTipo": {
     "arquetipo": {
       "n": 65,
-      "accion": 0.8615384615384616,
+      "accion": 0.8923076923076924,
       "caros": 0
     },
     "contradiccion": {
@@ -28,7 +28,7 @@
     },
     "basura": {
       "n": 11,
-      "accion": 0.5454545454545454,
+      "accion": 0.7272727272727273,
       "caros": 0
     },
     "origen": {
@@ -271,40 +271,6 @@
       "equipo": 0.27
     },
     {
-      "id": "QA033",
-      "tipo": "arquetipo",
-      "arquetipo": "estudiante",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.07,
-      "programa": {
-        "value": "ninguno",
-        "p": 0.53,
-        "dist": {
-          "inmersion": 0,
-          "ai_exec": 0.02,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.4,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0.01,
-          "ninguno": 0.53,
-          "otro": 0.04
-        }
-      },
-      "equipo": 0.1
-    },
-    {
       "id": "QA046",
       "tipo": "arquetipo",
       "arquetipo": "director_growth",
@@ -371,40 +337,6 @@
         }
       },
       "equipo": 0.15
-    },
-    {
-      "id": "QA063",
-      "tipo": "arquetipo",
-      "arquetipo": "estudiante",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.07,
-      "programa": {
-        "value": "second_brain",
-        "p": 0.5,
-        "dist": {
-          "inmersion": 0.01,
-          "ai_exec": 0.03,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.5,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0.01,
-          "ninguno": 0.42,
-          "otro": 0.03
-        }
-      },
-      "equipo": 0.1
     },
     {
       "id": "QS002",
@@ -545,76 +477,6 @@
         }
       },
       "equipo": 0.09
-    },
-    {
-      "id": "QS021",
-      "tipo": "basura",
-      "arquetipo": "sucio_basura",
-      "nota": "Cargo \"no sé\"",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.08,
-      "programa": {
-        "value": "ninguno",
-        "p": 0.55,
-        "dist": {
-          "inmersion": 0.01,
-          "ai_exec": 0.01,
-          "ai_dev": 0,
-          "ops_ai": 0.04,
-          "second_brain": 0.01,
-          "sales_machine": 0.02,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0.01,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0.02,
-          "multipliers": 0.12,
-          "ninguno": 0.55,
-          "otro": 0.2
-        }
-      },
-      "equipo": 0.19
-    },
-    {
-      "id": "QS025",
-      "tipo": "basura",
-      "arquetipo": "sucio_basura",
-      "nota": "Cargo \"jajaja\" por video para estudiantes",
-      "esperado": "nurturing",
-      "obtuvo": "cola_humana",
-      "listo": 0.06,
-      "programa": {
-        "value": "ninguno",
-        "p": 0.46,
-        "dist": {
-          "inmersion": 0,
-          "ai_exec": 0.05,
-          "ai_dev": 0,
-          "ops_ai": 0,
-          "second_brain": 0.4,
-          "sales_machine": 0,
-          "ai_sales": 0,
-          "linkedin_sales": 0,
-          "growth_rockstar": 0,
-          "advanced_strategy": 0,
-          "xtreme_growth": 0,
-          "ig_tiktok": 0,
-          "fundraising": 0,
-          "raise_your_round": 0,
-          "product_rockstar": 0,
-          "corporativos": 0,
-          "multipliers": 0.01,
-          "ninguno": 0.46,
-          "otro": 0.07
-        }
-      },
-      "equipo": 0.12
     },
     {
       "id": "QS027",

@@ -6,12 +6,12 @@ Jev (`typesafe-ai/jev` vía Vercel AI Gateway) responde en **una sola llamada** 
 
 | Métrica | Resultado |
 | --- | --- |
-| Acción correcta | **80,3 %** (perfiles típicos 86 %; casos sucios 55–91 %, ver abajo) |
+| Acción correcta | **83,5 %** (80,3 % antes de la regla de frío evidente; perfiles típicos 89 %; casos sucios 60–91 %, ver abajo) |
 | Programa correcto (17 programas) | **86,3 %** sobre 102 casos evaluables |
 | Categoría correcta | **82,4 %** · programa correcto dentro de la categoría acertada: **92,9 %** |
 | Venta a empresa (equipo) correcta | 97 % |
 | Errores caros (definición abajo) | **0** · la regla actual de 30X manda a entrevista a 27 personas que no debía |
-| Errores que terminan frente a una persona | 19 de 25 (**76 %**); los otros 6 son nurturing o una acción distinta a la esperada |
+| Errores que terminan frente a una persona | 13 de 21 (**62 %**); los otros 8 son nurturing o una acción distinta a la esperada. Antes de la regla de frío evidente: 19 de 25 (76 %): los 4 errores que la regla corrige eran nurturing esperado que iba a una persona |
 | Recuperados frente a la regla actual | 64 de los 70 que la regla descarta y sí tienen un camino comercial |
 | Costo | ~3.000 tokens por lead → **USD 0,13 por 1.000 decisiones** |
 | Latencia | **239 ms** de media, 333 ms en el 5 % más lento |
@@ -21,9 +21,9 @@ Jev (`typesafe-ai/jev` vía Vercel AI Gateway) responde en **una sola llamada** 
 
 | Tipo | n | Acción |
 | --- | --- | --- |
-| Arquetipos (16 perfiles típicos, otra semilla) | 65 | 86,2 % |
+| Arquetipos (16 perfiles típicos, otra semilla) | 65 | 89,2 % |
 | Contradicciones (formulario vs. cargo escrito, WhatsApp que desmiente) | 18 | 77,8 % |
-| Basura ("asdf", cargo "yo") | 11 | 54,5 % |
+| Basura ("asdf", cargo "yo") | 11 | 72,7 % |
 | Contenido de origen que no cuadra | 10 | 60,0 % |
 | Solo Luma (sin formulario) | 11 | 90,9 % |
 | Razón o desafío (contradice, inyecta o define el programa) | 12 | 83,3 % |
@@ -80,6 +80,7 @@ La línea base anterior (sáb en la mañana, set v2 con 8 programas: Jev 85 % fr
 - `agenda_ya` exige evidencia del formulario (cargo de decisor, inversión posible, envío completo) y coherencia ≥ 0,7.
 - Solo Luma con una sola señal: nunca `otro_programa` sin que lo confirme una persona.
 - Abandono del formulario: nunca nurturing; contacto rápido.
+- Frío evidente (aprobado sáb 17 oct, 11:00): si iba a una persona, P(listo) < 0,15, madurez "baja" ≥ 0,9 y P(empresa) < 0,5, va a nurturing (nunca con abandono ni manipulación). Motivo: en la semana del demo, Jev duda entre "ninguno" y Second Brain (~0,5) con estudiantes y curiosos, pero está seguro de que no están listos; mirarlos no cambia nada. Se diseñó con la semana del demo y se midió una vez en v3: acción 80,3 → 83,5 %, 4 casos cambian (los 4 a lo esperado), 0 errores caros.
 - Categoría clara y programa poco claro: una persona elige entre los programas de esa categoría.
 - Umbrales por costo del error: agenda (programa ≥ 0,70 y P(listo) ≥ 0,75), otro programa ≥ 0,65 y, bajo 0,60, siempre una persona.
 

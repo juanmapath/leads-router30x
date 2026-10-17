@@ -63,6 +63,6 @@ Requiere `.env.local` con `AI_GATEWAY_API_KEY` (Vercel AI Gateway). **Nunca** co
 Hecho y desplegado (CI verde, demo en https://leads-router30x.vercel.app/, repo juanmapath/leads-router30x): motor con 9 preguntas y catálogo de 17 programas,
 reglas en código (agenda exige formulario y coherencia; solo Luma; abandonos; manipulación → persona), set de prueba v3 (127 leads, otra semilla + casos sucios),
 puerta de eval en CI (piso 76 %, cero errores caros), cobertura de grabaciones en CI, semana precalculada, límite de llamadas en vivo.
-Set de prueba v3 (números del pitch): acción 80,3 %, programa 86,3 %, categoría 82,4 %, 0 errores caros, 76 % de los errores en una persona; ~USD 0,13 por 1.000; 239 ms.
+Set de prueba v3 (números del pitch): acción 83,5 % (con la regla de frío evidente), programa 86,3 %, categoría 82,4 %, 0 errores caros, 62 % de los errores en una persona; ~USD 0,13 por 1.000; 239 ms.
 Línea base (20 leads): Jev 19/20, Sonnet 5.5 18/20; Jev ~100× más barato y ~9× más rápido. Detalle: `docs/resultados-eval.md`.
 Siguiente: UI en el orden P0 → P1 → P2 de `docs/ui-plan.md`; luego playbook, README, video y entrega.

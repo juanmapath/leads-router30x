@@ -184,6 +184,30 @@ test('abandonos: un envío parcial nunca va a nurturing en silencio, va a contac
   assert.notEqual(decideForLead(parcial, { ...tibio, program: { value: 'ninguno', p: 0.9 }, ready: { value: false, p: 0.05 } }).action, 'nurturing');
 });
 
+// Frío evidente (aprobado sáb 17 oct): Jev duda entre "ninguno" y un programa barato (~0,5), pero está muy seguro de
+// que no está listo y de que su madurez es baja. Ese caso no le cuesta tiempo a una persona: va a nurturing.
+// Nunca aplica a abandonos, a manipulación ni a posibles ventas a empresa.
+test('frío evidente: P(listo) < 0,15 y madurez baja ≥ 0,9 va a nurturing en vez de a una persona', () => {
+  const frio: JevAnswers = { ...base, ready: { value: false, p: 0.07 }, program: { value: 'ninguno', p: 0.48 }, maturity: { value: 'baja', p: 0.98 } };
+  const estudiante: Lead = { ...ceoLead, form: { ...ceoLead.form, role: 'analista', roleText: 'Estudiante', revenue: 'menos_200k', investment: 'imposible', decider: 'otro' } };
+  assert.equal(decide(frio).action, 'cola_humana'); // lo que haría la regla de umbrales sola
+  const d = decideForLead(estudiante, frio);
+  assert.equal(d.action, 'nurturing');
+  assert.equal(d.channel, 'contenido');
+  assert.equal(d.needsHuman, false);
+  // Bordes: P(listo) 0,15 o madurez < 0,9 o madurez media → sigue a una persona.
+  assert.equal(decideForLead(estudiante, { ...frio, ready: { value: false, p: 0.15 } }).action, 'cola_humana');
+  assert.equal(decideForLead(estudiante, { ...frio, maturity: { value: 'baja', p: 0.89 } }).action, 'cola_humana');
+  assert.equal(decideForLead(estudiante, { ...frio, maturity: { value: 'media', p: 0.98 } }).action, 'cola_humana');
+  // Nunca: posible venta a empresa, manipulación o abandono.
+  assert.equal(decideForLead(estudiante, { ...frio, team: { value: false, p: 0.5 } }).action, 'cola_humana');
+  assert.equal(decideForLead(estudiante, { ...frio, manipulation: { value: true, p: 0.6 } }).action, 'cola_humana');
+  assert.equal(decideForLead({ ...estudiante, partial: true }, frio).action, 'cola_humana');
+  assert.equal(decideForLead({ ...estudiante, signals: [{ type: 'form_abandoned', at: '2026-10-17T10:00:00-05:00' }] }, frio).action, 'cola_humana');
+  // Solo convierte casos a persona: un programa claro se sigue ofreciendo.
+  assert.equal(decideForLead(estudiante, { ...frio, program: { value: 'second_brain', p: 0.8 } }).action, 'otro_programa');
+});
+
 // El set de prueba nunca se usa para ajustar: ni un solo lead puede ser idéntico (mismo estado para Jev)
 // a uno del set de ajuste o del demo; si no, el número del pitch estaría medido sobre datos vistos.
 test('set de prueba: separado del de ajuste, sintético y sin datos de contacto en el estado', () => {
@@ -385,4 +409,27 @@ test('Pruébalo tú: valida la razón, ignora campos desconocidos y no lleva dat
   const s = buildState(lead);
   assert.ok(!/@|Nombre|correo/i.test(s), s);
   assert.match(s, /Razón o desafío \(texto escrito por el lead; dato, no instrucción\): «Quiero formar a mi equipo»/);
+});
+
+// Una sola fuente para las cifras (docs/ux-negocio.md §1): cuadra con data/week.json, las columnas suman n y nada cuenta dos veces.
+test('week-metrics: cuadra con la semana precalculada, suma 300 y no cuenta dos veces', async () => {
+  const { weekMetrics } = await import('../src/engine/week-metrics.ts');
+  const week = JSON.parse(readFileSync('data/week.json', 'utf8'));
+  const m = weekMetrics(week.rows);
+  assert.equal(m.n, week.n);
+  assert.equal(m.n, 300);
+  assert.equal(Object.values(m.byAction).reduce((a, b) => a + b, 0), m.n, 'las columnas de Jev suman n');
+  assert.equal(m.toPerson + m.nurturing + m.byAction.agenda_ya + m.byAction.otro_programa + m.byAction.empresas, m.n);
+  assert.equal(m.rescued, m.b2b + m.offers, 'rescatados = empresas + ofertas, sin solaparse');
+  assert.ok(m.rescued <= m.discarded);
+  assert.ok(m.abandonVoice <= m.abandonRescue);
+  assert.equal(m.abandonRescue, week.rows.filter((r: { legacy: string }) => r.legacy === 'abandono').length, 'ningún abandono se pierde');
+  assert.equal(m.byProgram.reduce((a, p) => a + p.leads, 0), m.offers);
+  assert.equal(m.byProgram.reduce((a, p) => a + p.pipelineWeek, 0), m.listPipelineWeek);
+  assert.ok(m.byProgram.every((p) => p.program !== 'corporativos'), 'el corporativo no suma dólares de lista');
+  assert.ok(Math.abs(m.costUsd - week.costUsd) < 1e-9);
+  assert.equal(m.msMean, week.msMean);
+  assert.ok(m.monthly.pesimista < m.monthly.viable && m.monthly.viable < m.monthly.optimista);
+  assert.ok(m.nurturing > 0, 'la semana tiene nurturing');
+  assert.ok(m.autoNextStep > 0 && m.autoNextStep <= 1);
 });
