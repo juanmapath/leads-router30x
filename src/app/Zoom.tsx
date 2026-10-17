@@ -1,81 +1,61 @@
 'use client';
-// Zoom a un lead: la regla actual frente a Jev para el mismo lead. (Rediseño pendiente: paso siguiente de la UI.)
+// Un lead de cerca (docs/ui-plan.md, sección 2): la regla de puntos de 30X frente a Jev para el mismo lead.
 import { useEffect, useState } from 'react';
 import leads from '../../data/leads.json';
 import type { Lead } from '../engine/types.ts';
+import { JevCard, type JevResult } from './JevCard.tsx';
 
-const ACTION_LABEL: Record<string, string> = {
-  agenda_ya: 'Agenda ya',
-  otro_programa: 'Ofrecer otro programa',
-  empresas: 'Área de empresas',
-  nurturing: 'Nurturing',
-  cola_humana: 'Cola humana',
-};
+const ROUTE_LABEL: Record<string, string> = { entrevista: 'Entrevista', gracias: '"Gracias por tu aplicación"', abandono: 'Abandonó (sin acción)' };
+const POINTS_LABEL: Record<string, string> = { cargo: 'Cargo', facturacion: 'Facturación', inversion: 'Inversión USD 6.000', decisor: '¿Decide solo?' };
+
+interface ZoomResult extends JevResult { legacy: { score: number; route: string; breakdown: Record<string, number> }; lead: { id: string; archetype?: string } }
 
 export function Zoom({ selectedId }: { selectedId?: string | null }) {
   const all = leads as Lead[];
-  const [id, setId] = useState(all.find((l) => l.archetype === 'gerente_equipo_multinacional')?.id ?? all[0].id);
-  const [res, setRes] = useState<any>(null);
-  const [busy, setBusy] = useState(false);
+  const defaultId = all.find((l) => l.archetype === 'gerente_equipo_multinacional')?.id ?? all[0].id;
+  const [id, setId] = useState(defaultId);
+  const [res, setRes] = useState<ZoomResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (selectedId) { setId(selectedId); run(selectedId); }
-  }, [selectedId]);
-
-  async function run(leadId = id) {
-    setBusy(true);
-    setRes(null);
+  async function load(leadId: string) {
+    setId(leadId);
+    setError(null);
     const r = await fetch('/api/decide', { method: 'POST', body: JSON.stringify({ id: leadId }) });
-    setRes(await r.json());
-    setBusy(false);
+    const body = await r.json();
+    if (!r.ok) { setError(body.error ?? 'No se pudo decidir este lead.'); setRes(null); return; }
+    setRes(body);
   }
 
+  useEffect(() => { load(selectedId ?? defaultId); }, [selectedId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <section className="block" aria-labelledby="zoom">
+    <section className="block" aria-labelledby="zoom" id="zoom-section">
       <div className="block-head">
         <h2 id="zoom">Un lead de cerca</h2>
-        <p className="muted">La regla de puntos actual frente a Jev, para el mismo lead.</p>
+        <p className="muted">La misma persona, dos decisiones: la suma de puntos de hoy y Jev.</p>
       </div>
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <select value={id} onChange={(e) => setId(e.target.value)} style={{ padding: 10, flex: 1, minWidth: 0, font: 'inherit', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}>
-          {all.map((l) => (
-            <option key={l.id} value={l.id}>
-              {l.id} · {l.archetype} · {l.country}
-            </option>
-          ))}
-        </select>
-        <button onClick={() => run()} disabled={busy} className="btn">
-          {busy ? 'Decidiendo…' : 'Decidir'}
-        </button>
-      </div>
+      <label className="faint" htmlFor="lead-select">Lead</label>
+      <select id="lead-select" className="select" value={id} onChange={(e) => load(e.target.value)}>
+        {all.map((l) => <option key={l.id} value={l.id}>{l.id} · {l.archetype?.replaceAll('_', ' ')} · {l.country}</option>)}
+      </select>
+
+      {error && <p className="card" style={{ marginTop: 12 }}>{error} En producción, este lead pasaría a una persona.</p>}
       {res && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginTop: 24 }}>
-          <section className="card" style={{ border: '1px solid var(--border)', borderRadius: 8, padding: 16 }}>
-            <h2 style={{ fontSize: 16 }}>Regla actual</h2>
-            <p style={{ fontSize: 32, margin: 0 }}>{res.legacy?.score}/10</p>
-            <p>→ {res.legacy?.route === 'entrevista' ? 'Entrevista' : res.legacy?.route === 'abandono' ? 'Abandonó (sin acción)' : '"Gracias por tu aplicación"'}</p>
-          </section>
-          <section className="card" style={{ border: '2px solid var(--jev)', borderRadius: 8, padding: 16 }}>
-            <h2 style={{ fontSize: 16 }}>Jev</h2>
-            {res.error ? (
-              <p>{res.error}</p>
-            ) : (
-              <>
-                <p style={{ fontSize: 24, margin: 0 }}>{ACTION_LABEL[res.decision.action]}</p>
-                <ul>{res.decision.reasons.map((r: string) => <li key={r}>{r}</li>)}</ul>
-                <p style={{ color: 'var(--text-2)', fontSize: 13 }}>
-                  {res.jev.ms} ms · USD {res.jev.costUsd.toFixed(6)} · {res.jev.source}
-                </p>
-              </>
-            )}
-          </section>
+        <div className="grid-2" style={{ marginTop: 12 }}>
+          <div className="card legacy-card">
+            <span className="faint">Regla actual (suma de puntos del formulario)</span>
+            <table>
+              <tbody>
+                {Object.entries(res.legacy.breakdown).map(([k, v]) => (
+                  <tr key={k}><td>{POINTS_LABEL[k] ?? k}</td><td className="num">{v}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="legacy-score"><span className="num">{res.legacy.score}/10</span> → {ROUTE_LABEL[res.legacy.route]}</p>
+            <p className="faint">Más de 6 puntos pasa a entrevista; el resto ve &ldquo;gracias&rdquo;.</p>
+          </div>
+          <div className="card"><JevCard result={res} /></div>
         </div>
-      )}
-      {res?.state && (
-        <details style={{ marginTop: 16, color: 'var(--text-2)' }}>
-          <summary>Estado que recibió Jev</summary>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{res.state}</pre>
-        </details>
       )}
     </section>
   );

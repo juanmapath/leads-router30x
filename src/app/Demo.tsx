@@ -8,7 +8,7 @@ export function Demo() {
   const [selected, setSelected] = useState<string | null>(null);
   function select(id: string) {
     setSelected(id);
-    document.getElementById('zoom')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('zoom-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   return (
     <>
