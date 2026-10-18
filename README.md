@@ -1,6 +1,6 @@
 # Jev Lead Router · 30X
 
-**Reto JEV en 30X · Hackathon 30X (oct. 2026)** · Demo: [leads-router30x.vercel.app](https://leads-router30x.vercel.app/) · Playbook: [`playbook.pdf`](playbook.pdf) (fuente: [`docs/playbook.md`](docs/playbook.md)) · Supuestos: [`docs/supuestos.md`](docs/supuestos.md) · Video: pendiente
+**Reto JEV en 30X · Hackathon 30X (oct. 2026)** · Demo: [leads-router30x.vercel.app](https://leads-router30x.vercel.app/) · Playbook: [`playbook.pdf`](playbook.pdf) (fuente: [`docs/playbook.md`](docs/playbook.md)) · Supuestos: [`docs/supuestos.md`](docs/supuestos.md) · Video: https://drive.google.com/file/d/1FPWbkIFxGHh9HV5Lk7fubtWQFPAvUTF5/view
 
 **Cada semana, el formulario de 30X descarta en automático a 195 de 250 personas. Entre ellas, 10 empresas que venían a formar a su equipo.**
 
